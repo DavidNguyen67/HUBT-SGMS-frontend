@@ -1,12 +1,9 @@
-import { DevtoolsProvider } from '@providers/devtools';
-import { RefineKbarProvider } from '@refinedev/kbar';
-import React, { Suspense } from 'react';
-import { AntdRegistry } from '@ant-design/nextjs-registry';
-import { ColorModeContextProvider } from '@contexts/color-mode';
+import React from 'react';
 import '@refinedev/antd/dist/reset.css';
 import { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import MainContainer from '@components/MainContainer';
+import '@refinedev/antd/dist/reset.css';
 
 export const metadata: Metadata = {
   title: 'Refine',
@@ -28,17 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Suspense>
-          <RefineKbarProvider>
-            <AntdRegistry>
-              <ColorModeContextProvider defaultMode={defaultMode}>
-                <DevtoolsProvider>
-                  <MainContainer>{children}</MainContainer>
-                </DevtoolsProvider>
-              </ColorModeContextProvider>
-            </AntdRegistry>
-          </RefineKbarProvider>
-        </Suspense>
+        <MainContainer defaultMode={defaultMode}>{children}</MainContainer>
       </body>
     </html>
   );
