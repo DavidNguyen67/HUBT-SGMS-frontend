@@ -1,17 +1,20 @@
 "use client";
 
-import { Create, useForm, useSelect } from "@refinedev/antd";
+import { Edit, useForm, useSelect } from "@refinedev/antd";
 import { Form, Input, Select } from "antd";
 
-export default function BlogPostCreate() {
-  const { formProps, saveButtonProps } = useForm({});
+export default function BlogPostEdit() {
+  const { formProps, saveButtonProps, queryResult } = useForm({});
+
+  const blogPostsData = queryResult?.data?.data;
 
   const { selectProps: categorySelectProps } = useSelect({
     resource: "categories",
+    defaultValue: blogPostsData?.category?.id,
   });
 
   return (
-    <Create saveButtonProps={saveButtonProps}>
+    <Edit saveButtonProps={saveButtonProps}>
       <Form {...formProps} layout="vertical">
         <Form.Item
           label={"Title"}
@@ -38,6 +41,7 @@ export default function BlogPostCreate() {
         <Form.Item
           label={"Category"}
           name={["category", "id"]}
+          initialValue={formProps?.initialValues?.category?.id}
           rules={[
             {
               required: true,
@@ -67,6 +71,6 @@ export default function BlogPostCreate() {
           />
         </Form.Item>
       </Form>
-    </Create>
+    </Edit>
   );
 }
