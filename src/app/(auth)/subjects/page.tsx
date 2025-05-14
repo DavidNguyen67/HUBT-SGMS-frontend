@@ -1,9 +1,9 @@
 'use client';
 
-import StudentsManagement from '@components/StudentsManagement';
+import SubjectManagement from '@components/SubjectManagement';
 
 const StudentsManagementPage = () => {
-  return <StudentsManagement />;
+  return <SubjectManagement />;
 };
 
 export default StudentsManagementPage;

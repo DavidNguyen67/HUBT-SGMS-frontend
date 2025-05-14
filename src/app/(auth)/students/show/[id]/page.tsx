@@ -1,43 +1,48 @@
-"use client";
+'use client';
 
-import { DateField, MarkdownField, Show, TextField } from "@refinedev/antd";
-import { useOne, useShow } from "@refinedev/core";
-import { Typography } from "antd";
+import { StudentFormValues } from '@interfaces';
+import { DateField, Show, TextField } from '@refinedev/antd';
+import { useShow } from '@refinedev/core';
+import { Typography, Tag } from 'antd';
 
 const { Title } = Typography;
 
-export default function BlogPostShow() {
-  const { queryResult } = useShow({});
+const StudentShow = () => {
+  const { queryResult } = useShow<StudentFormValues>({
+    id: 'student_id',
+  });
   const { data, isLoading } = queryResult;
 
   const record = data?.data;
 
-  const { data: categoryData, isLoading: categoryIsLoading } = useOne({
-    resource: "categories",
-    id: record?.category?.id || "",
-    queryOptions: {
-      enabled: !!record,
-    },
-  });
-
   return (
     <Show isLoading={isLoading}>
-      <Title level={5}>{"ID"}</Title>
+      <Title level={5}>ID</Title>
       <TextField value={record?.id} />
-      <Title level={5}>{"Title"}</Title>
-      <TextField value={record?.title} />
-      <Title level={5}>{"Content"}</Title>
-      <MarkdownField value={record?.content} />
-      <Title level={5}>{"Category"}</Title>
-      <TextField
-        value={
-          categoryIsLoading ? <>Loading...</> : <>{categoryData?.data?.title}</>
-        }
-      />
-      <Title level={5}>{"Status"}</Title>
-      <TextField value={record?.status} />
-      <Title level={5}>{"CreatedAt"}</Title>
-      <DateField value={record?.createdAt} />
+
+      <Title level={5}>Mã sinh viên</Title>
+      <TextField value={record?.student_code} />
+
+      <Title level={5}>Họ tên</Title>
+      <TextField value={record?.full_name} />
+
+      <Title level={5}>Giới tính</Title>
+      {record?.gender === 'male' ? (
+        <Tag color="blue">Nam</Tag>
+      ) : (
+        <Tag color="pink">Nữ</Tag>
+      )}
+
+      <Title level={5}>Ngày sinh</Title>
+      <DateField value={record?.date_of_birth} format="DD/MM/YYYY" />
+
+      <Title level={5}>Lớp</Title>
+      <TextField value={record?.class_name} />
+
+      <Title level={5}>Ngày tạo</Title>
+      <DateField value={record?.created_at} />
     </Show>
   );
-}
+};
+
+export default StudentShow;

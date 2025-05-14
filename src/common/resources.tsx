@@ -57,4 +57,15 @@ export const resources: Array<ResourceProps> = [
     },
     icon: <TableOutlined />,
   },
+  {
+    name: 'Classes',
+    list: '/classes',
+    create: '/classes/create',
+    edit: '/classes/edit/:id',
+    show: '/classes/show/:id',
+    meta: {
+      canDelete: true,
+    },
+    icon: <TableOutlined />,
+  },
 ];

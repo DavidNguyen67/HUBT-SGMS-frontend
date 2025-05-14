@@ -1,3 +1,5 @@
+'use client';
+
 import {
   DateField,
   DeleteButton,
@@ -6,13 +8,13 @@ import {
   ShowButton,
   useTable,
 } from '@refinedev/antd';
-import { type BaseRecord } from '@refinedev/core';
-import { Space, Table, Tag, Tooltip } from 'antd';
+import { BaseRecord } from '@refinedev/core';
+import { Space, Table, Tooltip } from 'antd';
 import React from 'react';
-import fakeStudents from './seed';
 import { truncateText } from '@common/helper';
+import fakeSubjects from './seed';
 
-const StudentsManagement = () => {
+const SubjectManagement = () => {
   const { tableProps } = useTable({
     syncWithLocation: true,
   });
@@ -22,7 +24,7 @@ const StudentsManagement = () => {
       <Table
         {...tableProps}
         rowKey="id"
-        dataSource={fakeStudents}
+        dataSource={fakeSubjects}
         loading={false}
         tableLayout="fixed"
       >
@@ -33,33 +35,15 @@ const StudentsManagement = () => {
           width={60}
           render={(value: string) => (
             <Tooltip placement="topLeft" title={value}>
-              <div
-                style={{
-                  width: 60,
-                  wordWrap: 'break-word',
-                  wordBreak: 'break-word',
-                }}
-              >
+              <div style={{ width: 60, wordWrap: 'break-word' }}>
                 {truncateText(value)}
               </div>
             </Tooltip>
           )}
         />
-        <Table.Column dataIndex="student_code" title="Mã sinh viên" />
-        <Table.Column dataIndex="full_name" title="Họ tên" />
-        <Table.Column
-          dataIndex="gender"
-          title="Giới tính"
-          render={(value: string) =>
-            value === 'male' ? (
-              <Tag color="blue">Nam</Tag>
-            ) : (
-              <Tag color="pink">Nữ</Tag>
-            )
-          }
-        />
-        <Table.Column dataIndex="date_of_birth" title="Ngày sinh" />
-        <Table.Column dataIndex="class_name" title="Lớp" />
+        <Table.Column dataIndex="subject_code" title="Mã môn học" />
+        <Table.Column dataIndex="subject_name" title="Tên môn học" />
+        <Table.Column dataIndex="credits" title="Số tín chỉ" />
         <Table.Column
           dataIndex="created_at"
           title="Ngày tạo"
@@ -81,4 +65,4 @@ const StudentsManagement = () => {
   );
 };
 
-export default StudentsManagement;
+export default SubjectManagement;
