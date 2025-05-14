@@ -2,8 +2,8 @@
 
 import SubjectManagement from '@components/SubjectManagement';
 
-const StudentsManagementPage = () => {
+const SubjectManagementPage = () => {
   return <SubjectManagement />;
 };
 
-export default StudentsManagementPage;
+export default SubjectManagementPage;

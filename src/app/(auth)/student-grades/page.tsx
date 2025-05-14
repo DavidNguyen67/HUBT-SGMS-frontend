@@ -1,9 +1,9 @@
 'use client';
 
-import StudentsManagement from '@components/StudentsManagement';
+import StudentGradeManagement from '@components/StudentGradeManagement';
 
-const StudentsManagementPage = () => {
-  return <StudentsManagement />;
+const StudentGradeManagementPage = () => {
+  return <StudentGradeManagement />;
 };
 
-export default StudentsManagementPage;
+export default StudentGradeManagementPage;

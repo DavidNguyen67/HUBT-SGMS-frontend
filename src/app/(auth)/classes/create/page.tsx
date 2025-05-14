@@ -1,16 +1,16 @@
 'use client';
 
-import SubjectForm from '@components/SubjectForm';
-import { SubjectFormValues } from '@interfaces';
+import ClassForm from '@components/ClassForm';
+import { ClassFormValues } from '@interfaces';
 import { Create, useForm } from '@refinedev/antd';
 import { HttpError } from '@refinedev/core';
 import { Col, Row } from 'antd';
 
-const SubjectCreate = () => {
+const ClassCreate = () => {
   const { formProps, saveButtonProps } = useForm<
     Record<string, unknown>,
     HttpError,
-    SubjectFormValues
+    ClassFormValues
   >({
     submitOnEnter: true,
     action: 'create',
@@ -20,11 +20,11 @@ const SubjectCreate = () => {
     <Create saveButtonProps={saveButtonProps}>
       <Row>
         <Col span={6} offset={8}>
-          <SubjectForm formProps={formProps} />
+          <ClassForm formProps={formProps} />
         </Col>
       </Row>
     </Create>
   );
 };
 
-export default SubjectCreate;
+export default ClassCreate;

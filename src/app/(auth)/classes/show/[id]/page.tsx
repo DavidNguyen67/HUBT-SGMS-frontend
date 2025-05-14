@@ -1,15 +1,15 @@
 'use client';
 
 import { useShow } from '@refinedev/core';
+import { ClassFormValues } from '@interfaces';
 import { Show, TextField, DateField } from '@refinedev/antd';
-import { StudentGradeFormValues } from '@interfaces';
 import { Typography } from 'antd';
 
 const { Title } = Typography;
 
-const StudentGradeShow = () => {
-  const { queryResult } = useShow<StudentGradeFormValues>({
-    id: 'student_grade_id',
+const ClassShow = () => {
+  const { queryResult } = useShow<ClassFormValues>({
+    id: 'class_id',
   });
 
   const { data, isLoading } = queryResult;
@@ -19,16 +19,14 @@ const StudentGradeShow = () => {
     <Show isLoading={isLoading}>
       <Title level={5}>ID</Title>
       <TextField value={record?.id} />
-      <Title level={5}>Sinh viên</Title>
-      <TextField value={record?.student_name} />
-      <Title level={5}>Môn học</Title>
-      <TextField value={record?.subject_name} />
-      <Title level={5}>Điểm</Title>
-      <TextField value={record?.score} />
+      <Title level={5}>Mã lớp</Title>
+      <TextField value={record?.class_code} />
+      <Title level={5}>Tên lớp</Title>
+      <TextField value={record?.class_name} />
       <Title level={5}>Ngày tạo</Title>
       <DateField value={record?.created_at} />
     </Show>
   );
 };
 
-export default StudentGradeShow;
+export default ClassShow;

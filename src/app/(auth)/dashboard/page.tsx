@@ -1,7 +1,9 @@
 'use client';
 
+import Dashboard from '@components/Dashboard';
+
 const DashboardPage = () => {
-  return <div>DashboardPage</div>;
+  return <Dashboard />;
 };
 
 export default DashboardPage;

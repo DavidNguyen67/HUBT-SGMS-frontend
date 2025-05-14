@@ -1,31 +1,31 @@
 'use client';
 
-import GradeForm from '@components/GradeForm';
-import { GradeFormValues } from '@interfaces';
+import ClassForm from '@components/ClassForm';
+import { ClassFormValues } from '@interfaces';
 import { Edit, useForm } from '@refinedev/antd';
 import { HttpError } from '@refinedev/core';
 import { Col, Row } from 'antd';
 
-const GradeUpdate = () => {
+const ClassEdit = () => {
   const { formProps, saveButtonProps } = useForm<
     Record<string, unknown>,
     HttpError,
-    GradeFormValues
+    ClassFormValues
   >({
     submitOnEnter: true,
     action: 'edit',
-    id: 'grade_id',
+    id: 'class_id',
   });
 
   return (
     <Edit saveButtonProps={saveButtonProps}>
       <Row>
         <Col span={6} offset={8}>
-          <GradeForm formProps={formProps} />
+          <ClassForm formProps={formProps} />
         </Col>
       </Row>
     </Edit>
   );
 };
 
-export default GradeUpdate;
+export default ClassEdit;
