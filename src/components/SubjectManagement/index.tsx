@@ -20,13 +20,13 @@ const SubjectManagement = () => {
   });
 
   return (
-    <List>
+    <List title="Quản lý môn học">
       <Table
         {...tableProps}
         rowKey="id"
         dataSource={fakeSubjects}
-        loading={false}
         tableLayout="fixed"
+        loading={false}
       >
         <Table.Column
           dataIndex="id"

@@ -12,6 +12,10 @@ export const resources: Array<ResourceProps> = [
     name: 'Dashboard',
     list: '/dashboard',
     icon: <DashboardOutlined />,
+    meta: {
+      label: 'Tổng quan',
+      roles: ['admin', 'teacher', 'student'],
+    },
   },
   {
     name: 'Students',
@@ -21,8 +25,36 @@ export const resources: Array<ResourceProps> = [
     show: '/students/show/:id',
     meta: {
       canDelete: true,
+      label: 'Sinh viên',
+      roles: ['admin', 'teacher'],
     },
     icon: <UserOutlined />,
+  },
+  {
+    name: 'Teachers',
+    list: '/teachers',
+    create: '/teachers/create',
+    edit: '/teachers/edit/:id',
+    show: '/teachers/show/:id',
+    meta: {
+      canDelete: true,
+      label: 'Giáo viên',
+      roles: ['admin'],
+    },
+    icon: <UserOutlined />,
+  },
+  {
+    name: 'Classes',
+    list: '/classes',
+    create: '/classes/create',
+    edit: '/classes/edit/:id',
+    show: '/classes/show/:id',
+    meta: {
+      canDelete: true,
+      label: 'Lớp học',
+      roles: ['admin', 'teacher'],
+    },
+    icon: <TableOutlined />,
   },
   {
     name: 'Subjects',
@@ -32,6 +64,8 @@ export const resources: Array<ResourceProps> = [
     show: '/subjects/show/:id',
     meta: {
       canDelete: true,
+      label: 'Môn học',
+      roles: ['admin', 'teacher'],
     },
     icon: <BookOutlined />,
   },
@@ -43,6 +77,8 @@ export const resources: Array<ResourceProps> = [
     show: '/grades/show/:id',
     meta: {
       canDelete: true,
+      label: 'Điểm',
+      roles: ['admin', 'teacher'],
     },
     icon: <FileTextOutlined />,
   },
@@ -54,17 +90,8 @@ export const resources: Array<ResourceProps> = [
     show: '/student-grades/show/:id',
     meta: {
       canDelete: true,
-    },
-    icon: <TableOutlined />,
-  },
-  {
-    name: 'Classes',
-    list: '/classes',
-    create: '/classes/create',
-    edit: '/classes/edit/:id',
-    show: '/classes/show/:id',
-    meta: {
-      canDelete: true,
+      label: 'Điểm sinh viên',
+      roles: ['admin', 'teacher', 'student'],
     },
     icon: <TableOutlined />,
   },

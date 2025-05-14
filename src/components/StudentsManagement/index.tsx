@@ -18,7 +18,7 @@ const StudentsManagement = () => {
   });
 
   return (
-    <List>
+    <List title="Quản lý sinh viên">
       <Table
         {...tableProps}
         rowKey="id"

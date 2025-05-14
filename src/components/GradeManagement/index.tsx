@@ -20,13 +20,13 @@ const GradeManagement = () => {
   });
 
   return (
-    <List>
+    <List title="Quản lý loại điểm">
       <Table
         {...tableProps}
         rowKey="id"
         dataSource={fakeGrades}
-        loading={false}
         tableLayout="fixed"
+        loading={false}
       >
         <Table.Column
           dataIndex="id"

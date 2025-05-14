@@ -1,53 +1,50 @@
 'use client';
 
 import {
-  List,
-  useTable,
+  DateField,
   DeleteButton,
   EditButton,
+  List,
   ShowButton,
-  DateField,
+  useTable,
 } from '@refinedev/antd';
-import { Table, Space, Tooltip } from 'antd';
 import { BaseRecord } from '@refinedev/core';
+import { Space, Table, Tooltip } from 'antd';
+import React from 'react';
 import { truncateText } from '@common/helper';
-import { classSeedData } from './seed';
+import { fakeTeachers } from './seed';
 
-const ClassManagement = () => {
+const TeacherManagement = () => {
   const { tableProps } = useTable({
     syncWithLocation: true,
   });
 
   return (
-    <List title="Quản lý lớp học">
+    <List title="Quản lý giáo viên">
       <Table
         {...tableProps}
         rowKey="id"
-        dataSource={classSeedData}
+        dataSource={fakeTeachers}
         tableLayout="fixed"
         loading={false}
       >
         <Table.Column
           dataIndex="id"
-          title="Mã"
+          title="Mã giáo viên"
           ellipsis
-          width={60}
+          width={100}
           render={(value: string) => (
             <Tooltip placement="topLeft" title={value}>
-              <div
-                style={{
-                  width: 60,
-                  wordWrap: 'break-word',
-                  wordBreak: 'break-word',
-                }}
-              >
+              <div style={{ width: 100, wordWrap: 'break-word' }}>
                 {truncateText(value)}
               </div>
             </Tooltip>
           )}
         />
-        <Table.Column dataIndex="class_code" title="Mã lớp" />
-        <Table.Column dataIndex="class_name" title="Tên lớp" />
+        <Table.Column dataIndex="full_name" title="Họ và tên" />
+        <Table.Column dataIndex="subject" title="Môn học" />
+        <Table.Column dataIndex="email" title="Email" />
+        <Table.Column dataIndex="phone_number" title="Số điện thoại" />
         <Table.Column
           dataIndex="created_at"
           title="Ngày tạo"
@@ -69,4 +66,4 @@ const ClassManagement = () => {
   );
 };
 
-export default ClassManagement;
+export default TeacherManagement;

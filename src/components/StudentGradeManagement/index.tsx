@@ -17,12 +17,13 @@ const StudentGradeManagement = () => {
   const { tableProps } = useTable({ syncWithLocation: true });
 
   return (
-    <List>
+    <List title="Quản lý điểm sinh viên">
       <Table
         {...tableProps}
         rowKey="id"
         tableLayout="fixed"
         dataSource={fakeStudentGrades}
+        loading={false}
       >
         <Table.Column
           dataIndex="id"
