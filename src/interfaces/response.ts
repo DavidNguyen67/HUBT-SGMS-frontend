@@ -14,6 +14,7 @@ export interface Student {
   created_at: string;
   updated_at: string;
   deleted_at?: string;
+  class: Class;
 }
 
 export interface Class {

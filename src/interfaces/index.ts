@@ -49,3 +49,9 @@ export interface Teacher {
   address: string;
   created_at: Date;
 }
+
+export interface StudentTableFilter {
+  student_code?: string;
+  full_name?: string;
+  gender?: GENDER;
+}

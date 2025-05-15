@@ -22,7 +22,12 @@ const StudentCreate = () => {
   });
 
   return (
-    <Create saveButtonProps={saveButtonProps}>
+    <Create
+      saveButtonProps={saveButtonProps}
+      title="Thêm sinh viên"
+      breadcrumb={null}
+    
+>
       <Row>
         <Col span={6} offset={8}>
           <StudentForm formProps={formProps} />

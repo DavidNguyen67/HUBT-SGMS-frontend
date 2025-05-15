@@ -9,3 +9,15 @@ export enum ROLE {
   TEACHER = 'teacher',
   STUDENT = 'student',
 }
+
+export const TAG_GENDER_MAPPING: Record<GENDER, string> = {
+  [GENDER.FEMALE]: 'Nữ',
+  [GENDER.MALE]: 'Nam',
+  [GENDER.OTHER]: 'Khác',
+};
+
+export const TAG_GENDER_COLOR_MAPPING: Record<GENDER, string> = {
+  [GENDER.FEMALE]: 'pink',
+  [GENDER.MALE]: 'blue',
+  [GENDER.OTHER]: 'green',
+};

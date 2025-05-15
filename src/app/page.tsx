@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect } from 'react';
 import { useIsAuthenticated, useResource } from '@refinedev/core';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { authProviderClient } from '@providers/auth-provider/auth-provider.client';
 import { resources } from '@common/resources';
 
@@ -27,6 +27,8 @@ export default function IndexPage() {
 
         if (firstMatchingResource?.list) {
           router.push(firstMatchingResource.list as string);
+        } else {
+          redirect('/login');
         }
       }
     };
