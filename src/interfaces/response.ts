@@ -1,3 +1,5 @@
+import { GENDER } from '@common';
+
 export interface ResponsePagination<T> {
   data: T[];
   total: number;
@@ -8,7 +10,7 @@ export interface Student {
   full_name: string;
   student_code: string;
   date_of_birth: string;
-  gender: 'male' | 'female' | 'other';
+  gender: GENDER;
   created_at: string;
   updated_at: string;
   deleted_at?: string;

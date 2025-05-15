@@ -6,11 +6,12 @@ import * as yup from 'yup';
 import moment from 'moment';
 import { useSelect } from '@refinedev/antd';
 import { Class } from '@interfaces/response';
+import { GENDER } from '@common';
 
 const genderOptions = [
-  { label: 'Nam', value: 'male' },
-  { label: 'Nữ', value: 'female' },
-  { label: 'Khác', value: 'other' },
+  { label: 'Nam', value: GENDER.MALE },
+  { label: 'Nữ', value: GENDER.FEMALE },
+  { label: 'Khác', value: GENDER.OTHER },
 ];
 
 interface StudentFormProps {
