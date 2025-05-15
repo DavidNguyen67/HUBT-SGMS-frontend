@@ -7,6 +7,7 @@ import { useSelect } from '@refinedev/antd';
 import { Class } from '@interfaces/response';
 import { GENDER } from '@common';
 import dayjs from 'dayjs';
+import { Rule } from 'antd/es/form';
 
 const genderOptions = [
   { label: 'Nam', value: GENDER.MALE },
@@ -31,19 +32,18 @@ const StudentForm = (props: StudentFormProps) => {
   });
 
   const { selectProps } = useSelect<Class>({
-    resource: 'api/v1/classes', // Endpoint API để lấy danh sách lớp học
-    optionLabel: 'class_name', // Trường hiển thị trong dropdown
-    optionValue: 'id', // Trường giá trị (UUID của lớp học)
+    resource: 'api/v1/classes',
+    optionLabel: 'class_name',
+    optionValue: 'id',
   });
 
   const yupSync = {
     async validator({ field }: { field: any }, value: any) {
       await studentSchema.validateSyncAt(field, { [field]: value });
     },
-  };
+  } as unknown as Rule;
 
   const onFinish = async (values: StudentFormValues) => {
-    console.log('Form values:', values);
     props.formProps.onFinish?.(values);
   };
 

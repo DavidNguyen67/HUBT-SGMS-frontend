@@ -1,7 +1,8 @@
 'use client';
 
+import { GENDER } from '@common';
 import TeacherForm from '@components/TeacherForm';
-import { Teacher } from '@interfaces';
+import { TeacherFormValues } from '@interfaces';
 import { Create, useForm } from '@refinedev/antd';
 import { HttpError } from '@refinedev/core';
 import { Col, Row } from 'antd';
@@ -10,14 +11,22 @@ const TeacherCreate = () => {
   const { formProps, saveButtonProps } = useForm<
     Record<string, unknown>,
     HttpError,
-    Teacher
+    TeacherFormValues
   >({
+    defaultFormValues: {
+      gender: GENDER.FEMALE,
+    },
     submitOnEnter: true,
     action: 'create',
+    resource: 'api/v1/teachers',
   });
 
   return (
-    <Create saveButtonProps={saveButtonProps}>
+    <Create
+      saveButtonProps={saveButtonProps}
+      title="Thêm giáo viên"
+      breadcrumb={null}
+    >
       <Row>
         <Col span={6} offset={8}>
           <TeacherForm formProps={formProps} />

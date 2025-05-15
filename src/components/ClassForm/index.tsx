@@ -3,6 +3,7 @@
 import { Form, Input, FormProps } from 'antd';
 import * as yup from 'yup';
 import { ClassFormValues } from '@interfaces';
+import { Rule } from 'antd/es/form';
 
 interface ClassFormProps {
   formProps: FormProps<ClassFormValues>;
@@ -17,7 +18,7 @@ const yupSync = {
   async validator({ field }: { field: any }, value: any) {
     await classSchema.validateSyncAt(field, { [field]: value });
   },
-};
+} as unknown as Rule;
 
 const ClassForm = ({ formProps }: ClassFormProps) => {
   const onFinish = async (values: ClassFormValues) => {

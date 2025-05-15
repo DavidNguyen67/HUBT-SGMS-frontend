@@ -3,6 +3,7 @@
 import { Form, Input, InputNumber, FormProps } from 'antd';
 import * as yup from 'yup';
 import { SubjectFormValues } from '@interfaces';
+import { Rule } from 'antd/es/form';
 
 interface SubjectFormProps {
   formProps: FormProps<SubjectFormValues>;
@@ -24,7 +25,7 @@ const SubjectForm = (props: SubjectFormProps) => {
     async validator({ field }: { field: any }, value: any) {
       await subjectSchema.validateSyncAt(field, { [field]: value });
     },
-  };
+  } as unknown as Rule;
 
   const onFinish = async (values: SubjectFormValues) => {
     console.log('Form values:', values);

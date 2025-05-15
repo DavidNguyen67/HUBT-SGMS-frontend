@@ -14,7 +14,6 @@ import { truncateText } from '@common/helper';
 import { Student } from '@interfaces/response';
 import { StudentTableFilter } from '@interfaces';
 import { GENDER, TAG_GENDER_COLOR_MAPPING, TAG_GENDER_MAPPING } from '@common';
-import dayjs from 'dayjs';
 
 const StudentsManagement = () => {
   const { tableProps, searchFormProps } = useTable<
@@ -25,8 +24,6 @@ const StudentsManagement = () => {
     syncWithLocation: true,
     resource: 'api/v1/students',
     onSearch: (values) => {
-      console.log('first', values);
-
       const filters: CrudFilters = [];
 
       if (values.full_name != null) {
@@ -177,6 +174,9 @@ const StudentsManagement = () => {
                 size="small"
                 recordItemId={record.id}
                 resource="api/v1/students"
+                confirmTitle="Bạn có chắc muốn xóa sinh viên này không?"
+                confirmOkText="Đồng ý"
+                confirmCancelText="Hủy"
               />
             </Space>
           )}

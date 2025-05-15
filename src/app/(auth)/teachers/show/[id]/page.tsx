@@ -1,48 +1,111 @@
 'use client';
 
-import { Teacher } from '@interfaces';
-import { Show, TextField } from '@refinedev/antd';
+import {
+  DeleteButton,
+  EditButton,
+  ListButton,
+  RefreshButton,
+  Show,
+  TextField,
+  DateField,
+} from '@refinedev/antd';
 import { useShow } from '@refinedev/core';
-import { Typography } from 'antd';
+import { Typography, Tag, Table } from 'antd';
+import { TAG_GENDER_MAPPING, TAG_GENDER_COLOR_MAPPING } from '@common';
+import { useParams } from 'next/navigation';
+import { Teacher } from '@interfaces/response';
 
 const { Title } = Typography;
 
 const TeacherShow = () => {
+  const { id } = useParams() as { id: string };
+
   const { queryResult } = useShow<Teacher>({
-    id: 'teacher_id',
+    id,
+    resource: 'api/v1/teachers',
   });
+
   const { data, isLoading } = queryResult;
 
   const record = data?.data;
 
   return (
-    <Show isLoading={isLoading}>
+    <Show
+      isLoading={isLoading}
+      breadcrumb={null}
+      title="Chi tiết giáo viên"
+      headerButtons={({
+        listButtonProps,
+        refreshButtonProps,
+        editButtonProps,
+        deleteButtonProps,
+      }) => (
+        <>
+          <ListButton {...listButtonProps}>Danh sách giáo viên</ListButton>
+          <RefreshButton {...refreshButtonProps} resource="api/v1/teachers">
+            Làm mới
+          </RefreshButton>
+          {editButtonProps && (
+            <EditButton {...editButtonProps}>Chỉnh sửa</EditButton>
+          )}
+          {deleteButtonProps && (
+            <DeleteButton
+              {...deleteButtonProps}
+              resource="api/v1/teachers"
+              confirmTitle="Bạn có chắc muốn xóa giáo viên này không?"
+              confirmOkText="Đồng ý"
+              confirmCancelText="Hủy"
+            >
+              Xóa
+            </DeleteButton>
+          )}
+        </>
+      )}
+    >
       <Title level={5}>Mã giáo viên</Title>
-      <TextField value={record?.id} />
+      <TextField value={record?.teacher_code} />
 
       <Title level={5}>Họ và tên</Title>
       <TextField value={record?.full_name} />
 
       <Title level={5}>Giới tính</Title>
-      <TextField value={record?.gender} />
+      {record?.gender && (
+        <Tag color={TAG_GENDER_COLOR_MAPPING[record.gender]}>
+          {TAG_GENDER_MAPPING[record.gender]}
+        </Tag>
+      )}
 
       <Title level={5}>Ngày sinh</Title>
-      <TextField value={record?.date_of_birth} />
+      <DateField value={record?.date_of_birth} format="DD/MM/YYYY" />
 
-      <Title level={5}>Môn học</Title>
-      <TextField value={record?.subject} />
-
-      <Title level={5}>Email</Title>
-      <TextField value={record?.email} />
-
-      <Title level={5}>Số điện thoại</Title>
-      <TextField value={record?.phone_number} />
-
-      <Title level={5}>Địa chỉ</Title>
-      <TextField value={record?.address} />
+      <Title level={5}>Môn học - Lớp giảng dạy</Title>
+      {record?.teacherSubjectClasses?.length ? (
+        <div style={{ maxHeight: 240, overflowY: 'auto' }}>
+          <Table
+            dataSource={record.teacherSubjectClasses}
+            rowKey="id"
+            pagination={false}
+            size="small"
+            bordered
+          >
+            <Table.Column
+              title="Môn học"
+              dataIndex={['subject', 'subject_name']}
+              key="subject"
+            />
+            <Table.Column
+              title="Lớp học"
+              dataIndex={['class', 'class_name']}
+              key="class"
+            />
+          </Table>
+        </div>
+      ) : (
+        <i>Chưa được phân công</i>
+      )}
 
       <Title level={5}>Ngày tạo</Title>
-      <TextField value={record?.created_at} />
+      <DateField value={record?.created_at} format="DD/MM/YYYY" />
     </Show>
   );
 };

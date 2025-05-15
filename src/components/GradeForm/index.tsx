@@ -2,6 +2,7 @@
 
 import { GradeFormValues } from '@interfaces';
 import { Form, Input, InputNumber, FormProps } from 'antd';
+import { Rule } from 'antd/es/form';
 import * as yup from 'yup';
 
 interface GradeFormProps {
@@ -22,7 +23,7 @@ const GradeForm = ({ formProps }: GradeFormProps) => {
     async validator({ field }: { field: any }, value: any) {
       await gradeSchema.validateSyncAt(field, { [field]: value });
     },
-  };
+  } as unknown as Rule;
 
   const onFinish = async (values: GradeFormValues) => {
     formProps.onFinish?.(values);

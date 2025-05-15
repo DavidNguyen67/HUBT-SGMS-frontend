@@ -8,6 +8,13 @@ export interface StudentFormValues {
   class_id: string;
 }
 
+export interface TeacherFormValues {
+  teacher_code: string;
+  full_name: string;
+  gender: GENDER;
+  date_of_birth: Date;
+}
+
 export interface SubjectFormValues {
   subject_code: string;
   subject_name: string;
@@ -38,20 +45,14 @@ export interface ClassFormValues {
   created_at?: string;
 }
 
-export interface Teacher {
-  id: string;
-  full_name: string;
-  gender: GENDER;
-  date_of_birth: Date;
-  subject: string;
-  email: string;
-  phone_number: string;
-  address: string;
-  created_at: Date;
-}
-
 export interface StudentTableFilter {
   student_code?: string;
+  full_name?: string;
+  gender?: GENDER;
+}
+
+export interface TeacherTableFilter {
+  teacher_code?: string;
   full_name?: string;
   gender?: GENDER;
 }

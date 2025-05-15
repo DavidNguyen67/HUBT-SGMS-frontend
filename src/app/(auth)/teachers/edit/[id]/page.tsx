@@ -1,27 +1,74 @@
 'use client';
 
 import TeacherForm from '@components/TeacherForm';
-import { Teacher } from '@interfaces';
-import { Edit, useForm } from '@refinedev/antd';
+import { TeacherFormValues } from '@interfaces';
+import { Teacher } from '@interfaces/response';
+import {
+  DeleteButton,
+  Edit,
+  ListButton,
+  RefreshButton,
+  SaveButton,
+  useForm,
+} from '@refinedev/antd';
 import { HttpError } from '@refinedev/core';
 import { Col, Row } from 'antd';
+import { useParams } from 'next/navigation';
 
 const TeacherUpdate = () => {
-  const { formProps, saveButtonProps } = useForm<
-    Record<string, unknown>,
+  const { id } = useParams() as { id: string };
+
+  const { formProps, saveButtonProps, queryResult } = useForm<
+    Teacher,
     HttpError,
-    Teacher
+    TeacherFormValues
   >({
     submitOnEnter: true,
     action: 'edit',
-    id: 'teacher_id',
+    id,
+    resource: 'api/v1/teachers',
+    updateMutationOptions: {
+      meta: {
+        method: 'put',
+      },
+    },
   });
 
+  const initialValues = queryResult?.data?.data || undefined;
+
   return (
-    <Edit saveButtonProps={saveButtonProps}>
+    <Edit
+      breadcrumb={null}
+      saveButtonProps={saveButtonProps}
+      deleteButtonProps={{
+        resource: 'api/v1/teachers',
+      }}
+      title="Chỉnh sửa giáo viên"
+      headerButtons={({ listButtonProps, refreshButtonProps }) => (
+        <>
+          <ListButton {...listButtonProps}>Danh sách giáo viên</ListButton>
+          <RefreshButton {...refreshButtonProps} resource="api/v1/teachers">
+            Làm mới
+          </RefreshButton>
+        </>
+      )}
+      footerButtons={({ saveButtonProps, deleteButtonProps }) => (
+        <>
+          <DeleteButton
+            {...deleteButtonProps}
+            confirmTitle="Bạn có chắc muốn xóa giáo viên này không?"
+            confirmOkText="Đồng ý"
+            confirmCancelText="Hủy"
+          >
+            Xóa
+          </DeleteButton>
+          <SaveButton {...saveButtonProps}>Lưu</SaveButton>
+        </>
+      )}
+    >
       <Row>
         <Col span={6} offset={8}>
-          <TeacherForm formProps={formProps} />
+          <TeacherForm formProps={{ ...formProps, initialValues }} />
         </Col>
       </Row>
     </Edit>

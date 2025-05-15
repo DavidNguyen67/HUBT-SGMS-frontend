@@ -2,11 +2,13 @@
 
 import { Form, Input, Select, FormProps, DatePicker } from 'antd';
 import * as yup from 'yup';
-import { Teacher } from '@interfaces';
+import { TeacherFormValues } from '@interfaces';
 import { GENDER } from '@common';
+import { Rule } from 'antd/es/form';
+import dayjs from 'dayjs';
 
 interface TeacherFormProps {
-  formProps: FormProps<Teacher>;
+  formProps: FormProps<TeacherFormValues>;
 }
 
 const teacherSchema = yup.object().shape({
@@ -17,23 +19,16 @@ const teacherSchema = yup.object().shape({
     .oneOf([GENDER.MALE, GENDER.FEMALE, GENDER.OTHER])
     .required('Giới tính là bắt buộc'),
   date_of_birth: yup.date().required('Ngày sinh là bắt buộc'),
-  subject: yup.string().required('Môn học là bắt buộc'),
-  email: yup.string().email('Email không hợp lệ').required('Email là bắt buộc'),
-  phone_number: yup
-    .string()
-    .matches(/^[0-9]+$/, 'Số điện thoại chỉ chứa số')
-    .required('Số điện thoại là bắt buộc'),
-  address: yup.string().required('Địa chỉ là bắt buộc'),
 });
 
 const yupSync = {
   async validator({ field }: { field: any }, value: any) {
     await teacherSchema.validateSyncAt(field, { [field]: value });
   },
-};
+} as unknown as Rule;
 
 const TeacherForm = ({ formProps }: TeacherFormProps) => {
-  const onFinish = async (values: Teacher) => {
+  const onFinish = async (values: TeacherFormValues) => {
     formProps.onFinish?.(values);
   };
 
@@ -55,24 +50,15 @@ const TeacherForm = ({ formProps }: TeacherFormProps) => {
         </Select>
       </Form.Item>
 
-      <Form.Item name="date_of_birth" label="Ngày sinh" rules={[yupSync]}>
+      <Form.Item
+        name="date_of_birth"
+        label="Ngày sinh"
+        rules={[yupSync]}
+        getValueProps={(value) => ({
+          value: value ? dayjs(value) : undefined,
+        })}
+      >
         <DatePicker format="DD/MM/YYYY" style={{ width: '100%' }} />
-      </Form.Item>
-
-      <Form.Item name="subject" label="Môn học" rules={[yupSync]}>
-        <Input />
-      </Form.Item>
-
-      <Form.Item name="email" label="Email" rules={[yupSync]}>
-        <Input type="email" />
-      </Form.Item>
-
-      <Form.Item name="phone_number" label="Số điện thoại" rules={[yupSync]}>
-        <Input />
-      </Form.Item>
-
-      <Form.Item name="address" label="Địa chỉ" rules={[yupSync]}>
-        <Input />
       </Form.Item>
     </Form>
   );
