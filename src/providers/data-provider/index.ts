@@ -51,10 +51,19 @@ export const dataProviderSimpleRest = (
       query._order = _order.join(',');
     }
 
-    const combinedQuery = { ...query, ...queryFilters };
+    const externalFilters = meta?.externalFilters;
+
+    const combinedQuery = {
+      ...query,
+      ...queryFilters,
+      ...(externalFilters ?? {}),
+    };
+
     const urlWithQuery = Object.keys(combinedQuery).length
       ? `${url}?${stringify(combinedQuery)}`
       : url;
+
+    console.log('Check urlWithQuery:', urlWithQuery);
 
     const { data, headers } = await httpClient[requestMethod](urlWithQuery, {
       headers: headersFromMeta,

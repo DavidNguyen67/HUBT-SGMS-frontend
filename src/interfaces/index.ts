@@ -29,13 +29,10 @@ export interface GradeFormValues {
 }
 
 export interface StudentGradeFormValues {
-  id?: string;
-  student_id: string;
-  subject_id: string;
-  score: number;
-  created_at?: string;
-  student_name?: string;
-  subject_name?: string;
+  class_code: string;
+  class_name: string;
+  studentIds: string[];
+  teacherSubjectClassIds: string[];
 }
 
 export interface ClassFormValues {
@@ -43,6 +40,8 @@ export interface ClassFormValues {
   class_code: string;
   class_name: string;
   created_at?: string;
+  studentIds?: string[];
+  teacherSubjectClassIds?: string[];
 }
 
 export interface StudentTableFilter {
@@ -55,4 +54,11 @@ export interface TeacherTableFilter {
   teacher_code?: string;
   full_name?: string;
   gender?: GENDER;
+}
+
+export interface ClassTableFilter {
+  class_code?: string;
+  class_name?: string;
+  teacher_name?: string;
+  subject_name?: string;
 }

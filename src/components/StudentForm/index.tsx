@@ -15,33 +15,33 @@ const genderOptions = [
   { label: 'Khác', value: GENDER.OTHER },
 ];
 
+const studentSchema = yup.object().shape({
+  student_code: yup.string().required('Mã sinh viên là bắt buộc'),
+  full_name: yup.string().required('Họ tên là bắt buộc'),
+  gender: yup
+    .string()
+    .oneOf([GENDER.FEMALE, GENDER.MALE, GENDER.OTHER])
+    .required('Giới tính là bắt buộc'),
+  date_of_birth: yup.date().required('Ngày sinh là bắt buộc'),
+  class_id: yup.string().required('Lớp học là bắt buộc'),
+});
+
+const yupSync = {
+  async validator({ field }: { field: any }, value: any) {
+    await studentSchema.validateSyncAt(field, { [field]: value });
+  },
+} as unknown as Rule;
+
 interface StudentFormProps {
   formProps: FormProps<StudentFormValues>;
 }
 
 const StudentForm = (props: StudentFormProps) => {
-  const studentSchema = yup.object().shape({
-    student_code: yup.string().required('Mã sinh viên là bắt buộc'),
-    full_name: yup.string().required('Họ tên là bắt buộc'),
-    gender: yup
-      .string()
-      .oneOf([GENDER.FEMALE, GENDER.MALE, GENDER.OTHER])
-      .required('Giới tính là bắt buộc'),
-    date_of_birth: yup.date().required('Ngày sinh là bắt buộc'),
-    class_id: yup.string().required('Lớp học là bắt buộc'),
-  });
-
   const { selectProps } = useSelect<Class>({
     resource: 'api/v1/classes',
     optionLabel: 'class_name',
     optionValue: 'id',
   });
-
-  const yupSync = {
-    async validator({ field }: { field: any }, value: any) {
-      await studentSchema.validateSyncAt(field, { [field]: value });
-    },
-  } as unknown as Rule;
 
   const onFinish = async (values: StudentFormValues) => {
     props.formProps.onFinish?.(values);
@@ -72,7 +72,7 @@ const StudentForm = (props: StudentFormProps) => {
       </Form.Item>
 
       <Form.Item label="Lớp" name="class_id" rules={[yupSync]}>
-        <Select {...selectProps} />
+        <Select {...selectProps} placeholder="Chọn lớp học" />
       </Form.Item>
     </Form>
   );

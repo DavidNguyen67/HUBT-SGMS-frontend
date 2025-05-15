@@ -14,6 +14,7 @@ const ClassCreate = () => {
   >({
     submitOnEnter: true,
     action: 'create',
+    resource: 'api/v1/classes',
   });
 
   return (

@@ -34,6 +34,7 @@ export interface TeacherSubjectClass {
   created_at: string;
   updated_at: string;
   class: Class;
+  teacher: Teacher;
   subject: Subject;
   deleted_at?: string;
 }
@@ -52,6 +53,9 @@ export interface Class {
   id: string;
   class_code: string;
   class_name: string;
+  studentCount: number;
+  teacherSubjectClasses: TeacherSubjectClass[];
+  students: Student[];
   created_at: string;
   updated_at: string;
   deleted_at?: string;

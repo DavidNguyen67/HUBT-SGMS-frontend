@@ -2,26 +2,82 @@
 
 import ClassForm from '@components/ClassForm';
 import { ClassFormValues } from '@interfaces';
-import { Edit, useForm } from '@refinedev/antd';
+import { Class } from '@interfaces/response';
+import {
+  DeleteButton,
+  Edit,
+  ListButton,
+  RefreshButton,
+  SaveButton,
+  useForm,
+} from '@refinedev/antd';
 import { HttpError } from '@refinedev/core';
 import { Col, Row } from 'antd';
+import { useParams } from 'next/navigation';
 
 const ClassEdit = () => {
-  const { formProps, saveButtonProps } = useForm<
-    Record<string, unknown>,
+  const { id } = useParams() as { id: string };
+
+  const { formProps, saveButtonProps, queryResult } = useForm<
+    Class,
     HttpError,
     ClassFormValues
   >({
     submitOnEnter: true,
     action: 'edit',
-    id: 'class_id',
+    id,
+    resource: 'api/v1/classes',
+    updateMutationOptions: {
+      meta: {
+        method: 'put',
+      },
+    },
   });
 
+  const initialValues = queryResult?.data?.data
+    ? {
+        ...queryResult.data.data,
+        teacherSubjectClassIds:
+          queryResult.data.data?.teacherSubjectClasses.map((item) => item.id), // Lấy danh sách ID của teacherSubjectClasses
+        studentIds: queryResult.data.data?.students.map((item) => item.id), // Lấy danh sách ID của students
+      }
+    : undefined;
+
   return (
-    <Edit saveButtonProps={saveButtonProps}>
+    <Edit
+      breadcrumb={null}
+      saveButtonProps={saveButtonProps}
+      deleteButtonProps={{
+        resource: 'api/v1/students',
+      }}
+      title="Chỉnh sửa lớp học"
+      headerButtons={({ listButtonProps, refreshButtonProps }) => (
+        <>
+          <ListButton {...listButtonProps}>Danh sách lớp học</ListButton>
+          <RefreshButton {...refreshButtonProps} resource="api/v1/students">
+            Làm mới
+          </RefreshButton>
+        </>
+      )}
+      footerButtons={({ saveButtonProps, deleteButtonProps }) => (
+        <>
+          <DeleteButton
+            {...deleteButtonProps}
+            confirmTitle="Bạn có chắc muốn xóa lớp học này không?"
+            confirmOkText="Đồng ý"
+            confirmCancelText="Hủy"
+          >
+            Xóa
+          </DeleteButton>
+          <SaveButton {...saveButtonProps}>Lưu</SaveButton>
+        </>
+      )}
+    >
       <Row>
         <Col span={6} offset={8}>
-          <ClassForm formProps={formProps} />
+          <ClassForm
+            formProps={{ ...formProps, initialValues: initialValues }}
+          />
         </Col>
       </Row>
     </Edit>
