@@ -18,6 +18,7 @@ const StudentCreate = () => {
     },
     submitOnEnter: true,
     action: 'create',
+    resource: 'api/v1/students',
   });
 
   return (

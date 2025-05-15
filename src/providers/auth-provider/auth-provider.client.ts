@@ -6,16 +6,28 @@ import Cookies from 'js-cookie';
 
 const mockUsers = [
   {
-    name: 'John Doe',
-    email: 'johndoe@mail.com',
+    name: 'Admin User',
+    email: 'admin@mail.com',
     roles: [ROLE.ADMIN],
-    avatar: 'https://i.pravatar.cc/150?img=1',
+    avatar: 'https://i.pravatar.cc/150?img=2',
+  },
+  {
+    name: 'Teacher User',
+    email: 'teacher@mail.com',
+    roles: [ROLE.TEACHER],
+    avatar: 'https://i.pravatar.cc/150?img=3',
+  },
+  {
+    name: 'Student User',
+    email: 'student@mail.com',
+    roles: [ROLE.STUDENT],
+    avatar: 'https://i.pravatar.cc/150?img=4',
   },
 ];
 
 export const authProviderClient: AuthProvider = {
   login: async ({ email, username, password, remember }) => {
-    const user = mockUsers[0];
+    const user = mockUsers.find((item) => item.email === email);
 
     if (user) {
       Cookies.set('auth', JSON.stringify(user), {

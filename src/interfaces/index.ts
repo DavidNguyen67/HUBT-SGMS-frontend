@@ -5,7 +5,7 @@ export interface StudentFormValues {
   full_name: string;
   gender: GENDER;
   date_of_birth: Date;
-  class_name: string;
+  class_id: string;
 }
 
 export interface SubjectFormValues {

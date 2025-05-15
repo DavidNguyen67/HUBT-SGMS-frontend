@@ -6,15 +6,18 @@ import {
   ShowButton,
   useTable,
 } from '@refinedev/antd';
-import { type BaseRecord } from '@refinedev/core';
+import { HttpError, type BaseRecord } from '@refinedev/core';
 import { Space, Table, Tag, Tooltip } from 'antd';
 import React from 'react';
-import fakeStudents from './seed';
 import { truncateText } from '@common/helper';
 
 const StudentsManagement = () => {
-  const { tableProps } = useTable({
+  const { tableProps } = useTable<any, HttpError>({
     syncWithLocation: true,
+    resource: 'api/v1/students',
+    pagination: {
+      mode: 'client',
+    },
   });
 
   return (
@@ -22,9 +25,8 @@ const StudentsManagement = () => {
       <Table
         {...tableProps}
         rowKey="id"
-        dataSource={fakeStudents}
-        loading={false}
         tableLayout="fixed"
+        dataSource={tableProps.dataSource}
       >
         <Table.Column
           dataIndex="id"

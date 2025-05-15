@@ -3,18 +3,14 @@
 import { StudentFormValues } from '@interfaces';
 import { Form, Input, DatePicker, Select, FormProps } from 'antd';
 import * as yup from 'yup';
+import moment from 'moment';
+import { useSelect } from '@refinedev/antd';
+import { Class } from '@interfaces/response';
 
 const genderOptions = [
   { label: 'Nam', value: 'male' },
   { label: 'Nữ', value: 'female' },
   { label: 'Khác', value: 'other' },
-];
-
-const classOptions = [
-  { label: '12A1', value: '12A1' },
-  { label: '12A2', value: '12A2' },
-  { label: '11B1', value: '11B1' },
-  { label: '10C3', value: '10C3' },
 ];
 
 interface StudentFormProps {
@@ -30,7 +26,13 @@ const StudentForm = (props: StudentFormProps) => {
       .oneOf(['male', 'female'])
       .required('Giới tính là bắt buộc'),
     date_of_birth: yup.date().required('Ngày sinh là bắt buộc'),
-    class_name: yup.string().required('Lớp học là bắt buộc'),
+    class_id: yup.string().required('Lớp học là bắt buộc'),
+  });
+
+  const { selectProps } = useSelect<Class>({
+    resource: 'api/v1/classes', // Endpoint API để lấy danh sách lớp học
+    optionLabel: 'class_name', // Trường hiển thị trong dropdown
+    optionValue: 'id', // Trường giá trị (UUID của lớp học)
   });
 
   const yupSync = {
@@ -40,8 +42,12 @@ const StudentForm = (props: StudentFormProps) => {
   };
 
   const onFinish = async (values: StudentFormValues) => {
-    console.log('Form values:', values);
-    props.formProps.onFinish?.(values);
+    const formattedValues = {
+      ...values,
+      date_of_birth: values.date_of_birth,
+    };
+    console.log('Form values:', formattedValues);
+    props.formProps.onFinish?.(formattedValues);
   };
 
   return (
@@ -62,8 +68,8 @@ const StudentForm = (props: StudentFormProps) => {
         <DatePicker format="DD/MM/YYYY" style={{ width: '100%' }} />
       </Form.Item>
 
-      <Form.Item label="Lớp" name="class_name" rules={[yupSync]}>
-        <Select options={classOptions} />
+      <Form.Item label="Lớp" name="class_id" rules={[yupSync]}>
+        <Select {...selectProps} />
       </Form.Item>
     </Form>
   );

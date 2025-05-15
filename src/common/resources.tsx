@@ -14,7 +14,25 @@ export const resources: Array<ResourceProps> = [
     icon: <DashboardOutlined />,
     meta: {
       label: 'Tổng quan',
-      roles: ['admin', 'teacher', 'student'],
+      roles: ['admin'],
+    },
+  },
+  {
+    name: 'Dashboard',
+    list: '/teacher-dashboard',
+    icon: <DashboardOutlined />,
+    meta: {
+      label: 'Tổng quan',
+      roles: ['teacher'],
+    },
+  },
+  {
+    name: 'Dashboard',
+    list: '/student-dashboard',
+    icon: <DashboardOutlined />,
+    meta: {
+      label: 'Tổng quan',
+      roles: ['student'],
     },
   },
   {
@@ -52,7 +70,7 @@ export const resources: Array<ResourceProps> = [
     meta: {
       canDelete: true,
       label: 'Lớp học',
-      roles: ['admin', 'teacher'],
+      roles: ['admin', 'teacher', 'student'],
     },
     icon: <TableOutlined />,
   },
@@ -65,7 +83,7 @@ export const resources: Array<ResourceProps> = [
     meta: {
       canDelete: true,
       label: 'Môn học',
-      roles: ['admin', 'teacher'],
+      roles: ['admin', 'teacher', 'student'],
     },
     icon: <BookOutlined />,
   },
@@ -77,7 +95,7 @@ export const resources: Array<ResourceProps> = [
     show: '/grades/show/:id',
     meta: {
       canDelete: true,
-      label: 'Điểm',
+      label: 'Loại điểm',
       roles: ['admin', 'teacher'],
     },
     icon: <FileTextOutlined />,
