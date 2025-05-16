@@ -48,13 +48,13 @@ const ClassEdit = () => {
       breadcrumb={null}
       saveButtonProps={saveButtonProps}
       deleteButtonProps={{
-        resource: 'api/v1/students',
+        resource: 'api/v1/classes',
       }}
       title="Chỉnh sửa lớp học"
       headerButtons={({ listButtonProps, refreshButtonProps }) => (
         <>
           <ListButton {...listButtonProps}>Danh sách lớp học</ListButton>
-          <RefreshButton {...refreshButtonProps} resource="api/v1/students">
+          <RefreshButton {...refreshButtonProps} resource="api/v1/classes">
             Làm mới
           </RefreshButton>
         </>
@@ -74,7 +74,7 @@ const ClassEdit = () => {
       )}
     >
       <Row>
-        <Col span={6} offset={8}>
+        <Col span={16}>
           <ClassForm
             formProps={{ ...formProps, initialValues: initialValues }}
           />

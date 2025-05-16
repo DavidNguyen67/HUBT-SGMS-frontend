@@ -1,11 +1,13 @@
 'use client';
 
-import { Form, Input, FormProps, Select } from 'antd';
+import { Form, Input, FormProps } from 'antd';
 import * as yup from 'yup';
 import { ClassFormValues } from '@interfaces';
 import { Rule } from 'antd/es/form';
-import { Student, TeacherSubjectClass } from '@interfaces/response';
-import { useSelect } from '@refinedev/antd';
+import StudentTableSelect from '@components/StudentTableSelect';
+import SelectedStudentTable from '@components/SelectedStudentTable';
+import TeacherSubjectClassTableSelect from '@components/TeacherSubjectClassTableSelect';
+import SelectedTeacherSubjectClassTable from '@components/SelectedTeacherSubjectClassTable';
 
 interface ClassFormProps {
   formProps: FormProps<ClassFormValues>;
@@ -23,76 +25,60 @@ const yupSync = {
 } as unknown as Rule;
 
 const ClassForm = ({ formProps }: ClassFormProps) => {
-  const { selectProps: studentSelectProps } = useSelect<Student>({
-    resource: 'api/v1/students',
-    optionLabel: 'full_name',
-    optionValue: 'id',
-    onSearch: (value) => [
-      {
-        field: 'value',
-        operator: 'contains',
-        value,
-      },
-    ],
-    meta: {
-      externalFilters: {
-        _end: 50,
-      },
-    },
-  });
+  const [form] = Form.useForm(formProps.form);
 
-  const { selectProps: teacherSubjectClassSelectProps } =
-    useSelect<TeacherSubjectClass>({
-      resource: 'api/v1/teacher-subject-classes',
-      optionLabel: (item) =>
-        item.teacher.full_name + ' - ' + item.subject.subject_name,
-      optionValue: 'id',
-      onSearch: (value) => [
-        {
-          field: 'value',
-          operator: 'contains',
-          value,
-        },
-      ],
-      meta: {
-        externalFilters: {
-          end: 50,
-        },
-      },
-    });
+  const initialStudentIds = Form.useWatch('studentIds', form) ?? [];
 
   const onFinish = async (values: ClassFormValues) => {
     formProps.onFinish?.(values);
   };
 
   return (
-    <Form layout="vertical" {...formProps} onFinish={onFinish}>
+    <Form layout="vertical" {...formProps} form={form} onFinish={onFinish}>
       <Form.Item name="class_code" label="Mã lớp" rules={[yupSync]}>
-        <Input />
+        <Input width={200} placeholder="Nhập mã lớp" />
       </Form.Item>
 
       <Form.Item name="class_name" label="Tên lớp" rules={[yupSync]}>
-        <Input />
+        <Input width={200} placeholder="Nhập tên lớp" />
       </Form.Item>
 
-      <Form.Item name="studentIds" label="Sinh viên">
-        <Select
-          {...studentSelectProps}
-          placeholder="Chọn sinh viên"
-          allowClear
-          mode="multiple"
-          filterOption={false}
+      <Form.Item name="studentIds" label={`Số lượng Sinh viên: ${1}`}>
+        <StudentTableSelect
+          selectedRowKeys={formProps?.form?.getFieldValue('studentIds')}
+          onChange={(keys) =>
+            formProps?.form?.setFieldValue('studentIds', [
+              ...initialStudentIds,
+              ...keys,
+            ])
+          }
+          ignoreIds={initialStudentIds}
         />
+        {formProps?.form?.getFieldValue('studentIds')?.length > 0 && (
+          <SelectedStudentTable
+            ids={formProps?.form?.getFieldValue('studentIds')?.join(',')}
+          />
+        )}
       </Form.Item>
 
-      <Form.Item name="teacherSubjectClassIds" label="Giáo viên - Môn học">
-        <Select
-          {...teacherSubjectClassSelectProps}
-          placeholder="Chọn cặp giáo viên - môn học"
-          mode="multiple"
-          allowClear
-          filterOption={false}
+      <Form.Item
+        name="teacherSubjectClassIds"
+        label={`Số lượng Giáo viên - Môn học: ${1}`}
+      >
+        <TeacherSubjectClassTableSelect
+          selectedRowKeys={formProps?.form?.getFieldValue(
+            'teacherSubjectClassIds'
+          )}
+          onChange={(keys) =>
+            formProps?.form?.setFieldValue('teacherSubjectClassIds', keys)
+          }
         />
+        {formProps?.form?.getFieldValue('teacherSubjectClassIds')?.length >
+          0 && (
+          <SelectedTeacherSubjectClassTable
+            ids={formProps?.form?.getFieldValue('teacherSubjectClassIds')}
+          />
+        )}
       </Form.Item>
     </Form>
   );

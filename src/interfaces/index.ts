@@ -62,3 +62,12 @@ export interface ClassTableFilter {
   teacher_name?: string;
   subject_name?: string;
 }
+
+export interface TeacherSubjectClassTableFilter {
+  class_name?: string;
+  class_code?: string;
+  subject_name?: string;
+  subject_code?: string;
+  teacher_name?: string;
+  teacher_code?: string;
+}
