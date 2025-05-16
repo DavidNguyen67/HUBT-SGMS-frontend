@@ -13,9 +13,6 @@ const TeacherCreate = () => {
     HttpError,
     TeacherFormValues
   >({
-    defaultFormValues: {
-      gender: GENDER.FEMALE,
-    },
     submitOnEnter: true,
     action: 'create',
     resource: 'api/v1/teachers',

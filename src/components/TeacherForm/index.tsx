@@ -35,15 +35,15 @@ const TeacherForm = ({ formProps }: TeacherFormProps) => {
   return (
     <Form layout="vertical" {...formProps} onFinish={onFinish}>
       <Form.Item name="teacher_code" label="Mã giáo viên" rules={[yupSync]}>
-        <Input />
+        <Input placeholder="Nhập mã giáo viên" allowClear />
       </Form.Item>
 
       <Form.Item name="full_name" label="Họ và tên" rules={[yupSync]}>
-        <Input />
+        <Input placeholder="Nhập họ và tên giáo viên" allowClear />
       </Form.Item>
 
       <Form.Item name="gender" label="Giới tính" rules={[yupSync]}>
-        <Select>
+        <Select placeholder="Chọn giới tính" allowClear>
           <Select.Option value={GENDER.MALE}>Nam</Select.Option>
           <Select.Option value={GENDER.FEMALE}>Nữ</Select.Option>
           <Select.Option value={GENDER.OTHER}>Khác</Select.Option>
@@ -58,7 +58,12 @@ const TeacherForm = ({ formProps }: TeacherFormProps) => {
           value: value ? dayjs(value) : undefined,
         })}
       >
-        <DatePicker format="DD/MM/YYYY" style={{ width: '100%' }} />
+        <DatePicker
+          allowClear
+          format="DD/MM/YYYY"
+          style={{ width: '100%' }}
+          placeholder="Chọn ngày sinh"
+        />
       </Form.Item>
     </Form>
   );

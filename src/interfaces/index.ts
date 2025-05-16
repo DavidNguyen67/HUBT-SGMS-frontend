@@ -60,6 +60,7 @@ export interface TeacherTableFilter {
   full_name?: string;
   gender?: GENDER;
   date_of_birth_range?: [Dayjs, Dayjs];
+  teacher_subject_class?: string;
 }
 
 export interface ClassTableFilter {

@@ -49,6 +49,14 @@ const TeachersManagement = () => {
       });
     }
 
+    if (values.teacher_subject_class != null) {
+      filters.push({
+        field: 'teacher_subject_class',
+        operator: 'contains',
+        value: values.teacher_subject_class,
+      });
+    }
+
     if (values.date_of_birth_range && values.date_of_birth_range.length > 0) {
       const [from, to] = values.date_of_birth_range;
 
@@ -122,21 +130,21 @@ const TeachersManagement = () => {
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8} lg={5} xl={5}>
-            <Form.Item name="gender" label="Giới tính">
-              <Select placeholder="Chọn giới tính" allowClear>
-                <Select.Option value="male">Nam</Select.Option>
-                <Select.Option value="female">Nữ</Select.Option>
-                <Select.Option value="other">Khác</Select.Option>
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8} lg={5} xl={5}>
             <Form.Item name="date_of_birth_range" label="Ngày sinh">
               <DatePicker.RangePicker
                 format="DD/MM/YYYY"
                 allowClear
                 style={{ width: '100%' }}
                 placeholder={['Từ ngày', 'Đến ngày']}
+              />
+            </Form.Item>
+          </Col>
+
+          <Col xs={24} sm={12} md={8} lg={5} xl={5}>
+            <Form.Item name="teacher_subject_class" label="Môn học - Lớp học">
+              <Input
+                placeholder="Tìm theo tên hoặc mã của môn học - lớp học..."
+                allowClear
               />
             </Form.Item>
           </Col>
