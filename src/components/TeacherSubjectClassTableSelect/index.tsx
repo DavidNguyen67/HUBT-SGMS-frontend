@@ -1,10 +1,10 @@
-import { Modal, Table, Button, Tooltip, Form, Input } from 'antd';
-import { CrudFilters, HttpError } from '@refinedev/core';
-import { useState } from 'react';
-import { TeacherSubjectClassTableFilter } from '@interfaces';
-import { TeacherSubjectClass } from '@interfaces/response';
-import { DateField, useTable } from '@refinedev/antd';
-import { truncateText } from '@common/helper';
+import { Modal, Table, Button, Tooltip, Form, Input } from "antd";
+import { CrudFilters, HttpError } from "@refinedev/core";
+import { useState } from "react";
+import { TeacherSubjectClassTableFilter } from "@interfaces";
+import { TeacherSubjectClass } from "@interfaces/response";
+import { DateField, useTable } from "@refinedev/antd";
+import { truncateText } from "@common/helper";
 
 interface TeacherSubjectClassTableSelectProps {
   onChange: (selectedRowKeys: React.Key[]) => void;
@@ -23,81 +23,96 @@ const TeacherSubjectClassTableSelect = ({
     TeacherSubjectClassTableFilter
   >({
     syncWithLocation: true,
-    resource: 'api/v1/teacher-subject-classes',
+    resource: "api/v1/teacher-subject-classes",
     onSearch: (values) => {
       const filters: CrudFilters = [];
+
       if (values.class_name != null) {
         filters.push({
-          field: 'class_name',
-          operator: 'contains',
+          field: "class_name",
+          operator: "contains",
           value: values.class_name,
         });
       }
       if (values.class_code != null) {
         filters.push({
-          field: 'class_code',
-          operator: 'contains',
+          field: "class_code",
+          operator: "contains",
           value: values.class_code,
         });
       }
       if (values.subject_name != null) {
         filters.push({
-          field: 'subject_name',
-          operator: 'contains',
+          field: "subject_name",
+          operator: "contains",
           value: values.subject_name,
         });
       }
       if (values.subject_code != null) {
         filters.push({
-          field: 'subject_code',
-          operator: 'contains',
+          field: "subject_code",
+          operator: "contains",
           value: values.subject_code,
         });
       }
       if (values.teacher_name != null) {
         filters.push({
-          field: 'teacher_name',
-          operator: 'contains',
+          field: "teacher_name",
+          operator: "contains",
           value: values.teacher_name,
         });
       }
       if (values.teacher_code != null) {
         filters.push({
-          field: 'teacher_code',
-          operator: 'contains',
+          field: "teacher_code",
+          operator: "contains",
           value: values.teacher_code,
         });
       }
+
       return filters;
     },
     meta: {
       externalFilters: {
-        ignoreIds: ignoreIds?.join(','),
+        ignoreIds: ignoreIds?.join(","),
       },
     },
   });
 
   const [open, setOpen] = useState(false);
+  const [tempSelectedKeys, setTempSelectedKeys] = useState<React.Key[]>([]);
 
-  const rowSelection = {
-    selectedRowKeys,
-    onChange,
+  const handleOpen = () => {
+    setTempSelectedKeys(selectedRowKeys);
+    setOpen(true);
+  };
+
+  const handleConfirm = () => {
+    onChange(tempSelectedKeys);
+    setOpen(false);
   };
 
   return (
     <>
-      <Button onClick={() => setOpen(true)}>Chọn giáo viên - môn học</Button>
+      <Button onClick={handleOpen}>Chọn giáo viên - môn học</Button>
       <Modal
         open={open}
         title="Chọn giáo viên - môn học"
         onCancel={() => setOpen(false)}
-        footer={null}
+        footer={[
+          <Button key="cancel" onClick={() => setOpen(false)}>
+            Hủy
+          </Button>,
+          <Button key="confirm" type="primary" onClick={handleConfirm}>
+            Xác nhận
+          </Button>,
+        ]}
         width={900}
       >
         <Form
           layout="inline"
           {...searchFormProps}
-          style={{ marginBottom: 16, display: 'flex', gap: 16 }}
+          style={{ marginBottom: 16, display: "flex", gap: 16 }}
         >
           <Form.Item
             name="class_name"
@@ -170,52 +185,53 @@ const TeacherSubjectClassTableSelect = ({
           {...tableProps}
           rowKey="id"
           rowSelection={{
-            type: 'checkbox',
-            ...rowSelection,
+            type: "checkbox",
+            selectedRowKeys: tempSelectedKeys,
+            onChange: setTempSelectedKeys,
           }}
           dataSource={tableProps.dataSource}
           pagination={{
             ...tableProps.pagination,
-            position: ['bottomCenter'],
+            position: ["bottomCenter"],
             showSizeChanger: true,
-            pageSizeOptions: ['5', '10', '20', '50'],
+            pageSizeOptions: ["5", "10", "20", "50"],
             showTotal: (total) => `Tổng cộng ${total} bản ghi`,
           }}
         >
           <Table.Column
             title="Giáo viên"
-            dataIndex={['teacher', 'full_name']}
+            dataIndex={["teacher", "full_name"]}
             render={(value: string) => (
               <Tooltip title={value}>{truncateText(value, 24)}</Tooltip>
             )}
           />
           <Table.Column
             title="Mã GV"
-            dataIndex={['teacher', 'teacher_code']}
+            dataIndex={["teacher", "teacher_code"]}
             width={100}
           />
           <Table.Column
             title="Môn học"
-            dataIndex={['subject', 'subject_name']}
+            dataIndex={["subject", "subject_name"]}
             render={(value: string) => (
               <Tooltip title={value}>{truncateText(value, 24)}</Tooltip>
             )}
           />
           <Table.Column
             title="Mã môn"
-            dataIndex={['subject', 'subject_code']}
+            dataIndex={["subject", "subject_code"]}
             width={100}
           />
           <Table.Column
             title="Lớp"
-            dataIndex={['class', 'class_name']}
+            dataIndex={["class", "class_name"]}
             render={(value: string) => (
               <Tooltip title={value}>{truncateText(value, 24)}</Tooltip>
             )}
           />
           <Table.Column
             title="Mã lớp"
-            dataIndex={['class', 'class_code']}
+            dataIndex={["class", "class_code"]}
             width={100}
           />
           <Table.Column
@@ -231,4 +247,5 @@ const TeacherSubjectClassTableSelect = ({
     </>
   );
 };
+
 export default TeacherSubjectClassTableSelect;

@@ -1,39 +1,50 @@
-'use client';
+"use client";
 
-import { Table, Tooltip } from 'antd';
-import { DateField, useTable } from '@refinedev/antd';
-import { TeacherSubjectClass } from '@interfaces/response';
-import { truncateText } from '@common/helper';
-import { HttpError } from '@refinedev/core';
+import { Table, Tooltip, Button } from "antd";
+import { DateField, useTable } from "@refinedev/antd";
+import { TeacherSubjectClass } from "@interfaces/response";
+import { truncateText } from "@common/helper";
+import { HttpError } from "@refinedev/core";
+import { DeleteOutlined } from "@ant-design/icons";
+import { PAGE_SIZE_OPTIONS } from "@common";
 
 interface SelectedTeacherSubjectClassTableProps {
   ids?: string[];
+  onRemoveId?: (id: string) => void;
 }
 
 const SelectedTeacherSubjectClassTable = ({
   ids,
+  onRemoveId,
 }: SelectedTeacherSubjectClassTableProps) => {
   const { tableProps } = useTable<TeacherSubjectClass, HttpError>({
-    resource: 'api/v1/teacher-subject-classes',
+    resource: "api/v1/teacher-subject-classes",
     syncWithLocation: false,
     meta: {
       externalFilters: {
-        ids: Array.isArray(ids) ? ids.join(',') : ids,
+        ids: Array.isArray(ids) ? ids.join(",") : ids,
       },
     },
   });
 
   return (
     <Table
+      {...tableProps}
       size="small"
       rowKey="id"
-      pagination={false}
-      dataSource={tableProps.dataSource}
       style={{ marginTop: 12 }}
+      pagination={{
+        ...tableProps.pagination,
+        position: ["bottomCenter"],
+        showSizeChanger: true,
+        pageSizeOptions: PAGE_SIZE_OPTIONS,
+        defaultPageSize: +PAGE_SIZE_OPTIONS[0],
+        showTotal: (total) => `Tổng cộng ${total} bản ghi`,
+      }}
     >
       <Table.Column
         title="Giáo viên"
-        dataIndex={['teacher', 'full_name']}
+        dataIndex={["teacher", "full_name"]}
         filters={
           tableProps.dataSource?.map((item) => ({
             text: item.teacher.full_name,
@@ -49,7 +60,7 @@ const SelectedTeacherSubjectClassTable = ({
       />
       <Table.Column
         title="Mã GV"
-        dataIndex={['teacher', 'teacher_code']}
+        dataIndex={["teacher", "teacher_code"]}
         width={100}
         filters={
           tableProps.dataSource?.map((item) => ({
@@ -63,14 +74,14 @@ const SelectedTeacherSubjectClassTable = ({
       />
       <Table.Column
         title="Môn học"
-        dataIndex={['subject', 'subject_name']}
+        dataIndex={["subject", "subject_name"]}
         render={(value: string) => (
           <Tooltip title={value}>{truncateText(value)}</Tooltip>
         )}
       />
       <Table.Column
         title="Lớp học"
-        dataIndex={['class', 'class_name']}
+        dataIndex={["class", "class_name"]}
         render={(value: string) => (
           <Tooltip title={value}>{truncateText(value)}</Tooltip>
         )}
@@ -84,6 +95,22 @@ const SelectedTeacherSubjectClassTable = ({
         sorter={(a, b) =>
           new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
         }
+      />
+      <Table.Column
+        title="Hành động"
+        key="action"
+        fixed="right"
+        width={100}
+        render={(_, record: TeacherSubjectClass) => (
+          <Button
+            danger
+            size="small"
+            icon={<DeleteOutlined />}
+            onClick={() => {
+              onRemoveId?.(record.id);
+            }}
+          />
+        )}
       />
     </Table>
   );

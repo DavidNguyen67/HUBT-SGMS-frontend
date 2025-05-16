@@ -1,38 +1,50 @@
-'use client';
+"use client";
 
-import { Table, Tag, Tooltip } from 'antd';
-import { GENDER, TAG_GENDER_COLOR_MAPPING, TAG_GENDER_MAPPING } from '@common';
-import { DateField, useTable } from '@refinedev/antd';
-import { Student } from '@interfaces/response';
-import { truncateText } from '@common/helper';
-import { HttpError } from '@refinedev/core';
+import { Button, Table, Tag, Tooltip } from "antd";
+import {
+  GENDER,
+  PAGE_SIZE_OPTIONS,
+  TAG_GENDER_COLOR_MAPPING,
+  TAG_GENDER_MAPPING,
+} from "@common";
+import { DateField, DeleteButton, useTable } from "@refinedev/antd";
+import { Student } from "@interfaces/response";
+import { truncateText } from "@common/helper";
+import { HttpError } from "@refinedev/core";
+import { useState } from "react";
+import { DeleteOutlined } from "@ant-design/icons";
 
 interface SelectedStudentTableProps {
   ids?: string[];
+  onRemoveId?: (id: string) => void;
 }
 
-const SelectedStudentTable = ({ ids }: SelectedStudentTableProps) => {
+const SelectedStudentTable = ({
+  ids,
+  onRemoveId,
+}: SelectedStudentTableProps) => {
   const { tableProps } = useTable<Student, HttpError>({
-    resource: 'api/v1/students',
+    resource: "api/v1/students",
     syncWithLocation: false,
     meta: {
       externalFilters: {
-        ids: Array.isArray(ids) ? ids.join(',') : ids,
+        ids: Array.isArray(ids) ? ids.join(",") : ids,
       },
     },
   });
 
   return (
     <Table
+      {...tableProps}
       size="small"
       rowKey="id"
-      dataSource={tableProps.dataSource}
       style={{ marginTop: 12 }}
       pagination={{
         ...tableProps.pagination,
-        position: ['bottomCenter'],
+        position: ["bottomCenter"],
         showSizeChanger: true,
-        pageSizeOptions: ['10', '20', '30'],
+        pageSizeOptions: PAGE_SIZE_OPTIONS,
+        defaultPageSize: +PAGE_SIZE_OPTIONS[0],
         showTotal: (total) => `Tổng cộng ${total} bản ghi`,
       }}
     >
@@ -77,9 +89,9 @@ const SelectedStudentTable = ({ ids }: SelectedStudentTableProps) => {
         dataIndex="gender"
         title="Giới tính"
         filters={[
-          { text: 'Nam', value: 'male' },
-          { text: 'Nữ', value: 'female' },
-          { text: 'Khác', value: 'other' },
+          { text: "Nam", value: "male" },
+          { text: "Nữ", value: "female" },
+          { text: "Khác", value: "other" },
         ]}
         onFilter={(value, record) => record.gender === value}
         render={(value: GENDER) => (
@@ -98,6 +110,22 @@ const SelectedStudentTable = ({ ids }: SelectedStudentTableProps) => {
           new Date(a.date_of_birth).getTime() -
           new Date(b.date_of_birth).getTime()
         }
+      />
+      <Table.Column
+        title="Hành động"
+        key="action"
+        fixed="right"
+        width={100}
+        render={(_, record: Student) => (
+          <Button
+            danger
+            size="small"
+            icon={<DeleteOutlined />}
+            onClick={() => {
+              onRemoveId?.(record.id);
+            }}
+          />
+        )}
       />
     </Table>
   );

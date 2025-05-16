@@ -1,11 +1,11 @@
-import { Modal, Table, Button, Tag, Tooltip, Form, Select, Input } from 'antd';
-import { CrudFilters, HttpError } from '@refinedev/core';
-import { useMemo, useState } from 'react';
-import { StudentTableFilter } from '@interfaces';
-import { Student } from '@interfaces/response';
-import { DateField, useTable } from '@refinedev/antd';
-import { GENDER, TAG_GENDER_COLOR_MAPPING, TAG_GENDER_MAPPING } from '@common';
-import { truncateText } from '@common/helper';
+import { Modal, Table, Button, Tag, Tooltip, Form, Select, Input } from "antd";
+import { CrudFilters, HttpError } from "@refinedev/core";
+import { useMemo, useState } from "react";
+import { StudentTableFilter } from "@interfaces";
+import { Student } from "@interfaces/response";
+import { DateField, useTable } from "@refinedev/antd";
+import { GENDER, TAG_GENDER_COLOR_MAPPING, TAG_GENDER_MAPPING } from "@common";
+import { truncateText } from "@common/helper";
 
 interface StudentTableSelectProps {
   onChange: (selectedRowKeys: React.Key[]) => void;
@@ -13,46 +13,40 @@ interface StudentTableSelectProps {
   ignoreIds?: string[];
 }
 
-const PAGE_SIZE_OPTIONS = ['10', '20', '30'];
-
 const StudentTableSelect = ({
   onChange,
   selectedRowKeys,
   ignoreIds,
 }: StudentTableSelectProps) => {
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const [pageSize, setPageSize] = useState(10);
-
   const { tableProps, searchFormProps } = useTable<
     Student,
     HttpError,
     StudentTableFilter
   >({
     syncWithLocation: true,
-    resource: 'api/v1/students',
+    resource: "api/v1/students",
     onSearch: (values) => {
       const filters: CrudFilters = [];
 
       if (values.full_name != null) {
         filters.push({
-          field: 'full_name',
-          operator: 'contains',
+          field: "full_name",
+          operator: "contains",
           value: values.full_name || undefined,
         });
       }
 
       if (values.student_code != null) {
         filters.push({
-          field: 'student_code',
-          operator: 'contains',
+          field: "student_code",
+          operator: "contains",
           value: values.student_code || undefined,
         });
       }
 
       filters.push({
-        field: 'gender',
-        operator: 'eq',
+        field: "gender",
+        operator: "eq",
         value: values.gender ?? undefined,
       });
 
@@ -60,15 +54,10 @@ const StudentTableSelect = ({
     },
     meta: {
       externalFilters: {
-        ignoreIds: Array.isArray(ignoreIds) ? ignoreIds.join(',') : ignoreIds,
+        ignoreIds: Array.isArray(ignoreIds) ? ignoreIds.join(",") : ignoreIds,
       },
     },
   });
-
-  const paginatedData = useMemo(() => {
-    const start = (currentPage - 1) * pageSize;
-    return tableProps.dataSource?.slice(start, start + pageSize);
-  }, [tableProps.dataSource, currentPage, pageSize]);
 
   const [open, setOpen] = useState(false);
   const [tempSelectedKeys, setTempSelectedKeys] = useState<React.Key[]>([]);
@@ -103,7 +92,7 @@ const StudentTableSelect = ({
         <Form
           layout="inline"
           {...searchFormProps}
-          style={{ marginBottom: 16, display: 'flex', gap: 16 }}
+          style={{ marginBottom: 16, display: "flex", gap: 16 }}
         >
           <Form.Item
             name="full_name"
@@ -153,24 +142,19 @@ const StudentTableSelect = ({
           {...tableProps}
           rowKey="id"
           rowSelection={{
-            type: 'checkbox',
+            type: "checkbox",
             selectedRowKeys: tempSelectedKeys,
             onChange: setTempSelectedKeys,
           }}
+          size="small"
+          style={{ marginTop: 12 }}
           pagination={{
-            current: currentPage,
-            pageSize,
-            total: tableProps.dataSource?.length ?? 0,
-            onChange: (page, size) => {
-              setCurrentPage(page);
-              setPageSize(size);
-            },
-            position: ['bottomCenter'],
+            ...tableProps.pagination,
+            position: ["bottomCenter"],
             showSizeChanger: true,
-            pageSizeOptions: PAGE_SIZE_OPTIONS,
             showTotal: (total) => `Tổng cộng ${total} bản ghi`,
           }}
-          dataSource={paginatedData}
+          dataSource={tableProps.dataSource}
         >
           <Table.Column
             dataIndex="id"
@@ -182,8 +166,8 @@ const StudentTableSelect = ({
                 <div
                   style={{
                     width: 60,
-                    wordWrap: 'break-word',
-                    wordBreak: 'break-word',
+                    wordWrap: "break-word",
+                    wordBreak: "break-word",
                   }}
                 >
                   {truncateText(value)}
