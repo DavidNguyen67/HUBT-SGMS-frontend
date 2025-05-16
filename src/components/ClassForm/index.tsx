@@ -63,7 +63,7 @@ const ClassForm = ({ formProps }: ClassFormProps) => {
           }
           ignoreIds={currentStudentIds}
         />
-        {formProps?.form?.getFieldValue('studentIds')?.length > 0 && (
+        {currentStudentIds?.length > 0 && (
           <SelectedStudentTable
             ids={formProps?.form?.getFieldValue('studentIds')?.join(',')}
             onRemoveId={(id) => {
@@ -87,8 +87,7 @@ const ClassForm = ({ formProps }: ClassFormProps) => {
           }
           ignoreIds={currentTeacherSubjectClassIds}
         />
-        {formProps?.form?.getFieldValue('teacherSubjectClassIds')?.length >
-          0 && (
+        {currentTeacherSubjectClassIds?.length > 0 && (
           <SelectedTeacherSubjectClassTable
             ids={formProps?.form?.getFieldValue('teacherSubjectClassIds')}
             onRemoveId={(id) => {

@@ -8,22 +8,22 @@ import {
   TAG_GENDER_MAPPING,
 } from '@common';
 import { DateField, useTable } from '@refinedev/antd';
-import { Student } from '@interfaces/response';
-import { truncateText } from '@common/helper';
 import { HttpError } from '@refinedev/core';
+import { Teacher } from '@interfaces/response';
+import { truncateText } from '@common/helper';
 import { DeleteOutlined } from '@ant-design/icons';
 
-interface SelectedStudentTableProps {
+interface SelectedTeacherTableProps {
   ids?: string[];
   onRemoveId?: (id: string) => void;
 }
 
-const SelectedStudentTable = ({
+const SelectedTeacherTable = ({
   ids,
   onRemoveId,
-}: SelectedStudentTableProps) => {
-  const { tableProps } = useTable<Student, HttpError>({
-    resource: 'api/v1/students',
+}: SelectedTeacherTableProps) => {
+  const { tableProps } = useTable<Teacher, HttpError>({
+    resource: 'api/v1/teachers',
     syncWithLocation: false,
     meta: {
       externalFilters: {
@@ -59,27 +59,27 @@ const SelectedStudentTable = ({
         )}
       />
       <Table.Column
-        dataIndex="student_code"
-        title="Mã sinh viên"
+        dataIndex="teacher_code"
+        title="Mã giáo viên"
         width={120}
-        sorter={(a, b) => a.student_code.localeCompare(b.student_code)}
+        sorter={(a, b) => a.teacher_code.localeCompare(b.teacher_code)}
         filters={
-          tableProps.dataSource?.map((s) => ({
-            text: s.student_code,
-            value: s.student_code,
+          tableProps.dataSource?.map((t) => ({
+            text: t.teacher_code,
+            value: t.teacher_code,
           })) ?? []
         }
-        onFilter={(value, record) => record.student_code.includes(value)}
+        onFilter={(value, record) => record.teacher_code.includes(value)}
       />
       <Table.Column
         dataIndex="full_name"
         title="Họ tên"
-        width={200}
+        width={180}
         sorter={(a, b) => a.full_name.localeCompare(b.full_name)}
         filters={
-          tableProps.dataSource?.map((s) => ({
-            text: s.full_name,
-            value: s.full_name,
+          tableProps.dataSource?.map((t) => ({
+            text: t.full_name,
+            value: t.full_name,
           })) ?? []
         }
         onFilter={(value, record) => record.full_name.includes(value)}
@@ -104,20 +104,17 @@ const SelectedStudentTable = ({
       <Table.Column
         dataIndex="date_of_birth"
         title="Ngày sinh"
+        sorter={{ multiple: 3 }}
         render={(value: string) => (
           <DateField value={value} format="DD/MM/YYYY" />
         )}
-        sorter={(a, b) =>
-          new Date(a.date_of_birth).getTime() -
-          new Date(b.date_of_birth).getTime()
-        }
       />
       <Table.Column
         title="Hành động"
         key="action"
         fixed="right"
         width={100}
-        render={(_, record: Student) => (
+        render={(_, record: Teacher) => (
           <Button
             danger
             size="small"
@@ -132,4 +129,4 @@ const SelectedStudentTable = ({
   );
 };
 
-export default SelectedStudentTable;
+export default SelectedTeacherTable;

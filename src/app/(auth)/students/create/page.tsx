@@ -3,7 +3,7 @@
 import { GENDER } from '@common';
 import StudentForm from '@components/StudentForm';
 import { StudentFormValues } from '@interfaces';
-import { Create, useForm } from '@refinedev/antd';
+import { Create, SaveButton, useForm } from '@refinedev/antd';
 import { HttpError } from '@refinedev/core';
 import { Col, Row } from 'antd';
 
@@ -13,9 +13,6 @@ const StudentCreate = () => {
     HttpError,
     StudentFormValues
   >({
-    defaultFormValues: {
-      gender: GENDER.FEMALE,
-    },
     submitOnEnter: true,
     action: 'create',
     resource: 'api/v1/students',
@@ -26,6 +23,11 @@ const StudentCreate = () => {
       saveButtonProps={saveButtonProps}
       title="Thêm sinh viên"
       breadcrumb={null}
+      footerButtons={({ saveButtonProps }) => (
+        <>
+          <SaveButton {...saveButtonProps}>Tạo</SaveButton>
+        </>
+      )}
     >
       <Row>
         <Col span={6} offset={8}>

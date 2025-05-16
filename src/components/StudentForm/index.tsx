@@ -8,6 +8,7 @@ import { Class } from '@interfaces/response';
 import { GENDER } from '@common';
 import dayjs from 'dayjs';
 import { Rule } from 'antd/es/form';
+import viVN from 'antd/es/date-picker/locale/vi_VN';
 
 const genderOptions = [
   { label: 'Nam', value: GENDER.MALE },
@@ -41,6 +42,11 @@ const StudentForm = (props: StudentFormProps) => {
     resource: 'api/v1/classes',
     optionLabel: 'class_name',
     optionValue: 'id',
+    meta: {
+      externalFilters: {
+        _end: 50,
+      },
+    },
   });
 
   const onFinish = async (values: StudentFormValues) => {
@@ -50,15 +56,19 @@ const StudentForm = (props: StudentFormProps) => {
   return (
     <Form layout="vertical" {...props.formProps} onFinish={onFinish}>
       <Form.Item label="Mã sinh viên" name="student_code" rules={[yupSync]}>
-        <Input />
+        <Input placeholder="Nhập mã sinh viên" allowClear />
       </Form.Item>
 
       <Form.Item label="Họ tên" name="full_name" rules={[yupSync]}>
-        <Input />
+        <Input placeholder="Nhập họ tên sinh viên" allowClear />
       </Form.Item>
 
       <Form.Item label="Giới tính" name="gender" rules={[yupSync]}>
-        <Select options={genderOptions} />
+        <Select
+          options={genderOptions}
+          placeholder="Chọn giới tính"
+          allowClear
+        />
       </Form.Item>
       <Form.Item
         label="Ngày sinh"
@@ -68,11 +78,21 @@ const StudentForm = (props: StudentFormProps) => {
           value: value ? dayjs(value) : undefined,
         })}
       >
-        <DatePicker format="DD/MM/YYYY" style={{ width: '100%' }} />
+        <DatePicker
+          format="DD/MM/YYYY"
+          style={{ width: '100%' }}
+          placeholder="Chọn ngày sinh"
+          allowClear
+        />
       </Form.Item>
 
       <Form.Item label="Lớp" name="class_id" rules={[yupSync]}>
-        <Select {...selectProps} placeholder="Chọn lớp học" />
+        <Select
+          {...selectProps}
+          placeholder="Chọn lớp học"
+          virtual
+          allowClear
+        />
       </Form.Item>
     </Form>
   );

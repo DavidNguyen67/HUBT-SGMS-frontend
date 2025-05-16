@@ -6,6 +6,7 @@ import { Student } from '@interfaces/response';
 import { DateField, useTable } from '@refinedev/antd';
 import { GENDER, TAG_GENDER_COLOR_MAPPING, TAG_GENDER_MAPPING } from '@common';
 import { truncateText } from '@common/helper';
+import dayjs from 'dayjs';
 
 interface StudentTableSelectProps {
   onChange: (selectedRowKeys: React.Key[]) => void;
@@ -23,7 +24,7 @@ const StudentTableSelect = ({
     HttpError,
     StudentTableFilter
   >({
-    syncWithLocation: true,
+    syncWithLocation: false,
     resource: 'api/v1/students',
     onSearch: (values) => {
       const filters: CrudFilters = [];
@@ -160,7 +161,7 @@ const StudentTableSelect = ({
           }}
           dataSource={tableProps.dataSource}
         >
-          <Table.Column
+          <Table.Column<Student>
             dataIndex="id"
             title="Mã"
             ellipsis
@@ -179,19 +180,31 @@ const StudentTableSelect = ({
               </Tooltip>
             )}
           />
-          <Table.Column
+          <Table.Column<Student>
             dataIndex="student_code"
             title="Mã sinh viên"
-            width={120}
+            width={150}
             sorter={{ multiple: 1 }}
+            filters={
+              Array.from(
+                new Set(tableProps.dataSource?.map((item) => item.student_code))
+              ).map((code) => ({ text: code, value: code })) ?? []
+            }
+            onFilter={(value, record) => record.student_code === value}
           />
-          <Table.Column
+          <Table.Column<Student>
             dataIndex="full_name"
             title="Họ tên"
             sorter={{ multiple: 2 }}
             width={200}
+            filters={
+              Array.from(
+                new Set(tableProps.dataSource?.map((item) => item.full_name))
+              ).map((name) => ({ text: name, value: name })) ?? []
+            }
+            onFilter={(value, record) => record.full_name === value}
           />
-          <Table.Column
+          <Table.Column<Student>
             dataIndex="gender"
             title="Giới tính"
             render={(value: GENDER) => (
@@ -199,15 +212,35 @@ const StudentTableSelect = ({
                 {TAG_GENDER_MAPPING[value]}
               </Tag>
             )}
-            sorter
+            sorter={{ multiple: 3 }}
+            filters={[
+              { text: 'Nam', value: 'male' },
+              { text: 'Nữ', value: 'female' },
+              { text: 'Khác', value: 'other' },
+            ]}
+            onFilter={(value, record) => record.gender === value}
+            width={120}
           />
-          <Table.Column
+          <Table.Column<Student>
             dataIndex="date_of_birth"
             title="Ngày sinh"
-            sorter={{ multiple: 3 }}
+            sorter={{ multiple: 4 }}
             render={(value: string) => (
               <DateField value={value} format="DD/MM/YYYY" />
             )}
+            filters={
+              Array.from(
+                new Set(
+                  tableProps.dataSource?.map((item) => item.date_of_birth)
+                )
+              ).map((date) => ({
+                text: dayjs(date).format('DD/MM/YYYY'),
+                value: date,
+              })) ?? []
+            }
+            onFilter={(value, record) =>
+              dayjs(record.date_of_birth).isSameOrBefore(dayjs(value as string))
+            }
           />
         </Table>
       </Modal>

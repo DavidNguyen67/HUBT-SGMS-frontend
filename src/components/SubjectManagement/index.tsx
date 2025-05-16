@@ -21,7 +21,6 @@ import {
   Teacher,
   TeacherSubjectClass,
 } from '@interfaces/response';
-import { SelectProps } from 'antd/lib';
 import { MAX_TAGS_DISPLAY } from '@common';
 
 const SubjectManagement = () => {
@@ -184,6 +183,7 @@ const SubjectManagement = () => {
                 +{omittedValues.length}
               </Tooltip>
             )}
+            virtual
           />
         </Form.Item>
 
@@ -203,6 +203,7 @@ const SubjectManagement = () => {
                 +{omittedValues.length}
               </Tooltip>
             )}
+            virtual
           />
         </Form.Item>
 
@@ -228,11 +229,12 @@ const SubjectManagement = () => {
           showTotal: (total) => `Tổng cộng ${total} môn học`,
         }}
       >
-        <Table.Column
+        <Table.Column<Subject>
           dataIndex="id"
           title="Mã"
           width={60}
           ellipsis
+          onFilter={(value, record) => record.id === value}
           render={(value: string) => (
             <Tooltip placement="topLeft" title={value}>
               <div style={{ width: 80, wordWrap: 'break-word' }}>
@@ -241,13 +243,62 @@ const SubjectManagement = () => {
             </Tooltip>
           )}
         />
-        <Table.Column dataIndex="subject_code" title="Mã môn học" />
-        <Table.Column dataIndex="subject_name" title="Tên môn học" />
-        <Table.Column dataIndex="credits" title="Số tín chỉ" />
-        <Table.Column
+        <Table.Column<Subject>
+          dataIndex="subject_code"
+          title="Mã môn học"
+          sorter={{ multiple: 1 }}
+          filters={
+            Array.from(
+              new Set(tableProps.dataSource?.map((item) => item.subject_code))
+            ).map((code) => ({ text: code, value: code })) ?? []
+          }
+          onFilter={(value, record) => record.subject_code === value}
+        />
+        <Table.Column<Subject>
+          dataIndex="subject_name"
+          title="Tên môn học"
+          sorter={{ multiple: 2 }}
+          filters={
+            Array.from(
+              new Set(tableProps.dataSource?.map((item) => item.subject_name))
+            ).map((name) => ({ text: name, value: name })) ?? []
+          }
+          onFilter={(value, record) => record.subject_name === value}
+        />
+        <Table.Column<Subject>
+          dataIndex="credits"
+          title="Số tín chỉ"
+          sorter={{ multiple: 3 }}
+          filters={
+            Array.from(
+              new Set(tableProps.dataSource?.map((item) => item.credits))
+            ).map((credit) => ({ text: credit, value: credit })) ?? []
+          }
+          onFilter={(value, record) => record.credits === value}
+        />
+        <Table.Column<Subject>
           title="Lớp học"
           dataIndex="teacherSubjectClasses"
           width={200}
+          filters={
+            Array.from(
+              new Set(
+                tableProps.dataSource
+                  ?.flatMap((s) =>
+                    s.teacherSubjectClasses?.map((cls) => cls.class?.class_name)
+                  )
+                  .filter(Boolean)
+              )
+            ).map((name) => ({
+              text: name,
+              value: name,
+            })) ?? []
+          }
+          onFilter={(value, record) =>
+            record.teacherSubjectClasses?.some(
+              (cls) => cls.class?.class_name === value
+            )
+          }
           render={(tsc: TeacherSubjectClass[]) => (
             <div style={{ maxHeight: 80, overflowY: 'auto', paddingRight: 4 }}>
               {tsc?.map((cls) => (
@@ -264,10 +315,31 @@ const SubjectManagement = () => {
             </div>
           )}
         />
-        <Table.Column
+        <Table.Column<Subject>
           title="Giáo viên"
           dataIndex="teacherSubjectClasses"
           width={220}
+          filters={
+            Array.from(
+              new Set(
+                tableProps.dataSource
+                  ?.flatMap((s) =>
+                    s.teacherSubjectClasses?.map(
+                      (cls) => cls.teacher?.full_name
+                    )
+                  )
+                  .filter(Boolean)
+              )
+            ).map((name) => ({
+              text: name,
+              value: name,
+            })) ?? []
+          }
+          onFilter={(value, record) =>
+            record.teacherSubjectClasses?.some(
+              (cls) => cls.teacher?.full_name === value
+            )
+          }
           render={(tsc: TeacherSubjectClass[]) => (
             <div style={{ maxHeight: 80, overflowY: 'auto', paddingRight: 4 }}>
               {tsc?.map((cls) => (
@@ -284,10 +356,29 @@ const SubjectManagement = () => {
             </div>
           )}
         />
-        <Table.Column
+        <Table.Column<Subject>
           title="Sinh viên"
           dataIndex="studentGrades"
           width={280}
+          filters={
+            Array.from(
+              new Set(
+                tableProps.dataSource
+                  ?.flatMap((s) =>
+                    s.studentGrades?.map((grade) => grade.student?.full_name)
+                  )
+                  .filter(Boolean)
+              )
+            ).map((name) => ({
+              text: name,
+              value: name,
+            })) ?? []
+          }
+          onFilter={(value, record) =>
+            record.studentGrades?.some(
+              (grade) => grade.student?.full_name === value
+            )
+          }
           render={(grades: StudentGrade[]) => (
             <div style={{ maxHeight: 80, overflowY: 'auto', paddingRight: 4 }}>
               {grades?.map((grade) => (
@@ -305,9 +396,15 @@ const SubjectManagement = () => {
             </div>
           )}
         />
-        <Table.Column
+        <Table.Column<Subject>
           dataIndex="created_at"
           title="Ngày tạo"
+          sorter={{ multiple: 4 }}
+          filters={
+            Array.from(
+              new Set(tableProps.dataSource?.map((item) => item.created_at))
+            ).map((date) => ({ text: date, value: date })) ?? []
+          }
           render={(value: string) => <DateField value={value} />}
         />
         <Table.Column

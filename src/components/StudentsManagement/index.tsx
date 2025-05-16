@@ -4,18 +4,102 @@ import {
   EditButton,
   List,
   ShowButton,
-  useForm,
   useTable,
 } from '@refinedev/antd';
 import { CrudFilters, HttpError, type BaseRecord } from '@refinedev/core';
-import { Button, Form, Input, Select, Space, Table, Tag, Tooltip } from 'antd';
+import {
+  Button,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  Row,
+  Select,
+  Space,
+  Table,
+  Tag,
+  Tooltip,
+} from 'antd';
 import React from 'react';
 import { truncateText } from '@common/helper';
 import { Student } from '@interfaces/response';
 import { StudentTableFilter } from '@interfaces';
 import { GENDER, TAG_GENDER_COLOR_MAPPING, TAG_GENDER_MAPPING } from '@common';
+import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
 
 const StudentsManagement = () => {
+  const onSearch = (values: StudentTableFilter) => {
+    const filters: CrudFilters = [];
+
+    if (values.full_name != null) {
+      filters.push({
+        field: 'full_name',
+        operator: 'contains',
+        value: values.full_name || undefined,
+      });
+    }
+
+    if (values.student_code != null) {
+      filters.push({
+        field: 'student_code',
+        operator: 'contains',
+        value: values.student_code || undefined,
+      });
+    }
+
+    if (values.class_name_or_code != null) {
+      filters.push({
+        field: 'class_name_or_code',
+        operator: 'contains',
+        value: values.class_name_or_code || undefined,
+      });
+    }
+
+    if (values.date_of_birth_range && values.date_of_birth_range.length > 0) {
+      const [from, to] = values.date_of_birth_range;
+
+      if (from) {
+        filters.push({
+          field: 'date_of_birth_from',
+          operator: 'gte',
+          value: from.toISOString(),
+        });
+      }
+      if (to) {
+        filters.push({
+          field: 'date_of_birth_to',
+          operator: 'lte',
+          value: to.toISOString(),
+        });
+      }
+    } else {
+      filters.push({
+        field: 'date_of_birth_from',
+        operator: 'gte',
+        value: undefined,
+      });
+      filters.push({
+        field: 'date_of_birth_to',
+        operator: 'lte',
+        value: undefined,
+      });
+    }
+
+    filters.push({
+      field: 'gender',
+      operator: 'eq',
+      value: values.gender ?? undefined,
+    });
+
+    return filters;
+  };
+
   const { tableProps, searchFormProps } = useTable<
     Student,
     HttpError,
@@ -23,33 +107,7 @@ const StudentsManagement = () => {
   >({
     syncWithLocation: true,
     resource: 'api/v1/students',
-    onSearch: (values) => {
-      const filters: CrudFilters = [];
-
-      if (values.full_name != null) {
-        filters.push({
-          field: 'full_name',
-          operator: 'contains',
-          value: values.full_name || undefined,
-        });
-      }
-
-      if (values.student_code != null) {
-        filters.push({
-          field: 'student_code',
-          operator: 'contains',
-          value: values.student_code || undefined,
-        });
-      }
-
-      filters.push({
-        field: 'gender',
-        operator: 'eq',
-        value: values.gender ?? undefined,
-      });
-
-      return filters;
-    },
+    onSearch,
   });
 
   return (
@@ -60,54 +118,62 @@ const StudentsManagement = () => {
       }}
     >
       <Form
-        layout="inline"
+        layout="horizontal"
         {...searchFormProps}
-        style={{ marginBottom: 16, display: 'flex', gap: 8 }}
+        style={{ marginBottom: 16 }}
       >
-        <Form.Item
-          name="full_name"
-          label={<div style={{ width: 80, textAlign: 'left' }}>Họ tên</div>}
-        >
-          <Input
-            placeholder="Tìm theo tên..."
-            allowClear
-            style={{ width: 250 }}
-          />
-        </Form.Item>
+        <Row gutter={16}>
+          <Col xs={24} sm={12} md={8} lg={5} xl={5}>
+            <Form.Item name="student_code" label="Mã sinh viên">
+              <Input placeholder="Tìm theo mã sinh viên..." allowClear />
+            </Form.Item>
+          </Col>
 
-        <Form.Item
-          name="student_code"
-          label={
-            <div style={{ width: 80, textAlign: 'left' }}>Mã sinh viên</div>
-          }
-        >
-          <Input
-            placeholder="Tìm theo mã sinh viên..."
-            allowClear
-            style={{ width: 250 }}
-          />
-        </Form.Item>
+          <Col xs={24} sm={12} md={8} lg={5} xl={5}>
+            <Form.Item name="full_name" label="Họ tên">
+              <Input placeholder="Tìm theo tên..." allowClear />
+            </Form.Item>
+          </Col>
 
-        <Form.Item
-          name="gender"
-          label={<div style={{ width: 80, textAlign: 'left' }}>Giới tính</div>}
-        >
-          <Select
-            placeholder="Chọn giới tính"
-            allowClear
-            style={{ width: 250 }}
-          >
-            <Select.Option value="male">Nam</Select.Option>
-            <Select.Option value="female">Nữ</Select.Option>
-            <Select.Option value="other">Khác</Select.Option>
-          </Select>
-        </Form.Item>
+          <Col xs={24} sm={12} md={8} lg={5} xl={5}>
+            <Form.Item name="date_of_birth_range" label="Ngày sinh">
+              <DatePicker.RangePicker
+                format="DD/MM/YYYY"
+                allowClear
+                style={{ width: '100%' }}
+                placeholder={['Từ ngày', 'Đến ngày']}
+              />
+            </Form.Item>
+          </Col>
 
-        <Form.Item>
-          <Button htmlType="submit" type="primary">
-            Lọc
-          </Button>
-        </Form.Item>
+          <Col xs={24} sm={12} md={8} lg={5} xl={5}>
+            <Form.Item name="class_name_or_code" label="Lớp học">
+              <Input placeholder="Tìm theo tên hoặc mã lớp..." allowClear />
+            </Form.Item>
+          </Col>
+
+          <Col xs={24} sm={12} md={8} lg={4} xl={4}>
+            <Form.Item>
+              <Button
+                htmlType="submit"
+                type="primary"
+                icon={<SearchOutlined />}
+                style={{ marginRight: 16 }}
+              >
+                Lọc
+              </Button>
+              <Button
+                icon={<ReloadOutlined />}
+                onClick={() => {
+                  searchFormProps.form?.resetFields();
+                  searchFormProps.form?.submit();
+                }}
+              >
+                Đặt lại
+              </Button>
+            </Form.Item>
+          </Col>
+        </Row>
       </Form>
 
       <Table
@@ -123,7 +189,7 @@ const StudentsManagement = () => {
           showTotal: (total) => `Tổng cộng ${total} bản ghi`,
         }}
       >
-        <Table.Column
+        <Table.Column<Student>
           dataIndex="id"
           title="Mã"
           ellipsis
@@ -142,19 +208,31 @@ const StudentsManagement = () => {
             </Tooltip>
           )}
         />
-        <Table.Column
+        <Table.Column<Student>
           dataIndex="student_code"
           title="Mã sinh viên"
-          width={120}
+          width={150}
           sorter={{ multiple: 1 }}
+          filters={
+            Array.from(
+              new Set(tableProps.dataSource?.map((item) => item.student_code))
+            ).map((code) => ({ text: code, value: code })) ?? []
+          }
+          onFilter={(value, record) => record.student_code === value}
         />
-        <Table.Column
+        <Table.Column<Student>
           dataIndex="full_name"
           title="Họ tên"
           sorter={{ multiple: 2 }}
           width={200}
+          filters={
+            Array.from(
+              new Set(tableProps.dataSource?.map((item) => item.full_name))
+            ).map((name) => ({ text: name, value: name })) ?? []
+          }
+          onFilter={(value, record) => record.full_name === value}
         />
-        <Table.Column
+        <Table.Column<Student>
           dataIndex="gender"
           title="Giới tính"
           render={(value: GENDER) => (
@@ -162,30 +240,49 @@ const StudentsManagement = () => {
               {TAG_GENDER_MAPPING[value]}
             </Tag>
           )}
-          sorter
+          sorter={{ multiple: 3 }}
+          filters={[
+            { text: 'Nam', value: 'male' },
+            { text: 'Nữ', value: 'female' },
+            { text: 'Khác', value: 'other' },
+          ]}
+          onFilter={(value, record) => record.gender === value}
         />
-        <Table.Column
+        <Table.Column<Student>
           dataIndex="date_of_birth"
           title="Ngày sinh"
           sorter={{ multiple: 3 }}
           render={(value: string) => (
             <DateField value={value} format="DD/MM/YYYY" />
           )}
+          filters={
+            Array.from(
+              new Set(tableProps.dataSource?.map((item) => item.date_of_birth))
+            ).map((date) => ({
+              text: dayjs(date).format('DD/MM/YYYY'),
+              value: date,
+            })) ?? []
+          }
+          onFilter={(value, record) =>
+            dayjs(record.date_of_birth).isSameOrBefore(dayjs(value as string))
+          }
         />
-        <Table.Column
+        <Table.Column<Student>
           dataIndex="class"
           title="Lớp"
           render={(value) => value?.class_name}
+          filters={
+            Array.from(
+              new Set(
+                tableProps.dataSource?.map((item) => item.class?.class_name)
+              )
+            )
+              .filter(Boolean)
+              .map((name) => ({ text: name, value: name })) ?? []
+          }
+          onFilter={(value, record) => record.class?.class_name === value}
         />
-        <Table.Column
-          dataIndex="created_at"
-          title="Ngày tạo"
-          sorter={{ multiple: 4 }}
-          render={(value: string) => (
-            <DateField value={value} format="DD/MM/YYYY" />
-          )}
-        />
-        <Table.Column
+        <Table.Column<Student>
           title="Thao tác"
           dataIndex="actions"
           render={(_, record: BaseRecord) => (

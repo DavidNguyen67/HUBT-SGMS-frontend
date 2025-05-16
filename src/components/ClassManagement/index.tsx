@@ -140,7 +140,7 @@ const ClassesManagement = () => {
           showTotal: (total) => `Tổng cộng ${total} lớp học`,
         }}
       >
-        <Table.Column
+        <Table.Column<Class>
           dataIndex="id"
           title="Mã"
           width={60}
@@ -154,27 +154,45 @@ const ClassesManagement = () => {
           )}
         />
 
-        <Table.Column
+        <Table.Column<Class>
           dataIndex="class_code"
           title="Mã lớp"
           width={120}
           sorter={{ multiple: 1 }}
+          filters={
+            Array.from(
+              new Set(tableProps.dataSource?.map((item) => item.class_code))
+            ).map((code) => ({ text: code, value: code })) ?? []
+          }
+          onFilter={(value, record) => record.class_code === value}
         />
 
-        <Table.Column
+        <Table.Column<Class>
           dataIndex="class_name"
           title="Tên lớp"
           width={200}
           sorter={{ multiple: 2 }}
+          filters={
+            Array.from(
+              new Set(tableProps.dataSource?.map((item) => item.class_name))
+            ).map((name) => ({ text: name, value: name })) ?? []
+          }
+          onFilter={(value, record) => record.class_name === value}
         />
 
-        <Table.Column
+        <Table.Column<Class>
           dataIndex="studentCount"
           title="Số học sinh"
           sorter={{ multiple: 3 }}
+          filters={
+            Array.from(
+              new Set(tableProps.dataSource?.map((item) => item.studentCount))
+            ).map((count) => ({ text: count, value: count })) ?? []
+          }
+          onFilter={(value, record) => record.studentCount === value}
         />
 
-        <Table.Column
+        <Table.Column<Class>
           dataIndex="teacherSubjectClasses"
           title="Giáo viên - Môn học"
           render={(items: TeacherSubjectClass[]) => {
@@ -211,9 +229,30 @@ const ClassesManagement = () => {
               </Tooltip>
             );
           }}
+          filters={
+            Array.from(
+              new Set(
+                tableProps.dataSource?.flatMap((item) =>
+                  item.teacherSubjectClasses.map((teacherSubjectClass) => ({
+                    subject: teacherSubjectClass.subject?.subject_name,
+                    teacher: teacherSubjectClass.teacher?.full_name,
+                    id: teacherSubjectClass.id,
+                  }))
+                )
+              )
+            ).map((item) => ({
+              text: `${item.teacher} - ${item.subject}`,
+              value: item.id,
+            })) ?? []
+          }
+          onFilter={(value, record) => {
+            return record.teacherSubjectClasses
+              .map((item) => item.id)
+              .includes(value as string);
+          }}
         />
 
-        <Table.Column
+        <Table.Column<Class>
           title="Thao tác"
           dataIndex="actions"
           render={(_, record: BaseRecord) => (

@@ -1,4 +1,5 @@
 import { GENDER } from '@common';
+import { Dayjs } from 'dayjs';
 
 export interface StudentFormValues {
   student_code: string;
@@ -19,6 +20,8 @@ export interface SubjectFormValues {
   subject_code: string;
   subject_name: string;
   credits: number;
+  class_ids: string[];
+  teacher_ids: string[];
 }
 
 export interface GradeFormValues {
@@ -48,12 +51,15 @@ export interface StudentTableFilter {
   student_code?: string;
   full_name?: string;
   gender?: GENDER;
+  date_of_birth_range?: [Dayjs, Dayjs];
+  class_name_or_code?: string;
 }
 
 export interface TeacherTableFilter {
   teacher_code?: string;
   full_name?: string;
   gender?: GENDER;
+  date_of_birth_range?: [Dayjs, Dayjs];
 }
 
 export interface ClassTableFilter {

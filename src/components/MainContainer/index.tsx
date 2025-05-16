@@ -1,7 +1,7 @@
 'use client';
 
 import { useNotificationProvider } from '@refinedev/antd';
-import { Refine, ResourceProps, useIsAuthenticated } from '@refinedev/core';
+import { Refine, ResourceProps } from '@refinedev/core';
 import { RefineKbar, RefineKbarProvider } from '@refinedev/kbar';
 import routerProvider from '@refinedev/nextjs-router';
 import React, { Suspense, useEffect, useState } from 'react';
@@ -13,6 +13,12 @@ import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { ColorModeContextProvider } from '@contexts/color-mode';
 import { DevtoolsProvider } from '@refinedev/devtools';
 import AuthenticationListener from '@components/AuthenticationListener';
+import { ConfigProvider } from 'antd';
+import viVN from 'antd/locale/vi_VN';
+import dayjs from 'dayjs';
+import 'dayjs/locale/vi';
+
+dayjs.locale('vi');
 
 interface MainContainerProps {
   children: React.ReactNode;
@@ -41,10 +47,12 @@ const MainContainer = ({ children, defaultMode }: MainContainerProps) => {
                   projectId: 'BqkOw9-rTT8QE-6I7UhU',
                 }}
               >
-                <AuthenticationListener
-                  setVisibleResources={setVisibleResources}
-                />
-                {children}
+                <ConfigProvider locale={viVN}>
+                  <AuthenticationListener
+                    setVisibleResources={setVisibleResources}
+                  />
+                  {children}
+                </ConfigProvider>
                 <RefineKbar />
               </Refine>
             </DevtoolsProvider>
