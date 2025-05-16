@@ -14,6 +14,7 @@ const SubjectCreate = () => {
   >({
     submitOnEnter: true,
     action: 'create',
+    resource: 'api/v1/subjects',
   });
 
   return (

@@ -55,7 +55,6 @@ export interface Class {
   id: string;
   class_code: string;
   class_name: string;
-  studentCount: number;
   teacherSubjectClasses: TeacherSubjectClass[];
   students: Student[];
   created_at: string;
@@ -81,3 +80,4 @@ export interface GradeType {
   updated_at: string;
   deleted_at?: string;
 }
+

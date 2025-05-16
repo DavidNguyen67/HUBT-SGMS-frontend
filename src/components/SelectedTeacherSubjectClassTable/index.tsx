@@ -39,7 +39,6 @@ const SelectedTeacherSubjectClassTable = ({
         showSizeChanger: true,
         pageSizeOptions: PAGE_SIZE_OPTIONS,
         defaultPageSize: +PAGE_SIZE_OPTIONS[0],
-        showTotal: (total) => `Tổng cộng ${total} bản ghi`,
       }}
     >
       <Table.Column

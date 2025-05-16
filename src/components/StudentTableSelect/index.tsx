@@ -1,12 +1,25 @@
-import { Modal, Table, Button, Tag, Tooltip, Form, Select, Input } from 'antd';
+import {
+  Modal,
+  Table,
+  Button,
+  Tag,
+  Tooltip,
+  Form,
+  Select,
+  Input,
+  Row,
+  Col,
+  DatePicker,
+} from 'antd';
 import { CrudFilters, HttpError } from '@refinedev/core';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { StudentTableFilter } from '@interfaces';
 import { Student } from '@interfaces/response';
 import { DateField, useTable } from '@refinedev/antd';
 import { GENDER, TAG_GENDER_COLOR_MAPPING, TAG_GENDER_MAPPING } from '@common';
 import { truncateText } from '@common/helper';
 import dayjs from 'dayjs';
+import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 
 interface StudentTableSelectProps {
   onChange: (selectedRowKeys: React.Key[]) => void;
@@ -19,6 +32,72 @@ const StudentTableSelect = ({
   selectedRowKeys,
   ignoreIds,
 }: StudentTableSelectProps) => {
+  const onSearch = (values: StudentTableFilter) => {
+    const filters: CrudFilters = [];
+
+    if (values.full_name != null) {
+      filters.push({
+        field: 'full_name',
+        operator: 'contains',
+        value: values.full_name || undefined,
+      });
+    }
+
+    if (values.student_code != null) {
+      filters.push({
+        field: 'student_code',
+        operator: 'contains',
+        value: values.student_code || undefined,
+      });
+    }
+
+    if (values.class_name_or_code != null) {
+      filters.push({
+        field: 'class_name_or_code',
+        operator: 'contains',
+        value: values.class_name_or_code || undefined,
+      });
+    }
+
+    if (values.date_of_birth_range && values.date_of_birth_range.length > 0) {
+      const [from, to] = values.date_of_birth_range;
+
+      if (from) {
+        filters.push({
+          field: 'date_of_birth_from',
+          operator: 'gte',
+          value: from.toISOString(),
+        });
+      }
+      if (to) {
+        filters.push({
+          field: 'date_of_birth_to',
+          operator: 'lte',
+          value: to.toISOString(),
+        });
+      }
+    } else {
+      filters.push({
+        field: 'date_of_birth_from',
+        operator: 'gte',
+        value: undefined,
+      });
+      filters.push({
+        field: 'date_of_birth_to',
+        operator: 'lte',
+        value: undefined,
+      });
+    }
+
+    filters.push({
+      field: 'gender',
+      operator: 'eq',
+      value: values.gender ?? undefined,
+    });
+
+    return filters;
+  };
+
   const { tableProps, searchFormProps } = useTable<
     Student,
     HttpError,
@@ -26,33 +105,7 @@ const StudentTableSelect = ({
   >({
     syncWithLocation: false,
     resource: 'api/v1/students',
-    onSearch: (values) => {
-      const filters: CrudFilters = [];
-
-      if (values.full_name != null) {
-        filters.push({
-          field: 'full_name',
-          operator: 'contains',
-          value: values.full_name || undefined,
-        });
-      }
-
-      if (values.student_code != null) {
-        filters.push({
-          field: 'student_code',
-          operator: 'contains',
-          value: values.student_code || undefined,
-        });
-      }
-
-      filters.push({
-        field: 'gender',
-        operator: 'eq',
-        value: values.gender ?? undefined,
-      });
-
-      return filters;
-    },
+    onSearch,
     meta: {
       externalFilters: {
         ignoreIds: Array.isArray(ignoreIds) ? ignoreIds.join(',') : ignoreIds,
@@ -88,59 +141,59 @@ const StudentTableSelect = ({
             Xác nhận
           </Button>,
         ]}
-        width={800}
+        width={960}
       >
         <Form
-          layout="inline"
+          layout="horizontal"
           {...searchFormProps}
-          style={{ marginBottom: 16, display: 'flex', gap: 16 }}
+          style={{ marginBottom: 16 }}
         >
-          <Form.Item
-            name="full_name"
-            label={<div style={{ width: 50, textAlign: 'left' }}>Họ tên</div>}
-          >
-            <Input
-              style={{ width: 120 }}
-              placeholder="Tìm theo tên..."
-              allowClear
-            />
-          </Form.Item>
+          <Row gutter={8}>
+            <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+              <Form.Item name="student_code" label="Mã sinh viên">
+                <Input placeholder="Tìm theo mã sinh viên..." allowClear />
+              </Form.Item>
+            </Col>
 
-          <Form.Item
-            name="student_code"
-            label={
-              <div style={{ width: 80, textAlign: 'left' }}>Mã sinh viên</div>
-            }
-          >
-            <Input
-              style={{ width: 120 }}
-              placeholder="Tìm theo mã sinh viên..."
-              allowClear
-            />
-          </Form.Item>
+            <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+              <Form.Item name="full_name" label="Họ tên">
+                <Input placeholder="Tìm theo tên..." allowClear />
+              </Form.Item>
+            </Col>
 
-          <Form.Item
-            name="gender"
-            label={
-              <div style={{ width: 50, textAlign: 'left' }}>Giới tính</div>
-            }
-          >
-            <Select
-              placeholder="Chọn giới tính"
-              allowClear
-              style={{ width: 120 }}
-            >
-              <Select.Option value="male">Nam</Select.Option>
-              <Select.Option value="female">Nữ</Select.Option>
-              <Select.Option value="other">Khác</Select.Option>
-            </Select>
-          </Form.Item>
+            <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+              <Form.Item name="date_of_birth_range" label="Ngày sinh">
+                <DatePicker.RangePicker
+                  format="DD/MM/YYYY"
+                  allowClear
+                  style={{ width: '100%' }}
+                  placeholder={['Từ ngày', 'Đến ngày']}
+                />
+              </Form.Item>
+            </Col>
 
-          <Form.Item>
-            <Button htmlType="submit" type="primary">
-              Lọc
-            </Button>
-          </Form.Item>
+            <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+              <Form.Item>
+                <Button
+                  htmlType="submit"
+                  type="primary"
+                  icon={<SearchOutlined />}
+                  style={{ marginRight: 8 }}
+                >
+                  Lọc
+                </Button>
+                <Button
+                  icon={<ReloadOutlined />}
+                  onClick={() => {
+                    searchFormProps.form?.resetFields();
+                    searchFormProps.form?.submit();
+                  }}
+                >
+                  Đặt lại
+                </Button>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
 
         <Table
@@ -157,7 +210,6 @@ const StudentTableSelect = ({
             ...tableProps.pagination,
             position: ['bottomCenter'],
             showSizeChanger: true,
-            showTotal: (total) => `Tổng cộng ${total} bản ghi`,
           }}
           dataSource={tableProps.dataSource}
         >

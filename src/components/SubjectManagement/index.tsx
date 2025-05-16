@@ -10,7 +10,18 @@ import {
   useTable,
 } from '@refinedev/antd';
 import { BaseRecord, CrudFilters, HttpError } from '@refinedev/core';
-import { Button, Form, Input, Select, Space, Table, Tag, Tooltip } from 'antd';
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Row,
+  Select,
+  Space,
+  Table,
+  Tag,
+  Tooltip,
+} from 'antd';
 import React from 'react';
 import { truncateText } from '@common/helper';
 import { SubjectTableFilter } from '@interfaces';
@@ -22,6 +33,7 @@ import {
   TeacherSubjectClass,
 } from '@interfaces/response';
 import { MAX_TAGS_DISPLAY } from '@common';
+import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 
 const SubjectManagement = () => {
   const { tableProps, searchFormProps } = useTable<
@@ -34,19 +46,19 @@ const SubjectManagement = () => {
     onSearch: (values) => {
       const filters: CrudFilters = [];
 
-      if (values.subject_name != null) {
+      if (values.subject_code_and_name != null) {
         filters.push({
-          field: 'subject_name',
+          field: 'subject_code_and_name',
           operator: 'contains',
-          value: values.subject_name || undefined,
+          value: values.subject_code_and_name || undefined,
         });
       }
 
-      if (values.subject_code != null) {
+      if (values.teacher_id != null) {
         filters.push({
-          field: 'subject_code',
+          field: 'teacher_id',
           operator: 'contains',
-          value: values.subject_code || undefined,
+          value: values.teacher_id || undefined,
         });
       }
 
@@ -58,13 +70,11 @@ const SubjectManagement = () => {
         });
       }
 
-      if (values.credits != null) {
-        filters.push({
-          field: 'credits',
-          operator: 'contains',
-          value: values.credits || undefined,
-        });
-      }
+      filters.push({
+        field: 'credits',
+        operator: 'contains',
+        value: values.credits || undefined,
+      });
 
       if (values.teacher_id != null) {
         filters.push({
@@ -121,99 +131,95 @@ const SubjectManagement = () => {
         children: 'Thêm môn học',
       }}
     >
-      <Form
-        layout="inline"
-        {...searchFormProps}
-        style={{ marginBottom: 16, display: 'flex', gap: 8 }}
-      >
-        <Form.Item
-          name="subject_code"
-          label={<div style={{ width: 80, textAlign: 'left' }}>Mã môn học</div>}
-        >
-          <Input
-            placeholder="Tìm theo mã môn..."
-            allowClear
-            style={{ width: 250 }}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="subject_name"
-          label={
-            <div style={{ width: 80, textAlign: 'left' }}>Tên môn học</div>
-          }
-        >
-          <Input
-            placeholder="Tìm theo tên môn..."
-            allowClear
-            style={{ width: 250 }}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="credits"
-          label={<div style={{ width: 80, textAlign: 'left' }}>Số tín chỉ</div>}
-        >
-          <Select
-            placeholder="Chọn số tín chỉ"
-            allowClear
-            style={{ width: 250 }}
+      <Form layout="vertical" {...searchFormProps}>
+        <Row gutter={16}>
+          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+            <Form.Item name="subject_code_and_name" label="Môn học">
+              <Input placeholder="Tìm theo mã hoặc tên môn..." allowClear />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+            <Form.Item name="credits" label="Số tín chỉ">
+              <Select placeholder="Chọn số tín chỉ" allowClear>
+                <Select.Option value={1}>1</Select.Option>
+                <Select.Option value={2}>2</Select.Option>
+                <Select.Option value={3}>3</Select.Option>
+                <Select.Option value={4}>4</Select.Option>
+                <Select.Option value={5}>5</Select.Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+            <Form.Item name="teacher_id" label="Giáo viên">
+              <Select
+                {...teacherSelectProps}
+                placeholder="Chọn giáo viên"
+                allowClear
+                mode="multiple"
+                maxTagCount={MAX_TAGS_DISPLAY}
+                maxTagPlaceholder={(omittedValues) => (
+                  <Tooltip
+                    title={omittedValues.map((val) => val.label).join(', ')}
+                  >
+                    +{omittedValues.length}
+                  </Tooltip>
+                )}
+                virtual
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+            <Form.Item name="class_id" label="Lớp học">
+              <Select
+                {...classSelectProps}
+                placeholder="Chọn lớp học"
+                allowClear
+                mode="multiple"
+                maxTagCount={MAX_TAGS_DISPLAY}
+                maxTagPlaceholder={(omittedValues) => (
+                  <Tooltip
+                    title={omittedValues.map((val) => val.label).join(', ')}
+                  >
+                    +{omittedValues.length}
+                  </Tooltip>
+                )}
+                virtual
+              />
+            </Form.Item>
+          </Col>
+          <Col
+            xs={24}
+            sm={24}
+            md={24}
+            lg={24}
+            xl={24}
+            style={{ textAlign: 'right' }}
           >
-            <Select.Option value={1}>1</Select.Option>
-            <Select.Option value={2}>2</Select.Option>
-            <Select.Option value={3}>3</Select.Option>
-            <Select.Option value={4}>4</Select.Option>
-            <Select.Option value={5}>5</Select.Option>
-          </Select>
-        </Form.Item>
-
-        <Form.Item
-          name="teacher_id"
-          label={<div style={{ width: 80, textAlign: 'left' }}>Giáo viên</div>}
-        >
-          <Select
-            {...teacherSelectProps}
-            placeholder="Chọn giáo viên"
-            allowClear
-            style={{ width: 250 }}
-            mode="multiple"
-            maxTagCount={MAX_TAGS_DISPLAY}
-            maxTagPlaceholder={(omittedValues) => (
-              <Tooltip title={omittedValues.map((val) => val.label).join(', ')}>
-                +{omittedValues.length}
-              </Tooltip>
-            )}
-            virtual
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="class_id"
-          label={<div style={{ width: 80, textAlign: 'left' }}>Lớp học</div>}
-        >
-          <Select
-            {...classSelectProps}
-            placeholder="Chọn lớp học"
-            allowClear
-            style={{ width: 250 }}
-            mode="multiple"
-            maxTagCount={MAX_TAGS_DISPLAY}
-            maxTagPlaceholder={(omittedValues) => (
-              <Tooltip title={omittedValues.map((val) => val.label).join(', ')}>
-                +{omittedValues.length}
-              </Tooltip>
-            )}
-            virtual
-          />
-        </Form.Item>
-
-        <Form.Item>
-          <Button htmlType="submit" type="primary">
-            Lọc
-          </Button>
-        </Form.Item>
+            <Form.Item>
+              <Space>
+                <Button
+                  htmlType="submit"
+                  type="primary"
+                  icon={<SearchOutlined />}
+                  style={{ minWidth: 90 }}
+                >
+                  Lọc
+                </Button>
+                <Button
+                  icon={<ReloadOutlined />}
+                  onClick={() => {
+                    searchFormProps.form?.resetFields();
+                    searchFormProps.form?.submit();
+                  }}
+                  style={{ minWidth: 90 }}
+                >
+                  Đặt lại
+                </Button>
+              </Space>
+            </Form.Item>
+          </Col>
+        </Row>
       </Form>
-
       <Table
         {...tableProps}
         rowKey="id"
@@ -226,7 +232,6 @@ const SubjectManagement = () => {
           position: ['bottomCenter'],
           showSizeChanger: true,
           pageSizeOptions: ['10', '20', '30'],
-          showTotal: (total) => `Tổng cộng ${total} môn học`,
         }}
       >
         <Table.Column<Subject>
@@ -234,7 +239,6 @@ const SubjectManagement = () => {
           title="Mã"
           width={60}
           ellipsis
-          onFilter={(value, record) => record.id === value}
           render={(value: string) => (
             <Tooltip placement="topLeft" title={value}>
               <div style={{ width: 80, wordWrap: 'break-word' }}>
@@ -253,6 +257,7 @@ const SubjectManagement = () => {
             ).map((code) => ({ text: code, value: code })) ?? []
           }
           onFilter={(value, record) => record.subject_code === value}
+          width={150}
         />
         <Table.Column<Subject>
           dataIndex="subject_name"
@@ -264,10 +269,12 @@ const SubjectManagement = () => {
             ).map((name) => ({ text: name, value: name })) ?? []
           }
           onFilter={(value, record) => record.subject_name === value}
+          width={150}
         />
         <Table.Column<Subject>
           dataIndex="credits"
           title="Số tín chỉ"
+          width={180}
           sorter={{ multiple: 3 }}
           filters={
             Array.from(
@@ -297,6 +304,9 @@ const SubjectManagement = () => {
           onFilter={(value, record) =>
             record.teacherSubjectClasses?.some(
               (cls) => cls.class?.class_name === value
+            ) ||
+            record.teacherSubjectClasses?.some(
+              (cls) => cls.teacher?.full_name === value
             )
           }
           render={(tsc: TeacherSubjectClass[]) => (
@@ -336,6 +346,9 @@ const SubjectManagement = () => {
             })) ?? []
           }
           onFilter={(value, record) =>
+            record.teacherSubjectClasses?.some(
+              (cls) => cls.class?.class_name === value
+            ) ||
             record.teacherSubjectClasses?.some(
               (cls) => cls.teacher?.full_name === value
             )
@@ -396,17 +409,7 @@ const SubjectManagement = () => {
             </div>
           )}
         />
-        <Table.Column<Subject>
-          dataIndex="created_at"
-          title="Ngày tạo"
-          sorter={{ multiple: 4 }}
-          filters={
-            Array.from(
-              new Set(tableProps.dataSource?.map((item) => item.created_at))
-            ).map((date) => ({ text: date, value: date })) ?? []
-          }
-          render={(value: string) => <DateField value={value} />}
-        />
+
         <Table.Column
           title="Thao tác"
           dataIndex="actions"

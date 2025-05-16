@@ -1,20 +1,76 @@
 'use client';
 
 import {
-  DateField,
   DeleteButton,
   EditButton,
   List,
   ShowButton,
+  useSelect,
   useTable,
 } from '@refinedev/antd';
 import { CrudFilters, HttpError, BaseRecord } from '@refinedev/core';
-import { Button, Form, Input, Space, Table, Tooltip } from 'antd';
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Row,
+  Select,
+  Space,
+  Table,
+  Tooltip,
+} from 'antd';
 import { truncateText } from '@common/helper';
-import { Class, Student, TeacherSubjectClass } from '@interfaces/response';
+import {
+  Class,
+  Student,
+  Subject,
+  Teacher,
+  TeacherSubjectClass,
+} from '@interfaces/response';
 import { ClassTableFilter } from '@interfaces';
+import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+import { MAX_TAGS_DISPLAY } from '@common';
 
 const ClassesManagement = () => {
+  const onSearch = (values: ClassTableFilter) => {
+    const filters: CrudFilters = [];
+
+    if (values.class_name != null) {
+      filters.push({
+        field: 'class_name',
+        operator: 'contains',
+        value: values.class_name,
+      });
+    }
+
+    if (values.class_code != null) {
+      filters.push({
+        field: 'class_code',
+        operator: 'contains',
+        value: values.class_code,
+      });
+    }
+
+    if (values.teacher_ids != null) {
+      filters.push({
+        field: 'teacher_ids',
+        operator: 'contains',
+        value: values.teacher_ids,
+      });
+    }
+
+    if (values.subject_ids != null) {
+      filters.push({
+        field: 'subject_ids',
+        operator: 'contains',
+        value: values.subject_ids,
+      });
+    }
+
+    return filters;
+  };
+
   const { tableProps, searchFormProps } = useTable<
     Class,
     HttpError,
@@ -22,42 +78,42 @@ const ClassesManagement = () => {
   >({
     syncWithLocation: true,
     resource: 'api/v1/classes',
-    onSearch: (values) => {
-      const filters: CrudFilters = [];
+    onSearch,
+  });
 
-      if (values.class_name != null) {
-        filters.push({
-          field: 'class_name',
-          operator: 'contains',
-          value: values.class_name,
-        });
-      }
+  const { selectProps: teacherSelectProps } = useSelect<Teacher>({
+    resource: 'api/v1/teachers',
+    optionLabel: (item) => item?.full_name,
+    optionValue: 'id',
+    onSearch: (value) => [
+      {
+        field: 'value',
+        operator: 'contains',
+        value,
+      },
+    ],
+    meta: {
+      externalFilters: {
+        _end: 50,
+      },
+    },
+  });
 
-      if (values.class_code != null) {
-        filters.push({
-          field: 'class_code',
-          operator: 'contains',
-          value: values.class_code,
-        });
-      }
-
-      if (values.subject_name != null) {
-        filters.push({
-          field: 'subject_name',
-          operator: 'contains',
-          value: values.subject_name,
-        });
-      }
-
-      if (values.teacher_name != null) {
-        filters.push({
-          field: 'teacher_name',
-          operator: 'contains',
-          value: values.teacher_name,
-        });
-      }
-
-      return filters;
+  const { selectProps: subjectSelectProps } = useSelect<Subject>({
+    resource: 'api/v1/subjects',
+    optionLabel: (item) => item?.subject_name,
+    optionValue: 'id',
+    onSearch: (value) => [
+      {
+        field: 'value',
+        operator: 'contains',
+        value,
+      },
+    ],
+    meta: {
+      externalFilters: {
+        _end: 50,
+      },
     },
   });
 
@@ -68,64 +124,88 @@ const ClassesManagement = () => {
         children: 'Thêm lớp học',
       }}
     >
-      <Form
-        layout="inline"
-        {...searchFormProps}
-        style={{ marginBottom: 16, display: 'flex', gap: 8 }}
-      >
-        <Form.Item
-          name="class_name"
-          label={<div style={{ width: 80, textAlign: 'left' }}>Tên lớp</div>}
-        >
-          <Input
-            placeholder="Tìm theo tên lớp..."
-            allowClear
-            style={{ width: 250 }}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="class_code"
-          label={<div style={{ width: 80, textAlign: 'left' }}>Mã lớp</div>}
-        >
-          <Input
-            placeholder="Tìm theo mã lớp..."
-            allowClear
-            style={{ width: 250 }}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="teacher_name"
-          label={
-            <div style={{ width: 80, textAlign: 'left' }}>Tên giáo viên</div>
-          }
-        >
-          <Input
-            placeholder="Tìm theo mã lớp..."
-            allowClear
-            style={{ width: 250 }}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="subject_name"
-          label={
-            <div style={{ width: 80, textAlign: 'left' }}>Tên môn học</div>
-          }
-        >
-          <Input
-            placeholder="Tìm theo môn học..."
-            allowClear
-            style={{ width: 250 }}
-          />
-        </Form.Item>
-
-        <Form.Item>
-          <Button htmlType="submit" type="primary">
-            Lọc
-          </Button>
-        </Form.Item>
+      <Form layout="vertical" {...searchFormProps}>
+        <Row gutter={16}>
+          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+            <Form.Item name="class_name" label="Tên lớp">
+              <Input placeholder="Tìm theo tên lớp..." allowClear />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+            <Form.Item name="class_code" label="Mã lớp">
+              <Input placeholder="Tìm theo mã lớp..." allowClear />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+            <Form.Item name="teacher_ids" label="Tên giáo viên">
+              <Select
+                {...teacherSelectProps}
+                placeholder="Chọn giáo viên"
+                allowClear
+                mode="multiple"
+                maxTagCount={MAX_TAGS_DISPLAY}
+                maxTagPlaceholder={(omittedValues) => (
+                  <Tooltip
+                    title={omittedValues.map((val) => val.label).join(', ')}
+                  >
+                    +{omittedValues.length}
+                  </Tooltip>
+                )}
+                virtual
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+            <Form.Item name="subject_ids" label="Tên môn học">
+              <Select
+                {...subjectSelectProps}
+                placeholder="Chọn môn học"
+                allowClear
+                mode="multiple"
+                maxTagCount={MAX_TAGS_DISPLAY}
+                maxTagPlaceholder={(omittedValues) => (
+                  <Tooltip
+                    title={omittedValues.map((val) => val.label).join(', ')}
+                  >
+                    +{omittedValues.length}
+                  </Tooltip>
+                )}
+                virtual
+              />
+            </Form.Item>
+          </Col>
+          <Col
+            xs={24}
+            sm={24}
+            md={24}
+            lg={24}
+            xl={24}
+            style={{ textAlign: 'right' }}
+          >
+            <Form.Item>
+              <Space>
+                <Button
+                  htmlType="submit"
+                  type="primary"
+                  icon={<SearchOutlined />}
+                  style={{ minWidth: 90 }}
+                >
+                  Lọc
+                </Button>
+                <Button
+                  icon={<ReloadOutlined />}
+                  onClick={() => {
+                    searchFormProps.form?.resetFields();
+                    searchFormProps.form?.submit();
+                  }}
+                  style={{ minWidth: 90 }}
+                >
+                  Đặt lại
+                </Button>
+              </Space>
+            </Form.Item>
+          </Col>
+        </Row>
       </Form>
 
       <Table
@@ -137,7 +217,6 @@ const ClassesManagement = () => {
           position: ['bottomCenter'],
           showSizeChanger: true,
           pageSizeOptions: ['10', '20', '30'],
-          showTotal: (total) => `Tổng cộng ${total} lớp học`,
         }}
       >
         <Table.Column<Class>
@@ -181,15 +260,24 @@ const ClassesManagement = () => {
         />
 
         <Table.Column<Class>
-          dataIndex="studentCount"
-          title="Số học sinh"
-          sorter={{ multiple: 3 }}
-          filters={
-            Array.from(
-              new Set(tableProps.dataSource?.map((item) => item.studentCount))
-            ).map((count) => ({ text: count, value: count })) ?? []
-          }
-          onFilter={(value, record) => record.studentCount === value}
+          dataIndex="students"
+          title="Số sinh viên"
+          width={150}
+          // sorter={{ multiple: 3 }}
+          render={(items: Student[]) => items?.length ?? 0}
+          // filters={
+          //   Array.from(
+          //     new Set(
+          //       tableProps.dataSource?.map((item) => item.students?.length ?? 0)
+          //     )
+          //   ).map((count) => ({
+          //     text: count,
+          //     value: count,
+          //   })) ?? []
+          // }
+          // onFilter={(value, record) => {
+          //   return record.students?.length === value;
+          // }}
         />
 
         <Table.Column<Class>

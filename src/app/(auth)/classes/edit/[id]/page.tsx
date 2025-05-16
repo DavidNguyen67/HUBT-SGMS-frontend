@@ -37,9 +37,14 @@ const ClassEdit = () => {
   const initialValues = queryResult?.data?.data
     ? {
         ...queryResult.data.data,
-        teacherSubjectClassIds:
-          queryResult.data.data?.teacherSubjectClasses.map((item) => item.id), // Lấy danh sách ID của teacherSubjectClasses
-        studentIds: queryResult.data.data?.students.map((item) => item.id), // Lấy danh sách ID của students
+        teacherSubjectClassIds: Array.from(
+          new Set(
+            queryResult.data.data?.teacherSubjectClasses.map((item) => item.id)
+          )
+        ),
+        studentIds: Array.from(
+          new Set(queryResult.data.data?.students.map((item) => item.id))
+        ),
       }
     : undefined;
 

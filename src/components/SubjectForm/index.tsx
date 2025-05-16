@@ -1,17 +1,10 @@
 'use client';
 
-import { useSelect, useForm } from '@refinedev/antd';
-import { Form, Input, InputNumber, Select, Button, Tooltip } from 'antd';
+import { Form, Input, InputNumber } from 'antd';
 import * as yup from 'yup';
 import { Rule } from 'antd/es/form';
 import { SubjectFormValues } from '@interfaces';
-import { MAX_TAGS_DISPLAY } from '@common';
-import { Class, Teacher } from '@interfaces/response';
 import { FormProps } from 'antd/lib';
-import ClassTableSelect from '@components/ClassTableSelect';
-import SelectedClassTable from '@components/SelectedClassTable';
-import TeacherTableSelect from '@components/TeacherTableSelect';
-import SelectedTeacherTable from '@components/SelectedTeacherTable';
 
 interface StudentFormProps {
   formProps: FormProps<SubjectFormValues>;
@@ -26,8 +19,6 @@ const subjectSchema = yup.object().shape({
     .required('Số tín chỉ là bắt buộc')
     .min(1, 'Ít nhất 1 tín chỉ')
     .max(10, 'Tối đa 10 tín chỉ'),
-  class_ids: yup.array().of(yup.string()),
-  teacher_ids: yup.array().of(yup.string()),
 });
 
 const yupSync = {
@@ -39,11 +30,8 @@ const yupSync = {
 const SubjectForm = ({ formProps }: StudentFormProps) => {
   const [form] = Form.useForm(formProps.form);
 
-  const currentClassIds = Form.useWatch('class_ids', form) ?? [];
-
-  const currentTeacherIds = Form.useWatch('teacher_ids', form) ?? [];
-
   const onFinish = async (values: SubjectFormValues) => {
+    console.log('Check values:', JSON.stringify(values, null, 2));
     formProps.onFinish?.(values);
   };
 
@@ -64,50 +52,6 @@ const SubjectForm = ({ formProps }: StudentFormProps) => {
           style={{ width: '100%' }}
           placeholder="Nhập số tín chỉ"
         />
-      </Form.Item>
-
-      <Form.Item label="Lớp học" name="class_ids">
-        <ClassTableSelect
-          selectedRowKeys={formProps?.form?.getFieldValue('class_ids')}
-          onChange={(keys) =>
-            formProps?.form?.setFieldValue('class_ids', [
-              ...currentClassIds,
-              ...keys,
-            ])
-          }
-          ignoreIds={currentClassIds}
-        />
-        {currentClassIds?.length > 0 && (
-          <SelectedClassTable
-            ids={formProps?.form?.getFieldValue('class_ids')?.join(',')}
-            onRemoveId={(id) => {
-              const newIds = currentClassIds.filter((item) => item !== id);
-              formProps?.form?.setFieldValue('class_ids', newIds);
-            }}
-          />
-        )}
-      </Form.Item>
-
-      <Form.Item label="Giáo viên" name="teacher_ids">
-        <TeacherTableSelect
-          selectedRowKeys={formProps?.form?.getFieldValue('teacher_ids')}
-          onChange={(keys) =>
-            formProps?.form?.setFieldValue('teacher_ids', [
-              ...currentTeacherIds,
-              ...keys,
-            ])
-          }
-          ignoreIds={currentTeacherIds}
-        />
-        {currentTeacherIds?.length > 0 && (
-          <SelectedTeacherTable
-            ids={formProps?.form?.getFieldValue('teacher_ids')?.join(',')}
-            onRemoveId={(id) => {
-              const newIds = currentTeacherIds.filter((item) => item !== id);
-              formProps?.form?.setFieldValue('teacher_ids', newIds);
-            }}
-          />
-        )}
       </Form.Item>
     </Form>
   );

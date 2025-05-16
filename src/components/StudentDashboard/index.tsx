@@ -21,7 +21,7 @@ const chartData = grades.map((grade) => ({
 const StudentDashboard = () => {
   return (
     <Show title="Tổng quan sinh viên">
-      <Row gutter={16}>
+      <Row gutter={8}>
         <Col span={8}>
           <Card>
             <Statistic title="Tổng số môn đã học" value={grades.length} />

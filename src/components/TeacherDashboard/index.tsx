@@ -33,7 +33,7 @@ const COLORS = ['#1890ff', '#52c41a', '#faad14', '#f5222d'];
 const TeacherDashboard = () => {
   return (
     <Show title="Tổng quan giáo viên">
-      <Row gutter={16}>
+      <Row gutter={8}>
         <Col span={8}>
           <Card>
             <Statistic

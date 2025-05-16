@@ -63,8 +63,6 @@ export const dataProviderSimpleRest = (
       ? `${url}?${stringify(combinedQuery)}`
       : url;
 
-    console.log('Check urlWithQuery:', urlWithQuery);
-
     const { data, headers } = await httpClient[requestMethod](urlWithQuery, {
       headers: headersFromMeta,
     });

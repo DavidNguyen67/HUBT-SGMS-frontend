@@ -1,9 +1,28 @@
-import { Modal, Table, Button, Form, Input } from 'antd';
+import {
+  Modal,
+  Table,
+  Button,
+  Form,
+  Input,
+  Space,
+  Col,
+  Select,
+  Row,
+  Tooltip,
+} from 'antd';
 import { useState } from 'react';
-import { useTable } from '@refinedev/antd';
+import { useSelect, useTable } from '@refinedev/antd';
 import { CrudFilters, HttpError } from '@refinedev/core';
-import { truncateText } from '@common/helper';
-import { Class } from '@interfaces/response';
+import {
+  Class,
+  Student,
+  Subject,
+  Teacher,
+  TeacherSubjectClass,
+} from '@interfaces/response';
+import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+import { MAX_TAGS_DISPLAY } from '@common';
+import { ClassTableFilter } from '@interfaces';
 
 interface ClassTableSelectProps {
   onChange: (selectedRowKeys: React.Key[]) => void;
@@ -16,46 +35,52 @@ const ClassTableSelect = ({
   selectedRowKeys,
   ignoreIds,
 }: ClassTableSelectProps) => {
+  const onSearch = (values: ClassTableFilter) => {
+    const filters: CrudFilters = [];
+
+    if (values.class_name != null) {
+      filters.push({
+        field: 'class_name',
+        operator: 'contains',
+        value: values.class_name,
+      });
+    }
+
+    if (values.class_code != null) {
+      filters.push({
+        field: 'class_code',
+        operator: 'contains',
+        value: values.class_code,
+      });
+    }
+
+    if (values.teacher_ids != null) {
+      filters.push({
+        field: 'teacher_ids',
+        operator: 'contains',
+        value: values.teacher_ids,
+      });
+    }
+
+    if (values.subject_ids != null) {
+      filters.push({
+        field: 'subject_ids',
+        operator: 'contains',
+        value: values.subject_ids,
+      });
+    }
+
+    return filters;
+  };
+
   const { tableProps, searchFormProps } = useTable<
     Class,
     HttpError,
-    {
-      class_name?: string;
-      class_code?: string;
-      teacher_name?: string;
-    }
+    ClassTableFilter
   >({
     syncWithLocation: true,
     resource: 'api/v1/classes',
-    onSearch: (values) => {
-      const filters: CrudFilters = [];
-
-      if (values.class_name) {
-        filters.push({
-          field: 'class_name',
-          operator: 'contains',
-          value: values.class_name,
-        });
-      }
-
-      if (values.class_code) {
-        filters.push({
-          field: 'class_code',
-          operator: 'contains',
-          value: values.class_code,
-        });
-      }
-
-      if (values.teacher_name) {
-        filters.push({
-          field: 'teacher_name',
-          operator: 'contains',
-          value: values.teacher_name,
-        });
-      }
-
-      return filters;
-    },
+    onSearch,
     meta: {
       externalFilters: {
         ignoreIds: Array.isArray(ignoreIds) ? ignoreIds.join(',') : ignoreIds,
@@ -76,6 +101,42 @@ const ClassTableSelect = ({
     setOpen(false);
   };
 
+  const { selectProps: teacherSelectProps } = useSelect<Teacher>({
+    resource: 'api/v1/teachers',
+    optionLabel: (item) => item?.full_name,
+    optionValue: 'id',
+    onSearch: (value) => [
+      {
+        field: 'value',
+        operator: 'contains',
+        value,
+      },
+    ],
+    meta: {
+      externalFilters: {
+        _end: 50,
+      },
+    },
+  });
+
+  const { selectProps: subjectSelectProps } = useSelect<Subject>({
+    resource: 'api/v1/subjects',
+    optionLabel: (item) => item?.subject_name,
+    optionValue: 'id',
+    onSearch: (value) => [
+      {
+        field: 'value',
+        operator: 'contains',
+        value,
+      },
+    ],
+    meta: {
+      externalFilters: {
+        _end: 50,
+      },
+    },
+  });
+
   return (
     <>
       <Button onClick={handleOpen}>Chọn lớp học</Button>
@@ -93,51 +154,88 @@ const ClassTableSelect = ({
         ]}
         width={900}
       >
-        <Form
-          layout="inline"
-          {...searchFormProps}
-          style={{ marginBottom: 16, display: 'flex', gap: 16 }}
-        >
-          <Form.Item
-            name="class_name"
-            label={<div style={{ width: 100, textAlign: 'left' }}>Tên lớp</div>}
-          >
-            <Input
-              style={{ width: 150 }}
-              placeholder="Tìm tên lớp..."
-              allowClear
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="class_code"
-            label={<div style={{ width: 100, textAlign: 'left' }}>Mã lớp</div>}
-          >
-            <Input
-              style={{ width: 150 }}
-              placeholder="Tìm mã lớp..."
-              allowClear
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="teacher_name"
-            label={
-              <div style={{ width: 100, textAlign: 'left' }}>Tên giáo viên</div>
-            }
-          >
-            <Input
-              style={{ width: 150 }}
-              placeholder="Tìm giáo viên..."
-              allowClear
-            />
-          </Form.Item>
-
-          <Form.Item>
-            <Button htmlType="submit" type="primary">
-              Lọc
-            </Button>
-          </Form.Item>
+        <Form layout="vertical" {...searchFormProps}>
+          <Row gutter={16}>
+            <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+              <Form.Item name="class_name" label="Tên lớp">
+                <Input placeholder="Tìm theo tên lớp..." allowClear />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+              <Form.Item name="class_code" label="Mã lớp">
+                <Input placeholder="Tìm theo mã lớp..." allowClear />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+              <Form.Item name="teacher_ids" label="Tên giáo viên">
+                <Select
+                  {...teacherSelectProps}
+                  placeholder="Chọn giáo viên"
+                  allowClear
+                  mode="multiple"
+                  maxTagCount={MAX_TAGS_DISPLAY}
+                  maxTagPlaceholder={(omittedValues) => (
+                    <Tooltip
+                      title={omittedValues.map((val) => val.label).join(', ')}
+                    >
+                      +{omittedValues.length}
+                    </Tooltip>
+                  )}
+                  virtual
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+              <Form.Item name="subject_ids" label="Tên môn học">
+                <Select
+                  {...subjectSelectProps}
+                  placeholder="Chọn môn học"
+                  allowClear
+                  mode="multiple"
+                  maxTagCount={MAX_TAGS_DISPLAY}
+                  maxTagPlaceholder={(omittedValues) => (
+                    <Tooltip
+                      title={omittedValues.map((val) => val.label).join(', ')}
+                    >
+                      +{omittedValues.length}
+                    </Tooltip>
+                  )}
+                  virtual
+                />
+              </Form.Item>
+            </Col>
+            <Col
+              xs={24}
+              sm={24}
+              md={24}
+              lg={24}
+              xl={24}
+              style={{ textAlign: 'left' }}
+            >
+              <Form.Item>
+                <Space>
+                  <Button
+                    htmlType="submit"
+                    type="primary"
+                    icon={<SearchOutlined />}
+                    style={{ minWidth: 90 }}
+                  >
+                    Lọc
+                  </Button>
+                  <Button
+                    icon={<ReloadOutlined />}
+                    onClick={() => {
+                      searchFormProps.form?.resetFields();
+                      searchFormProps.form?.submit();
+                    }}
+                    style={{ minWidth: 90 }}
+                  >
+                    Đặt lại
+                  </Button>
+                </Space>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
 
         <Table
@@ -154,43 +252,99 @@ const ClassTableSelect = ({
             ...tableProps.pagination,
             position: ['bottomCenter'],
             showSizeChanger: true,
-            showTotal: (total) => `Tổng cộng ${total} bản ghi`,
           }}
         >
-          <Table.Column
+          <Table.Column<Class>
             dataIndex="class_code"
             title="Mã lớp"
-            width={100}
-            ellipsis
+            width={120}
+            sorter={{ multiple: 1 }}
+            filters={
+              Array.from(
+                new Set(tableProps.dataSource?.map((item) => item.class_code))
+              ).map((code) => ({ text: code, value: code })) ?? []
+            }
+            onFilter={(value, record) => record.class_code === value}
           />
-          <Table.Column
+
+          <Table.Column<Class>
             dataIndex="class_name"
             title="Tên lớp"
+            width={200}
+            sorter={{ multiple: 2 }}
+            filters={
+              Array.from(
+                new Set(tableProps.dataSource?.map((item) => item.class_name))
+              ).map((name) => ({ text: name, value: name })) ?? []
+            }
+            onFilter={(value, record) => record.class_name === value}
+          />
+
+          <Table.Column<Class>
+            dataIndex="students"
+            title="Số sinh viên"
             width={150}
-            ellipsis
+            render={(items: Student[]) => items?.length ?? 0}
           />
-          <Table.Column
-            title="Giáo viên"
-            dataIndex="teacher"
-            render={(_, record: Class) => {
-              const teacher = record.teacherSubjectClasses?.[0]?.teacher;
-              return teacher?.full_name || 'Không rõ';
+
+          <Table.Column<Class>
+            dataIndex="teacherSubjectClasses"
+            title="Giáo viên - Môn học"
+            render={(items: TeacherSubjectClass[]) => {
+              const tooltipContent = (
+                <div>
+                  {items?.map((item, idx) => (
+                    <div key={idx}>
+                      <b>{item.teacher?.full_name || '-'}</b> -{' '}
+                      {item.subject?.subject_name || 'Chưa rõ'}
+                    </div>
+                  )) || '-'}
+                </div>
+              );
+
+              const displayContent = items
+                ?.map(
+                  (item) =>
+                    `${item.teacher?.full_name} - ${item.subject?.subject_name}`
+                )
+                .join(' | ');
+
+              return (
+                <Tooltip title={tooltipContent}>
+                  <div
+                    style={{
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      maxWidth: 200,
+                    }}
+                  >
+                    {displayContent}
+                  </div>
+                </Tooltip>
+              );
             }}
-            width={160}
-          />
-          <Table.Column
-            title="Môn học"
-            dataIndex="subject"
-            render={(_, record: Class) => {
-              const subject = record.teacherSubjectClasses?.[0]?.subject;
-              return subject?.subject_name || 'Không rõ';
+            filters={
+              Array.from(
+                new Set(
+                  tableProps.dataSource?.flatMap((item) =>
+                    item.teacherSubjectClasses.map((teacherSubjectClass) => ({
+                      subject: teacherSubjectClass.subject?.subject_name,
+                      teacher: teacherSubjectClass.teacher?.full_name,
+                      id: teacherSubjectClass.id,
+                    }))
+                  )
+                )
+              ).map((item) => ({
+                text: `${item.teacher} - ${item.subject}`,
+                value: item.id,
+              })) ?? []
+            }
+            onFilter={(value, record) => {
+              return record.teacherSubjectClasses
+                .map((item) => item.id)
+                .includes(value as string);
             }}
-            width={160}
-          />
-          <Table.Column
-            title="Số học sinh"
-            dataIndex="studentCount"
-            width={80}
           />
         </Table>
       </Modal>

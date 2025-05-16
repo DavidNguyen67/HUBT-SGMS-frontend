@@ -22,7 +22,7 @@ const Dashboard = () => {
   return (
     <div className="h-full">
       <Show title="Dashboard">
-        <Row gutter={16}>
+        <Row gutter={8}>
           <Col span={6}>
             <Card>
               <Statistic

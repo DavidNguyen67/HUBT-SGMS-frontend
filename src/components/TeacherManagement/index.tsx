@@ -113,23 +113,19 @@ const TeachersManagement = () => {
         children: 'Thêm giáo viên',
       }}
     >
-      <Form
-        layout="horizontal"
-        {...searchFormProps}
-        style={{ marginBottom: 16 }}
-      >
+      <Form layout="vertical" {...searchFormProps}>
         <Row gutter={16}>
-          <Col xs={24} sm={12} md={8} lg={5} xl={5}>
+          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
             <Form.Item name="full_name" label="Họ tên">
               <Input placeholder="Tìm theo tên..." allowClear />
             </Form.Item>
           </Col>
-          <Col xs={24} sm={12} md={8} lg={5} xl={5}>
+          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
             <Form.Item name="teacher_code" label="Mã giáo viên">
               <Input placeholder="Tìm theo mã giáo viên..." allowClear />
             </Form.Item>
           </Col>
-          <Col xs={24} sm={12} md={8} lg={5} xl={5}>
+          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
             <Form.Item name="date_of_birth_range" label="Ngày sinh">
               <DatePicker.RangePicker
                 format="DD/MM/YYYY"
@@ -139,8 +135,7 @@ const TeachersManagement = () => {
               />
             </Form.Item>
           </Col>
-
-          <Col xs={24} sm={12} md={8} lg={5} xl={5}>
+          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
             <Form.Item name="teacher_subject_class" label="Môn học - Lớp học">
               <Input
                 placeholder="Tìm theo tên hoặc mã của môn học - lớp học..."
@@ -148,25 +143,35 @@ const TeachersManagement = () => {
               />
             </Form.Item>
           </Col>
-          <Col xs={24} sm={12} md={8} lg={4} xl={4}>
+          <Col
+            xs={24}
+            sm={24}
+            md={24}
+            lg={24}
+            xl={24}
+            style={{ textAlign: 'right' }}
+          >
             <Form.Item>
-              <Button
-                htmlType="submit"
-                type="primary"
-                icon={<SearchOutlined />}
-                style={{ marginRight: 16 }}
-              >
-                Lọc
-              </Button>
-              <Button
-                icon={<ReloadOutlined />}
-                onClick={() => {
-                  searchFormProps.form?.resetFields();
-                  searchFormProps.form?.submit();
-                }}
-              >
-                Đặt lại
-              </Button>
+              <Space>
+                <Button
+                  htmlType="submit"
+                  type="primary"
+                  icon={<SearchOutlined />}
+                  style={{ minWidth: 90 }}
+                >
+                  Lọc
+                </Button>
+                <Button
+                  icon={<ReloadOutlined />}
+                  onClick={() => {
+                    searchFormProps.form?.resetFields();
+                    searchFormProps.form?.submit();
+                  }}
+                  style={{ minWidth: 90 }}
+                >
+                  Đặt lại
+                </Button>
+              </Space>
             </Form.Item>
           </Col>
         </Row>
@@ -181,7 +186,6 @@ const TeachersManagement = () => {
           position: ['bottomCenter'],
           showSizeChanger: true,
           pageSizeOptions: ['10', '20', '30'],
-          showTotal: (total) => `Tổng cộng ${total} giáo viên`,
         }}
       >
         <Table.Column<Teacher>

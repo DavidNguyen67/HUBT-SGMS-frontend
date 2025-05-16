@@ -1,9 +1,23 @@
-import { Modal, Table, Button, Form, Input, Tag } from 'antd';
+import {
+  Modal,
+  Table,
+  Button,
+  Form,
+  Input,
+  Tag,
+  DatePicker,
+  Row,
+  Col,
+  Space,
+} from 'antd';
 import { useState } from 'react';
 import { DateField, useTable } from '@refinedev/antd';
 import { CrudFilters, HttpError } from '@refinedev/core';
 import { Teacher } from '@interfaces/response';
 import { GENDER, TAG_GENDER_COLOR_MAPPING, TAG_GENDER_MAPPING } from '@common';
+import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+import { TeacherTableFilter } from '@interfaces';
+import dayjs from 'dayjs';
 
 interface TeacherTableSelectProps {
   onChange: (selectedRowKeys: React.Key[]) => void;
@@ -16,34 +30,80 @@ const TeacherTableSelect = ({
   selectedRowKeys,
   ignoreIds,
 }: TeacherTableSelectProps) => {
+  const onSearch = (values: TeacherTableFilter) => {
+    const filters: CrudFilters = [];
+
+    if (values.full_name != null) {
+      filters.push({
+        field: 'full_name',
+        operator: 'contains',
+        value: values.full_name,
+      });
+    }
+
+    if (values.teacher_code != null) {
+      filters.push({
+        field: 'teacher_code',
+        operator: 'contains',
+        value: values.teacher_code || undefined,
+      });
+    }
+
+    if (values.teacher_subject_class != null) {
+      filters.push({
+        field: 'teacher_subject_class',
+        operator: 'contains',
+        value: values.teacher_subject_class,
+      });
+    }
+
+    if (values.date_of_birth_range && values.date_of_birth_range.length > 0) {
+      const [from, to] = values.date_of_birth_range;
+
+      if (from) {
+        filters.push({
+          field: 'date_of_birth_from',
+          operator: 'gte',
+          value: from.toISOString(),
+        });
+      }
+      if (to) {
+        filters.push({
+          field: 'date_of_birth_to',
+          operator: 'lte',
+          value: to.toISOString(),
+        });
+      }
+    } else {
+      filters.push({
+        field: 'date_of_birth_from',
+        operator: 'gte',
+        value: undefined,
+      });
+      filters.push({
+        field: 'date_of_birth_to',
+        operator: 'lte',
+        value: undefined,
+      });
+    }
+
+    filters.push({
+      field: 'gender',
+      operator: 'eq',
+      value: values.gender ?? undefined,
+    });
+
+    return filters;
+  };
+
   const { tableProps, searchFormProps } = useTable<
     Teacher,
     HttpError,
-    {
-      full_name?: string;
-      teacher_code?: string;
-    }
+    TeacherTableFilter
   >({
     syncWithLocation: true,
     resource: 'api/v1/teachers',
-    onSearch: (values) => {
-      const filters: CrudFilters = [];
-      if (values.full_name) {
-        filters.push({
-          field: 'full_name',
-          operator: 'contains',
-          value: values.full_name,
-        });
-      }
-      if (values.teacher_code) {
-        filters.push({
-          field: 'teacher_code',
-          operator: 'contains',
-          value: values.teacher_code,
-        });
-      }
-      return filters;
-    },
+    onSearch,
     meta: {
       externalFilters: {
         ignoreIds: Array.isArray(ignoreIds) ? ignoreIds.join(',') : ignoreIds,
@@ -81,37 +141,70 @@ const TeacherTableSelect = ({
         ]}
         width={800}
       >
-        <Form
-          layout="inline"
-          {...searchFormProps}
-          style={{ marginBottom: 16, display: 'flex', gap: 16 }}
-        >
-          <Form.Item
-            name="full_name"
-            label={<div style={{ width: 50, textAlign: 'left' }}>Họ tên</div>}
-          >
-            <Input
-              style={{ width: 150 }}
-              placeholder="Tìm theo tên..."
-              allowClear
-            />
-          </Form.Item>
-          <Form.Item
-            name="teacher_code"
-            label={<div style={{ width: 50, textAlign: 'left' }}>Mã GV</div>}
-          >
-            <Input
-              style={{ width: 150 }}
-              placeholder="Tìm mã giáo viên..."
-              allowClear
-            />
-          </Form.Item>
-          <Form.Item>
-            <Button htmlType="submit" type="primary">
-              Lọc
-            </Button>
-          </Form.Item>
+        <Form layout="vertical" {...searchFormProps}>
+          <Row gutter={16}>
+            <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+              <Form.Item name="full_name" label="Họ tên">
+                <Input placeholder="Tìm theo tên..." allowClear />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+              <Form.Item name="teacher_code" label="Mã giáo viên">
+                <Input placeholder="Tìm theo mã giáo viên..." allowClear />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+              <Form.Item name="date_of_birth_range" label="Ngày sinh">
+                <DatePicker.RangePicker
+                  format="DD/MM/YYYY"
+                  allowClear
+                  style={{ width: '100%' }}
+                  placeholder={['Từ ngày', 'Đến ngày']}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+              <Form.Item name="teacher_subject_class" label="Môn học - Lớp học">
+                <Input
+                  placeholder="Tìm theo tên hoặc mã của môn học - lớp học..."
+                  allowClear
+                />
+              </Form.Item>
+            </Col>
+            <Col
+              xs={24}
+              sm={24}
+              md={24}
+              lg={24}
+              xl={24}
+              style={{ textAlign: 'right' }}
+            >
+              <Form.Item>
+                <Space>
+                  <Button
+                    htmlType="submit"
+                    type="primary"
+                    icon={<SearchOutlined />}
+                    style={{ minWidth: 90 }}
+                  >
+                    Lọc
+                  </Button>
+                  <Button
+                    icon={<ReloadOutlined />}
+                    onClick={() => {
+                      searchFormProps.form?.resetFields();
+                      searchFormProps.form?.submit();
+                    }}
+                    style={{ minWidth: 90 }}
+                  >
+                    Đặt lại
+                  </Button>
+                </Space>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
+
         <Table
           {...tableProps}
           rowKey="id"
@@ -126,24 +219,33 @@ const TeacherTableSelect = ({
             ...tableProps.pagination,
             position: ['bottomCenter'],
             showSizeChanger: true,
-            showTotal: (total) => `Tổng cộng ${total} bản ghi`,
           }}
         >
-          <Table.Column
+          <Table.Column<Teacher>
             dataIndex="teacher_code"
-            title="Mã GV"
-            width={100}
-            ellipsis
+            title="Mã giáo viên"
+            width={150}
             sorter={{ multiple: 1 }}
+            filters={
+              Array.from(
+                new Set(tableProps.dataSource?.map((item) => item.teacher_code))
+              ).map((code) => ({ text: code, value: code })) ?? []
+            }
+            onFilter={(value, record) => record.teacher_code === value}
           />
-          <Table.Column
+          <Table.Column<Teacher>
             dataIndex="full_name"
             title="Họ tên"
-            width={180}
-            ellipsis
             sorter={{ multiple: 2 }}
+            width={200}
+            filters={
+              Array.from(
+                new Set(tableProps.dataSource?.map((item) => item.full_name))
+              ).map((name) => ({ text: name, value: name })) ?? []
+            }
+            onFilter={(value, record) => record.full_name === value}
           />
-          <Table.Column
+          <Table.Column<Teacher>
             dataIndex="gender"
             title="Giới tính"
             render={(value: GENDER) => (
@@ -160,13 +262,26 @@ const TeacherTableSelect = ({
             onFilter={(value, record) => record.gender === value}
             width={120}
           />
-          <Table.Column
+          <Table.Column<Teacher>
             dataIndex="date_of_birth"
             title="Ngày sinh"
-            sorter={{ multiple: 4 }}
             render={(value: string) => (
               <DateField value={value} format="DD/MM/YYYY" />
             )}
+            sorter={{ multiple: 4 }}
+            filters={
+              Array.from(
+                new Set(
+                  tableProps.dataSource?.map((item) => item.date_of_birth)
+                )
+              ).map((date) => ({
+                text: dayjs(date).format('DD/MM/YYYY'),
+                value: date,
+              })) ?? []
+            }
+            onFilter={(value, record) =>
+              dayjs(record.date_of_birth).isSameOrBefore(dayjs(value as string))
+            }
           />
         </Table>
       </Modal>

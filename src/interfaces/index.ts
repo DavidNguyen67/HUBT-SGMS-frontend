@@ -20,8 +20,6 @@ export interface SubjectFormValues {
   subject_code: string;
   subject_name: string;
   credits: number;
-  class_ids: string[];
-  teacher_ids: string[];
 }
 
 export interface GradeFormValues {
@@ -66,8 +64,10 @@ export interface TeacherTableFilter {
 export interface ClassTableFilter {
   class_code?: string;
   class_name?: string;
-  teacher_name?: string;
-  subject_name?: string;
+  // teacher_name?: string;
+  // subject_name?: string;
+  teacher_ids?: string[];
+  subject_ids?: string[];
 }
 
 export interface TeacherSubjectClassTableFilter {
@@ -80,8 +80,7 @@ export interface TeacherSubjectClassTableFilter {
 }
 
 export interface SubjectTableFilter {
-  subject_code?: string;
-  subject_name?: string;
+  subject_code_and_name?: string;
   credits?: number;
   teacher_id?: string;
   class_id?: string;

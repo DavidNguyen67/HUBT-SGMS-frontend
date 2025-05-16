@@ -1,4 +1,4 @@
-import { Modal, Table, Button, Tooltip, Form, Input } from 'antd';
+import { Modal, Table, Button, Tooltip, Form, Input, Row, Col } from 'antd';
 import { CrudFilters, HttpError } from '@refinedev/core';
 import { useState } from 'react';
 import { TeacherSubjectClassTableFilter } from '@interfaces';
@@ -114,75 +114,65 @@ const TeacherSubjectClassTableSelect = ({
         width={900}
       >
         <Form
-          layout="inline"
+          layout="horizontal"
           {...searchFormProps}
-          style={{ marginBottom: 16, display: 'flex', gap: 16 }}
+          style={{ marginBottom: 16 }}
         >
-          <Form.Item
-            name="class_name"
-            label={<div style={{ width: 60, textAlign: 'left' }}>Tên lớp</div>}
-          >
-            <Input
-              placeholder="Tìm theo tên lớp..."
-              allowClear
-              style={{ width: 150 }}
-            />
-          </Form.Item>
-          <Form.Item
-            name="class_code"
-            label={<div style={{ width: 60, textAlign: 'left' }}>Mã lớp</div>}
-          >
-            <Input
-              placeholder="Tìm theo mã lớp..."
-              allowClear
-              style={{ width: 150 }}
-            />
-          </Form.Item>
-          <Form.Item
-            name="subject_name"
-            label={<div style={{ width: 60, textAlign: 'left' }}>Tên môn</div>}
-          >
-            <Input
-              placeholder="Tìm theo tên môn..."
-              allowClear
-              style={{ width: 150 }}
-            />
-          </Form.Item>
-          <Form.Item
-            name="subject_code"
-            label={<div style={{ width: 60, textAlign: 'left' }}>Mã môn</div>}
-          >
-            <Input
-              placeholder="Tìm theo mã môn..."
-              allowClear
-              style={{ width: 150 }}
-            />
-          </Form.Item>
-          <Form.Item
-            name="teacher_name"
-            label={<div style={{ width: 60, textAlign: 'left' }}>Tên GV</div>}
-          >
-            <Input
-              placeholder="Tìm theo tên GV..."
-              allowClear
-              style={{ width: 150 }}
-            />
-          </Form.Item>
-          <Form.Item
-            name="teacher_code"
-            label={<div style={{ width: 60, textAlign: 'left' }}>Mã GV</div>}
-          >
-            <Input
-              placeholder="Tìm theo mã GV..."
-              allowClear
-              style={{ width: 150 }}
-            />
-          </Form.Item>
-          <Form.Item>
-            <Button htmlType="submit" type="primary">
-              Lọc
-            </Button>
-          </Form.Item>
+          <Row gutter={8}>
+            <Col xs={24} sm={12} md={8} lg={8} xl={8}>
+              <Form.Item name="class_name" label="Tên lớp">
+                <Input placeholder="Tìm theo tên lớp..." allowClear />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={8} xl={8}>
+              <Form.Item name="class_code" label="Mã lớp">
+                <Input placeholder="Tìm theo mã lớp..." allowClear />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={8} xl={8}>
+              <Form.Item name="subject_name" label="Tên môn">
+                <Input placeholder="Tìm theo tên môn..." allowClear />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={8} xl={8}>
+              <Form.Item name="subject_code" label="Mã môn">
+                <Input placeholder="Tìm theo mã môn..." allowClear />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={8} xl={8}>
+              <Form.Item name="teacher_name" label="Tên GV">
+                <Input placeholder="Tìm theo tên GV..." allowClear />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={8} xl={8}>
+              <Form.Item name="teacher_code" label="Mã GV">
+                <Input placeholder="Tìm theo mã GV..." allowClear />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={8} xl={8}>
+              <Form.Item>
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: 8,
+                  }}
+                >
+                  <Button htmlType="submit" type="primary" style={{ flex: 1 }}>
+                    Lọc
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      searchFormProps.form?.resetFields();
+                      searchFormProps.form?.submit();
+                    }}
+                    style={{ flex: 1 }}
+                  >
+                    Đặt lại
+                  </Button>
+                </div>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
 
         <Table
@@ -199,7 +189,6 @@ const TeacherSubjectClassTableSelect = ({
             position: ['bottomCenter'],
             showSizeChanger: true,
             pageSizeOptions: ['5', '10', '20', '50'],
-            showTotal: (total) => `Tổng cộng ${total} bản ghi`,
           }}
         >
           <Table.Column<TeacherSubjectClass>
@@ -298,33 +287,6 @@ const TeacherSubjectClassTableSelect = ({
               ).map((code) => ({ text: code, value: code })) ?? []
             }
             onFilter={(value, record) => record.class?.class_code === value}
-          />
-          <Table.Column<TeacherSubjectClass>
-            title="Ngày tạo"
-            dataIndex="created_at"
-            render={(value: string) => (
-              <DateField value={value} format="DD/MM/YYYY" />
-            )}
-            width={120}
-            sorter={{ multiple: 7 }}
-            filters={
-              Array.from(
-                new Set(
-                  tableProps.dataSource?.map((item) =>
-                    dayjs(item.created_at).format('DD/MM/YYYY')
-                  )
-                )
-              ).map((date) => ({
-                text: date,
-                value: date,
-              })) ?? []
-            }
-            onFilter={(value, record) =>
-              dayjs(record.created_at, 'DD/MM/YYYY').isSameOrBefore(
-                dayjs(value as string, 'DD/MM/YYYY'),
-                'day'
-              )
-            }
           />
         </Table>
       </Modal>
