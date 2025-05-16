@@ -73,20 +73,52 @@ const ClassesManagement = () => {
         {...searchFormProps}
         style={{ marginBottom: 16, display: 'flex', gap: 8 }}
       >
-        <Form.Item name="class_name" label="Tên lớp">
-          <Input placeholder="Tìm theo tên lớp..." allowClear />
+        <Form.Item
+          name="class_name"
+          label={<div style={{ width: 80, textAlign: 'left' }}>Tên lớp</div>}
+        >
+          <Input
+            placeholder="Tìm theo tên lớp..."
+            allowClear
+            style={{ width: 250 }}
+          />
         </Form.Item>
 
-        <Form.Item name="class_code" label="Mã lớp">
-          <Input placeholder="Tìm theo mã lớp..." allowClear />
+        <Form.Item
+          name="class_code"
+          label={<div style={{ width: 80, textAlign: 'left' }}>Mã lớp</div>}
+        >
+          <Input
+            placeholder="Tìm theo mã lớp..."
+            allowClear
+            style={{ width: 250 }}
+          />
         </Form.Item>
 
-        <Form.Item name="teacher_name" label="Tên giáo viên">
-          <Input placeholder="Tìm theo mã lớp..." allowClear />
+        <Form.Item
+          name="teacher_name"
+          label={
+            <div style={{ width: 80, textAlign: 'left' }}>Tên giáo viên</div>
+          }
+        >
+          <Input
+            placeholder="Tìm theo mã lớp..."
+            allowClear
+            style={{ width: 250 }}
+          />
         </Form.Item>
 
-        <Form.Item name="subject_name" label="Tên môn học">
-          <Input placeholder="Tìm theo môn học..." allowClear />
+        <Form.Item
+          name="subject_name"
+          label={
+            <div style={{ width: 80, textAlign: 'left' }}>Tên môn học</div>
+          }
+        >
+          <Input
+            placeholder="Tìm theo môn học..."
+            allowClear
+            style={{ width: 250 }}
+          />
         </Form.Item>
 
         <Form.Item>

@@ -18,9 +18,13 @@ const ClassCreate = () => {
   });
 
   return (
-    <Create saveButtonProps={saveButtonProps}>
+    <Create
+      saveButtonProps={saveButtonProps}
+      title="Thêm lớp học"
+      breadcrumb={null}
+    >
       <Row>
-        <Col span={6} offset={8}>
+        <Col span={16}>
           <ClassForm formProps={formProps} />
         </Col>
       </Row>

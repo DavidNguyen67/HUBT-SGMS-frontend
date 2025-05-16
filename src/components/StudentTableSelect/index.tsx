@@ -1,11 +1,11 @@
-import { Modal, Table, Button, Tag, Tooltip, Form, Select, Input } from "antd";
-import { CrudFilters, HttpError } from "@refinedev/core";
-import { useMemo, useState } from "react";
-import { StudentTableFilter } from "@interfaces";
-import { Student } from "@interfaces/response";
-import { DateField, useTable } from "@refinedev/antd";
-import { GENDER, TAG_GENDER_COLOR_MAPPING, TAG_GENDER_MAPPING } from "@common";
-import { truncateText } from "@common/helper";
+import { Modal, Table, Button, Tag, Tooltip, Form, Select, Input } from 'antd';
+import { CrudFilters, HttpError } from '@refinedev/core';
+import { useMemo, useState } from 'react';
+import { StudentTableFilter } from '@interfaces';
+import { Student } from '@interfaces/response';
+import { DateField, useTable } from '@refinedev/antd';
+import { GENDER, TAG_GENDER_COLOR_MAPPING, TAG_GENDER_MAPPING } from '@common';
+import { truncateText } from '@common/helper';
 
 interface StudentTableSelectProps {
   onChange: (selectedRowKeys: React.Key[]) => void;
@@ -24,29 +24,29 @@ const StudentTableSelect = ({
     StudentTableFilter
   >({
     syncWithLocation: true,
-    resource: "api/v1/students",
+    resource: 'api/v1/students',
     onSearch: (values) => {
       const filters: CrudFilters = [];
 
       if (values.full_name != null) {
         filters.push({
-          field: "full_name",
-          operator: "contains",
+          field: 'full_name',
+          operator: 'contains',
           value: values.full_name || undefined,
         });
       }
 
       if (values.student_code != null) {
         filters.push({
-          field: "student_code",
-          operator: "contains",
+          field: 'student_code',
+          operator: 'contains',
           value: values.student_code || undefined,
         });
       }
 
       filters.push({
-        field: "gender",
-        operator: "eq",
+        field: 'gender',
+        operator: 'eq',
         value: values.gender ?? undefined,
       });
 
@@ -54,7 +54,7 @@ const StudentTableSelect = ({
     },
     meta: {
       externalFilters: {
-        ignoreIds: Array.isArray(ignoreIds) ? ignoreIds.join(",") : ignoreIds,
+        ignoreIds: Array.isArray(ignoreIds) ? ignoreIds.join(',') : ignoreIds,
       },
     },
   });
@@ -92,11 +92,11 @@ const StudentTableSelect = ({
         <Form
           layout="inline"
           {...searchFormProps}
-          style={{ marginBottom: 16, display: "flex", gap: 16 }}
+          style={{ marginBottom: 16, display: 'flex', gap: 16 }}
         >
           <Form.Item
             name="full_name"
-            label={<div style={{ width: 50 }}>Họ tên</div>}
+            label={<div style={{ width: 50, textAlign: 'left' }}>Họ tên</div>}
           >
             <Input
               style={{ width: 120 }}
@@ -107,7 +107,9 @@ const StudentTableSelect = ({
 
           <Form.Item
             name="student_code"
-            label={<div style={{ width: 80 }}>Mã sinh viên</div>}
+            label={
+              <div style={{ width: 80, textAlign: 'left' }}>Mã sinh viên</div>
+            }
           >
             <Input
               style={{ width: 120 }}
@@ -118,7 +120,9 @@ const StudentTableSelect = ({
 
           <Form.Item
             name="gender"
-            label={<div style={{ width: 50 }}>Giới tính</div>}
+            label={
+              <div style={{ width: 50, textAlign: 'left' }}>Giới tính</div>
+            }
           >
             <Select
               placeholder="Chọn giới tính"
@@ -142,7 +146,7 @@ const StudentTableSelect = ({
           {...tableProps}
           rowKey="id"
           rowSelection={{
-            type: "checkbox",
+            type: 'checkbox',
             selectedRowKeys: tempSelectedKeys,
             onChange: setTempSelectedKeys,
           }}
@@ -150,7 +154,7 @@ const StudentTableSelect = ({
           style={{ marginTop: 12 }}
           pagination={{
             ...tableProps.pagination,
-            position: ["bottomCenter"],
+            position: ['bottomCenter'],
             showSizeChanger: true,
             showTotal: (total) => `Tổng cộng ${total} bản ghi`,
           }}
@@ -166,8 +170,8 @@ const StudentTableSelect = ({
                 <div
                   style={{
                     width: 60,
-                    wordWrap: "break-word",
-                    wordBreak: "break-word",
+                    wordWrap: 'break-word',
+                    wordBreak: 'break-word',
                   }}
                 >
                   {truncateText(value)}

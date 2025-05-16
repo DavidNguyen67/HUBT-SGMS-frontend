@@ -1,10 +1,10 @@
-import { Modal, Table, Button, Tooltip, Form, Input } from "antd";
-import { CrudFilters, HttpError } from "@refinedev/core";
-import { useState } from "react";
-import { TeacherSubjectClassTableFilter } from "@interfaces";
-import { TeacherSubjectClass } from "@interfaces/response";
-import { DateField, useTable } from "@refinedev/antd";
-import { truncateText } from "@common/helper";
+import { Modal, Table, Button, Tooltip, Form, Input } from 'antd';
+import { CrudFilters, HttpError } from '@refinedev/core';
+import { useState } from 'react';
+import { TeacherSubjectClassTableFilter } from '@interfaces';
+import { TeacherSubjectClass } from '@interfaces/response';
+import { DateField, useTable } from '@refinedev/antd';
+import { truncateText } from '@common/helper';
 
 interface TeacherSubjectClassTableSelectProps {
   onChange: (selectedRowKeys: React.Key[]) => void;
@@ -23,49 +23,49 @@ const TeacherSubjectClassTableSelect = ({
     TeacherSubjectClassTableFilter
   >({
     syncWithLocation: true,
-    resource: "api/v1/teacher-subject-classes",
+    resource: 'api/v1/teacher-subject-classes',
     onSearch: (values) => {
       const filters: CrudFilters = [];
 
       if (values.class_name != null) {
         filters.push({
-          field: "class_name",
-          operator: "contains",
+          field: 'class_name',
+          operator: 'contains',
           value: values.class_name,
         });
       }
       if (values.class_code != null) {
         filters.push({
-          field: "class_code",
-          operator: "contains",
+          field: 'class_code',
+          operator: 'contains',
           value: values.class_code,
         });
       }
       if (values.subject_name != null) {
         filters.push({
-          field: "subject_name",
-          operator: "contains",
+          field: 'subject_name',
+          operator: 'contains',
           value: values.subject_name,
         });
       }
       if (values.subject_code != null) {
         filters.push({
-          field: "subject_code",
-          operator: "contains",
+          field: 'subject_code',
+          operator: 'contains',
           value: values.subject_code,
         });
       }
       if (values.teacher_name != null) {
         filters.push({
-          field: "teacher_name",
-          operator: "contains",
+          field: 'teacher_name',
+          operator: 'contains',
           value: values.teacher_name,
         });
       }
       if (values.teacher_code != null) {
         filters.push({
-          field: "teacher_code",
-          operator: "contains",
+          field: 'teacher_code',
+          operator: 'contains',
           value: values.teacher_code,
         });
       }
@@ -74,7 +74,7 @@ const TeacherSubjectClassTableSelect = ({
     },
     meta: {
       externalFilters: {
-        ignoreIds: ignoreIds?.join(","),
+        ignoreIds: ignoreIds?.join(','),
       },
     },
   });
@@ -112,11 +112,11 @@ const TeacherSubjectClassTableSelect = ({
         <Form
           layout="inline"
           {...searchFormProps}
-          style={{ marginBottom: 16, display: "flex", gap: 16 }}
+          style={{ marginBottom: 16, display: 'flex', gap: 16 }}
         >
           <Form.Item
             name="class_name"
-            label={<div style={{ width: 50 }}>Tên lớp</div>}
+            label={<div style={{ width: 60, textAlign: 'left' }}>Tên lớp</div>}
           >
             <Input
               placeholder="Tìm theo tên lớp..."
@@ -126,7 +126,7 @@ const TeacherSubjectClassTableSelect = ({
           </Form.Item>
           <Form.Item
             name="class_code"
-            label={<div style={{ width: 50 }}>Mã lớp</div>}
+            label={<div style={{ width: 60, textAlign: 'left' }}>Mã lớp</div>}
           >
             <Input
               placeholder="Tìm theo mã lớp..."
@@ -136,7 +136,7 @@ const TeacherSubjectClassTableSelect = ({
           </Form.Item>
           <Form.Item
             name="subject_name"
-            label={<div style={{ width: 50 }}>Tên môn</div>}
+            label={<div style={{ width: 60, textAlign: 'left' }}>Tên môn</div>}
           >
             <Input
               placeholder="Tìm theo tên môn..."
@@ -146,7 +146,7 @@ const TeacherSubjectClassTableSelect = ({
           </Form.Item>
           <Form.Item
             name="subject_code"
-            label={<div style={{ width: 50 }}>Mã môn</div>}
+            label={<div style={{ width: 60, textAlign: 'left' }}>Mã môn</div>}
           >
             <Input
               placeholder="Tìm theo mã môn..."
@@ -156,7 +156,7 @@ const TeacherSubjectClassTableSelect = ({
           </Form.Item>
           <Form.Item
             name="teacher_name"
-            label={<div style={{ width: 50 }}>Tên GV</div>}
+            label={<div style={{ width: 60, textAlign: 'left' }}>Tên GV</div>}
           >
             <Input
               placeholder="Tìm theo tên GV..."
@@ -166,7 +166,7 @@ const TeacherSubjectClassTableSelect = ({
           </Form.Item>
           <Form.Item
             name="teacher_code"
-            label={<div style={{ width: 50 }}>Mã GV</div>}
+            label={<div style={{ width: 60, textAlign: 'left' }}>Mã GV</div>}
           >
             <Input
               placeholder="Tìm theo mã GV..."
@@ -185,53 +185,53 @@ const TeacherSubjectClassTableSelect = ({
           {...tableProps}
           rowKey="id"
           rowSelection={{
-            type: "checkbox",
+            type: 'checkbox',
             selectedRowKeys: tempSelectedKeys,
             onChange: setTempSelectedKeys,
           }}
           dataSource={tableProps.dataSource}
           pagination={{
             ...tableProps.pagination,
-            position: ["bottomCenter"],
+            position: ['bottomCenter'],
             showSizeChanger: true,
-            pageSizeOptions: ["5", "10", "20", "50"],
+            pageSizeOptions: ['5', '10', '20', '50'],
             showTotal: (total) => `Tổng cộng ${total} bản ghi`,
           }}
         >
           <Table.Column
             title="Giáo viên"
-            dataIndex={["teacher", "full_name"]}
+            dataIndex={['teacher', 'full_name']}
             render={(value: string) => (
               <Tooltip title={value}>{truncateText(value, 24)}</Tooltip>
             )}
           />
           <Table.Column
             title="Mã GV"
-            dataIndex={["teacher", "teacher_code"]}
+            dataIndex={['teacher', 'teacher_code']}
             width={100}
           />
           <Table.Column
             title="Môn học"
-            dataIndex={["subject", "subject_name"]}
+            dataIndex={['subject', 'subject_name']}
             render={(value: string) => (
               <Tooltip title={value}>{truncateText(value, 24)}</Tooltip>
             )}
           />
           <Table.Column
             title="Mã môn"
-            dataIndex={["subject", "subject_code"]}
+            dataIndex={['subject', 'subject_code']}
             width={100}
           />
           <Table.Column
             title="Lớp"
-            dataIndex={["class", "class_name"]}
+            dataIndex={['class', 'class_name']}
             render={(value: string) => (
               <Tooltip title={value}>{truncateText(value, 24)}</Tooltip>
             )}
           />
           <Table.Column
             title="Mã lớp"
-            dataIndex={["class", "class_code"]}
+            dataIndex={['class', 'class_code']}
             width={100}
           />
           <Table.Column

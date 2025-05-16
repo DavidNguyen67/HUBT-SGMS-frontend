@@ -59,20 +59,43 @@ const TeachersManagement = () => {
         children: 'Thêm giáo viên',
       }}
     >
-      <Form layout="inline" {...searchFormProps} style={{ marginBottom: 16 }}>
-        <Form.Item name="full_name" label="Họ tên">
-          <Input placeholder="Tìm theo tên..." allowClear />
+      <Form
+        layout="inline"
+        {...searchFormProps}
+        style={{ marginBottom: 16, display: 'flex', gap: 8 }}
+      >
+        <Form.Item
+          name="full_name"
+          label={<div style={{ width: 80, textAlign: 'left' }}>Họ tên</div>}
+        >
+          <Input
+            placeholder="Tìm theo tên..."
+            allowClear
+            style={{ width: 250 }}
+          />
         </Form.Item>
 
-        <Form.Item name="teacher_code" label="Mã giáo viên">
-          <Input placeholder="Tìm theo mã giáo viên..." allowClear />
+        <Form.Item
+          name="teacher_code"
+          label={
+            <div style={{ width: 80, textAlign: 'left' }}>Mã giáo viên</div>
+          }
+        >
+          <Input
+            placeholder="Tìm theo mã giáo viên..."
+            allowClear
+            style={{ width: 250 }}
+          />
         </Form.Item>
 
-        <Form.Item name="gender" label="Giới tính">
+        <Form.Item
+          name="gender"
+          label={<div style={{ width: 80, textAlign: 'left' }}>Giới tính</div>}
+        >
           <Select
             placeholder="Chọn giới tính"
             allowClear
-            style={{ width: 120 }}
+            style={{ width: 250 }}
           >
             <Select.Option value="male">Nam</Select.Option>
             <Select.Option value="female">Nữ</Select.Option>

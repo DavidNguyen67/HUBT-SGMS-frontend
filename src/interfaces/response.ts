@@ -44,6 +44,8 @@ export interface Subject {
   subject_code: string;
   subject_name: string;
   credits: number;
+  teacherSubjectClasses: TeacherSubjectClass[];
+  studentGrades: StudentGrade[];
   created_at: string;
   updated_at: string;
   deleted_at?: string;
@@ -56,6 +58,25 @@ export interface Class {
   studentCount: number;
   teacherSubjectClasses: TeacherSubjectClass[];
   students: Student[];
+  created_at: string;
+  updated_at: string;
+  deleted_at?: string;
+}
+
+export interface StudentGrade {
+  id: string;
+  student: Student;
+  grade_type: GradeType;
+  score: number;
+  created_at: string;
+  updated_at: string;
+  deleted_at?: string;
+}
+
+export interface GradeType {
+  id: string;
+  grade_name: string;
+  coefficient: number;
   created_at: string;
   updated_at: string;
   deleted_at?: string;

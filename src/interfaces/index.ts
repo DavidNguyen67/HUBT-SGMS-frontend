@@ -71,3 +71,11 @@ export interface TeacherSubjectClassTableFilter {
   teacher_name?: string;
   teacher_code?: string;
 }
+
+export interface SubjectTableFilter {
+  subject_code?: string;
+  subject_name?: string;
+  credits?: number;
+  teacher_id?: string;
+  class_id?: string;
+}
