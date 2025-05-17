@@ -1,9 +1,8 @@
 'use client';
 
-import { StudentFormValues } from '@interfaces';
+import { DEFAULT_DATE_FORMAT } from '@common';
 import { Student } from '@interfaces/response';
 import {
-  Breadcrumb,
   DateField,
   DeleteButton,
   EditButton,
@@ -12,7 +11,7 @@ import {
   Show,
   TextField,
 } from '@refinedev/antd';
-import { useBreadcrumb, useShow } from '@refinedev/core';
+import { useShow } from '@refinedev/core';
 import { Typography, Tag } from 'antd';
 import { useParams } from 'next/navigation';
 
@@ -80,7 +79,7 @@ const StudentShow = () => {
       )}
 
       <Title level={5}>Ngày sinh</Title>
-      <DateField value={record?.date_of_birth} format="DD/MM/YYYY" />
+      <DateField value={record?.date_of_birth} format={DEFAULT_DATE_FORMAT} />
 
       <Title level={5}>Lớp</Title>
       <TextField value={record?.class?.class_name} />

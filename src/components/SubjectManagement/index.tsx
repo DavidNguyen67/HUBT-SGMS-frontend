@@ -19,7 +19,6 @@ import {
   Select,
   Space,
   Table,
-  Tag,
   Tooltip,
 } from 'antd';
 import React from 'react';
@@ -411,6 +410,7 @@ const SubjectManagement = () => {
         />
 
         <Table.Column
+          width={100}
           title="Thao tác"
           dataIndex="actions"
           render={(_, record: BaseRecord) => (

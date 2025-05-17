@@ -342,6 +342,7 @@ const ClassesManagement = () => {
 
         <Table.Column<Class>
           title="Thao tác"
+          width={100}
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
             <Space>

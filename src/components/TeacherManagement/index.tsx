@@ -16,13 +16,17 @@ import {
   Form,
   Input,
   Row,
-  Select,
   Space,
   Table,
   Tag,
   Tooltip,
 } from 'antd';
-import { GENDER, TAG_GENDER_COLOR_MAPPING, TAG_GENDER_MAPPING } from '@common';
+import {
+  DEFAULT_DATE_FORMAT,
+  GENDER,
+  TAG_GENDER_COLOR_MAPPING,
+  TAG_GENDER_MAPPING,
+} from '@common';
 import { truncateText } from '@common/helper';
 import { Teacher, TeacherSubjectClass } from '@interfaces/response';
 import { TeacherTableFilter } from '@interfaces';
@@ -64,14 +68,14 @@ const TeachersManagement = () => {
         filters.push({
           field: 'date_of_birth_from',
           operator: 'gte',
-          value: from.toISOString(),
+          value: from.add(1, 'day').toISOString(),
         });
       }
       if (to) {
         filters.push({
           field: 'date_of_birth_to',
           operator: 'lte',
-          value: to.toISOString(),
+          value: to.add(2, 'day').toISOString(),
         });
       }
     } else {
@@ -128,7 +132,7 @@ const TeachersManagement = () => {
           <Col xs={24} sm={12} md={8} lg={6} xl={6}>
             <Form.Item name="date_of_birth_range" label="Ngày sinh">
               <DatePicker.RangePicker
-                format="DD/MM/YYYY"
+                format={DEFAULT_DATE_FORMAT}
                 allowClear
                 style={{ width: '100%' }}
                 placeholder={['Từ ngày', 'Đến ngày']}
@@ -246,14 +250,14 @@ const TeachersManagement = () => {
           dataIndex="date_of_birth"
           title="Ngày sinh"
           render={(value: string) => (
-            <DateField value={value} format="DD/MM/YYYY" />
+            <DateField value={value} format={DEFAULT_DATE_FORMAT} />
           )}
           sorter={{ multiple: 4 }}
           filters={
             Array.from(
               new Set(tableProps.dataSource?.map((item) => item.date_of_birth))
             ).map((date) => ({
-              text: dayjs(date).format('DD/MM/YYYY'),
+              text: dayjs(date).format(DEFAULT_DATE_FORMAT),
               value: date,
             })) ?? []
           }
@@ -322,6 +326,7 @@ const TeachersManagement = () => {
 
         <Table.Column<Teacher>
           title="Thao tác"
+          width={100}
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
             <Space>

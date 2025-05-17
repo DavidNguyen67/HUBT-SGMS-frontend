@@ -2,6 +2,7 @@
 
 import { Button, Table, Tag, Tooltip } from 'antd';
 import {
+  DEFAULT_DATE_FORMAT,
   GENDER,
   PAGE_SIZE_OPTIONS,
   TAG_GENDER_COLOR_MAPPING,
@@ -105,7 +106,7 @@ const SelectedTeacherTable = ({
         title="Ngày sinh"
         sorter={{ multiple: 3 }}
         render={(value: string) => (
-          <DateField value={value} format="DD/MM/YYYY" />
+          <DateField value={value} format={DEFAULT_DATE_FORMAT} />
         )}
       />
       <Table.Column

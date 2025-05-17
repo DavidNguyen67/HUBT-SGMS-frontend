@@ -6,7 +6,7 @@ import { TeacherSubjectClass } from '@interfaces/response';
 import { truncateText } from '@common/helper';
 import { HttpError } from '@refinedev/core';
 import { DeleteOutlined } from '@ant-design/icons';
-import { PAGE_SIZE_OPTIONS } from '@common';
+import { DEFAULT_DATE_FORMAT, PAGE_SIZE_OPTIONS } from '@common';
 
 interface SelectedTeacherSubjectClassTableProps {
   ids?: string[];
@@ -113,7 +113,7 @@ const SelectedTeacherSubjectClassTable = ({
         title="Ngày tạo"
         dataIndex="created_at"
         render={(value: string) => (
-          <DateField value={value} format="DD/MM/YYYY" />
+          <DateField value={value} format={DEFAULT_DATE_FORMAT} />
         )}
         sorter={{ multiple: 5 }}
       />

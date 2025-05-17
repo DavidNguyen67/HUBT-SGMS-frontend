@@ -5,7 +5,7 @@ import { Form, Input, DatePicker, Select, FormProps } from 'antd';
 import * as yup from 'yup';
 import { useSelect } from '@refinedev/antd';
 import { Class } from '@interfaces/response';
-import { GENDER } from '@common';
+import { DEFAULT_DATE_FORMAT, GENDER } from '@common';
 import dayjs from 'dayjs';
 import { Rule } from 'antd/es/form';
 import viVN from 'antd/es/date-picker/locale/vi_VN';
@@ -79,7 +79,7 @@ const StudentForm = (props: StudentFormProps) => {
         })}
       >
         <DatePicker
-          format="DD/MM/YYYY"
+          format={DEFAULT_DATE_FORMAT}
           style={{ width: '100%' }}
           placeholder="Chọn ngày sinh"
           allowClear

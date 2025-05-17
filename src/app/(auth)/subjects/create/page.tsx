@@ -24,7 +24,7 @@ const SubjectCreate = () => {
       breadcrumb={null}
     >
       <Row>
-        <Col span={16}>
+        <Col span={6} offset={8}>
           <SubjectForm formProps={formProps} />
         </Col>
       </Row>

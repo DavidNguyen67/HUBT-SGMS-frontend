@@ -1,8 +1,8 @@
 'use client';
 
 import GradeForm from '@components/GradeForm';
-import { GradeFormValues } from '@interfaces';
-import { Edit, useForm } from '@refinedev/antd';
+import { GradeTypeFormValues } from '@interfaces';
+import { Create, Edit, SaveButton, useForm } from '@refinedev/antd';
 import { HttpError } from '@refinedev/core';
 import { Col, Row } from 'antd';
 
@@ -10,21 +10,30 @@ const GradeCreate = () => {
   const { formProps, saveButtonProps } = useForm<
     Record<string, unknown>,
     HttpError,
-    GradeFormValues
+    GradeTypeFormValues
   >({
     submitOnEnter: true,
     action: 'create',
-    id: 'grade_id',
+    resource: 'api/v1/grade-types',
   });
 
   return (
-    <Edit saveButtonProps={saveButtonProps}>
+    <Create
+      saveButtonProps={saveButtonProps}
+      title="Thêm loại điểm"
+      breadcrumb={null}
+      footerButtons={({ saveButtonProps }) => (
+        <>
+          <SaveButton {...saveButtonProps}>Tạo</SaveButton>
+        </>
+      )}
+    >
       <Row>
         <Col span={6} offset={8}>
           <GradeForm formProps={formProps} />
         </Col>
       </Row>
-    </Edit>
+    </Create>
   );
 };
 

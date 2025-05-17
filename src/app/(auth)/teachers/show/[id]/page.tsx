@@ -11,7 +11,11 @@ import {
 } from '@refinedev/antd';
 import { useShow } from '@refinedev/core';
 import { Typography, Tag, Table } from 'antd';
-import { TAG_GENDER_MAPPING, TAG_GENDER_COLOR_MAPPING } from '@common';
+import {
+  TAG_GENDER_MAPPING,
+  TAG_GENDER_COLOR_MAPPING,
+  DEFAULT_DATE_FORMAT,
+} from '@common';
 import { useParams } from 'next/navigation';
 import { Teacher } from '@interfaces/response';
 
@@ -76,7 +80,7 @@ const TeacherShow = () => {
       )}
 
       <Title level={5}>Ngày sinh</Title>
-      <DateField value={record?.date_of_birth} format="DD/MM/YYYY" />
+      <DateField value={record?.date_of_birth} format={DEFAULT_DATE_FORMAT} />
 
       <Title level={5}>Môn học - Lớp giảng dạy</Title>
       {record?.teacherSubjectClasses?.length ? (
@@ -105,7 +109,7 @@ const TeacherShow = () => {
       )}
 
       <Title level={5}>Ngày tạo</Title>
-      <DateField value={record?.created_at} format="DD/MM/YYYY" />
+      <DateField value={record?.created_at} format={DEFAULT_DATE_FORMAT} />
     </Show>
   );
 };

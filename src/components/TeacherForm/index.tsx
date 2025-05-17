@@ -3,7 +3,7 @@
 import { Form, Input, Select, FormProps, DatePicker } from 'antd';
 import * as yup from 'yup';
 import { TeacherFormValues } from '@interfaces';
-import { GENDER } from '@common';
+import { DEFAULT_DATE_FORMAT, GENDER } from '@common';
 import { Rule } from 'antd/es/form';
 import dayjs from 'dayjs';
 
@@ -60,7 +60,7 @@ const TeacherForm = ({ formProps }: TeacherFormProps) => {
       >
         <DatePicker
           allowClear
-          format="DD/MM/YYYY"
+          format={DEFAULT_DATE_FORMAT}
           style={{ width: '100%' }}
           placeholder="Chọn ngày sinh"
         />

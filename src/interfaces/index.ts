@@ -85,3 +85,15 @@ export interface SubjectTableFilter {
   teacher_id?: string;
   class_id?: string;
 }
+
+export interface GradeTypeTableFilter {
+  grade_name?: string;
+  coefficient?: number;
+  created_at_range?: [Dayjs, Dayjs];
+  class_id?: string;
+}
+
+export interface GradeTypeFormValues {
+  grade_name: string;
+  coefficient: number;
+}

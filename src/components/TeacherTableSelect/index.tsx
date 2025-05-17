@@ -14,7 +14,12 @@ import { useState } from 'react';
 import { DateField, useTable } from '@refinedev/antd';
 import { CrudFilters, HttpError } from '@refinedev/core';
 import { Teacher } from '@interfaces/response';
-import { GENDER, TAG_GENDER_COLOR_MAPPING, TAG_GENDER_MAPPING } from '@common';
+import {
+  DEFAULT_DATE_FORMAT,
+  GENDER,
+  TAG_GENDER_COLOR_MAPPING,
+  TAG_GENDER_MAPPING,
+} from '@common';
 import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { TeacherTableFilter } from '@interfaces';
 import dayjs from 'dayjs';
@@ -64,14 +69,14 @@ const TeacherTableSelect = ({
         filters.push({
           field: 'date_of_birth_from',
           operator: 'gte',
-          value: from.toISOString(),
+          value: from.add(1, 'day').toISOString(),
         });
       }
       if (to) {
         filters.push({
           field: 'date_of_birth_to',
           operator: 'lte',
-          value: to.toISOString(),
+          value: to.add(2, 'day').toISOString(),
         });
       }
     } else {
@@ -156,7 +161,7 @@ const TeacherTableSelect = ({
             <Col xs={24} sm={12} md={8} lg={6} xl={6}>
               <Form.Item name="date_of_birth_range" label="Ngày sinh">
                 <DatePicker.RangePicker
-                  format="DD/MM/YYYY"
+                  format={DEFAULT_DATE_FORMAT}
                   allowClear
                   style={{ width: '100%' }}
                   placeholder={['Từ ngày', 'Đến ngày']}
@@ -266,7 +271,7 @@ const TeacherTableSelect = ({
             dataIndex="date_of_birth"
             title="Ngày sinh"
             render={(value: string) => (
-              <DateField value={value} format="DD/MM/YYYY" />
+              <DateField value={value} format={DEFAULT_DATE_FORMAT} />
             )}
             sorter={{ multiple: 4 }}
             filters={
@@ -275,7 +280,7 @@ const TeacherTableSelect = ({
                   tableProps.dataSource?.map((item) => item.date_of_birth)
                 )
               ).map((date) => ({
-                text: dayjs(date).format('DD/MM/YYYY'),
+                text: dayjs(date).format(DEFAULT_DATE_FORMAT),
                 value: date,
               })) ?? []
             }

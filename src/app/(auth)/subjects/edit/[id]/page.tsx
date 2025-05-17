@@ -18,7 +18,7 @@ import { useParams } from 'next/navigation';
 const SubjectUpdate = () => {
   const { id } = useParams() as { id: string };
 
-  const { formProps, saveButtonProps, queryResult } = useForm<
+  const { formProps, saveButtonProps } = useForm<
     Subject,
     HttpError,
     SubjectFormValues
@@ -33,26 +33,6 @@ const SubjectUpdate = () => {
       },
     },
   });
-
-  const initialValues = queryResult?.data?.data
-    ? {
-        ...queryResult.data.data,
-        class_ids: Array.from(
-          new Set(
-            queryResult.data.data?.teacherSubjectClasses.map(
-              (item) => item.class.id
-            )
-          )
-        ),
-        teacher_ids: Array.from(
-          new Set(
-            queryResult.data.data?.teacherSubjectClasses.map(
-              (item) => item.teacher.id
-            )
-          )
-        ),
-      }
-    : undefined;
 
   return (
     <Edit
@@ -86,9 +66,7 @@ const SubjectUpdate = () => {
     >
       <Row>
         <Col span={16}>
-          <SubjectForm
-            formProps={{ ...formProps, initialValues: initialValues }}
-          />
+          <SubjectForm formProps={{ ...formProps }} />
         </Col>
       </Row>
     </Edit>

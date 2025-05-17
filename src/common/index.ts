@@ -25,3 +25,5 @@ export const TAG_GENDER_COLOR_MAPPING: Record<GENDER, string> = {
 export const PAGE_SIZE_OPTIONS = ['5', '10', '20'];
 
 export const MAX_TAGS_DISPLAY = 1;
+
+export const DEFAULT_DATE_FORMAT = 'DD/MM/YYYY';
