@@ -126,13 +126,13 @@ const StudentsManagement = () => {
       <Form layout="vertical" {...searchFormProps}>
         <Row gutter={16}>
           <Col xs={24} sm={12} md={8} lg={6} xl={6}>
-            <Form.Item name="student_code" label="Mã sinh viên">
-              <Input placeholder="Tìm theo mã sinh viên..." allowClear />
+            <Form.Item name="full_name" label="Họ tên">
+              <Input placeholder="Tìm theo tên..." allowClear />
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8} lg={6} xl={6}>
-            <Form.Item name="full_name" label="Họ tên">
-              <Input placeholder="Tìm theo tên..." allowClear />
+            <Form.Item name="student_code" label="Mã sinh viên">
+              <Input placeholder="Tìm theo mã sinh viên..." allowClear />
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8} lg={6} xl={6}>
