@@ -31,6 +31,8 @@ import {
 import { ClassTableFilter } from '@interfaces';
 import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { MAX_TAGS_DISPLAY } from '@common';
+import TeacherPicker from '@components/TeacherPicker';
+import SubjectPicker from '@components/SubjectPicker';
 
 const ClassesManagement = () => {
   const onSearch = (values: ClassTableFilter) => {
@@ -81,42 +83,6 @@ const ClassesManagement = () => {
     onSearch,
   });
 
-  const { selectProps: teacherSelectProps } = useSelect<Teacher>({
-    resource: 'api/v1/teachers',
-    optionLabel: (item) => item?.full_name,
-    optionValue: 'id',
-    onSearch: (value) => [
-      {
-        field: 'value',
-        operator: 'contains',
-        value,
-      },
-    ],
-    meta: {
-      externalFilters: {
-        _end: 50,
-      },
-    },
-  });
-
-  const { selectProps: subjectSelectProps } = useSelect<Subject>({
-    resource: 'api/v1/subjects',
-    optionLabel: (item) => item?.subject_name,
-    optionValue: 'id',
-    onSearch: (value) => [
-      {
-        field: 'value',
-        operator: 'contains',
-        value,
-      },
-    ],
-    meta: {
-      externalFilters: {
-        _end: 50,
-      },
-    },
-  });
-
   return (
     <List
       title="Quản lý lớp học"
@@ -138,40 +104,12 @@ const ClassesManagement = () => {
           </Col>
           <Col xs={24} sm={12} md={8} lg={6} xl={6}>
             <Form.Item name="teacher_ids" label="Tên giáo viên">
-              <Select
-                {...teacherSelectProps}
-                placeholder="Chọn giáo viên"
-                allowClear
-                mode="multiple"
-                maxTagCount={MAX_TAGS_DISPLAY}
-                maxTagPlaceholder={(omittedValues) => (
-                  <Tooltip
-                    title={omittedValues.map((val) => val.label).join(', ')}
-                  >
-                    +{omittedValues.length}
-                  </Tooltip>
-                )}
-                virtual
-              />
+              <TeacherPicker />
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8} lg={6} xl={6}>
             <Form.Item name="subject_ids" label="Tên môn học">
-              <Select
-                {...subjectSelectProps}
-                placeholder="Chọn môn học"
-                allowClear
-                mode="multiple"
-                maxTagCount={MAX_TAGS_DISPLAY}
-                maxTagPlaceholder={(omittedValues) => (
-                  <Tooltip
-                    title={omittedValues.map((val) => val.label).join(', ')}
-                  >
-                    +{omittedValues.length}
-                  </Tooltip>
-                )}
-                virtual
-              />
+              <SubjectPicker />
             </Form.Item>
           </Col>
           <Col

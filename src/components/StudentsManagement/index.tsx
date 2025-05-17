@@ -34,6 +34,7 @@ import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+import ClassPicker from '@components/ClassPicker';
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
@@ -58,11 +59,11 @@ const StudentsManagement = () => {
       });
     }
 
-    if (values.class_name_or_code != null) {
+    if (values.class_ids != null) {
       filters.push({
-        field: 'class_name_or_code',
+        field: 'class_ids',
         operator: 'contains',
-        value: values.class_name_or_code || undefined,
+        value: values.class_ids || undefined,
       });
     }
 
@@ -145,8 +146,8 @@ const StudentsManagement = () => {
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8} lg={6} xl={6}>
-            <Form.Item name="class_name_or_code" label="Lớp học">
-              <Input placeholder="Tìm theo tên hoặc mã lớp..." allowClear />
+            <Form.Item name="class_ids" label="Lớp học">
+              <ClassPicker />
             </Form.Item>
           </Col>
           <Col

@@ -9,6 +9,7 @@ import { DEFAULT_DATE_FORMAT, GENDER } from '@common';
 import dayjs from 'dayjs';
 import { Rule } from 'antd/es/form';
 import viVN from 'antd/es/date-picker/locale/vi_VN';
+import ClassPicker from '@components/ClassPicker';
 
 const genderOptions = [
   { label: 'Nam', value: GENDER.MALE },
@@ -38,17 +39,6 @@ interface StudentFormProps {
 }
 
 const StudentForm = (props: StudentFormProps) => {
-  const { selectProps } = useSelect<Class>({
-    resource: 'api/v1/classes',
-    optionLabel: 'class_name',
-    optionValue: 'id',
-    meta: {
-      externalFilters: {
-        _end: 50,
-      },
-    },
-  });
-
   const onFinish = async (values: StudentFormValues) => {
     props.formProps.onFinish?.(values);
   };
@@ -87,12 +77,7 @@ const StudentForm = (props: StudentFormProps) => {
       </Form.Item>
 
       <Form.Item label="Lớp" name="class_id" rules={[yupSync]}>
-        <Select
-          {...selectProps}
-          placeholder="Chọn lớp học"
-          virtual
-          allowClear
-        />
+        <ClassPicker />
       </Form.Item>
     </Form>
   );

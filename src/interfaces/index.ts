@@ -50,7 +50,7 @@ export interface StudentTableFilter {
   full_name?: string;
   gender?: GENDER;
   date_of_birth_range?: [Dayjs, Dayjs];
-  class_name_or_code?: string;
+  class_ids?: string[];
 }
 
 export interface TeacherTableFilter {
@@ -96,4 +96,11 @@ export interface GradeTypeTableFilter {
 export interface GradeTypeFormValues {
   grade_name: string;
   coefficient: number;
+}
+
+export interface StudentGradeTableFilter {
+  created_at_range?: [Dayjs, Dayjs];
+  score?: number;
+  subject_ids?: string;
+  student_ids?: string;
 }

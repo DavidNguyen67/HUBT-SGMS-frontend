@@ -66,6 +66,7 @@ export interface StudentGrade {
   id: string;
   student: Student;
   grade_type: GradeType;
+  subject: Subject;
   score: number;
   created_at: string;
   updated_at: string;
@@ -80,4 +81,3 @@ export interface GradeType {
   updated_at: string;
   deleted_at?: string;
 }
-
