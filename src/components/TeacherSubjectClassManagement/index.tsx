@@ -119,7 +119,7 @@ const TeacherSubjectClassManagement = () => {
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8} lg={6}>
-            <Form.Item name="create_at_range" label="Thời gian phân công">
+            <Form.Item name="create_at_range" label="Ngày đăng ký">
               <DatePicker.RangePicker
                 format={DEFAULT_DATE_FORMAT}
                 allowClear
@@ -135,6 +135,7 @@ const TeacherSubjectClassManagement = () => {
                   htmlType="submit"
                   type="primary"
                   icon={<SearchOutlined />}
+                  style={{ minWidth: 90 }}
                 >
                   Lọc
                 </Button>
@@ -144,6 +145,7 @@ const TeacherSubjectClassManagement = () => {
                     searchFormProps.form?.resetFields();
                     searchFormProps.form?.submit();
                   }}
+                  style={{ minWidth: 90 }}
                 >
                   Đặt lại
                 </Button>
@@ -250,7 +252,7 @@ const TeacherSubjectClassManagement = () => {
                 size="small"
                 recordItemId={record.id}
                 resource="api/v1/teacher-subject-classes"
-                confirmTitle="Bạn có chắc muốn xóa đăng ký này không?"
+                confirmTitle="Bạn có chắc muốn xóa bản ghi này không?"
                 confirmOkText="Đồng ý"
                 confirmCancelText="Hủy"
               />
