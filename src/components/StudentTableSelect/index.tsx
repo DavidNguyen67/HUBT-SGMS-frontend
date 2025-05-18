@@ -56,14 +56,6 @@ const StudentTableSelect = ({
       });
     }
 
-    if (values.class_name_or_code != null) {
-      filters.push({
-        field: 'class_name_or_code',
-        operator: 'contains',
-        value: values.class_name_or_code || undefined,
-      });
-    }
-
     if (values.date_of_birth_range && values.date_of_birth_range.length > 0) {
       const [from, to] = values.date_of_birth_range;
 
