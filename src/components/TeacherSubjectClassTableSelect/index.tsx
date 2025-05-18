@@ -235,7 +235,7 @@ const TeacherSubjectClassTableSelect = ({
               Array.from(
                 new Set(
                   tableProps.dataSource?.map(
-                    (item) => item.subject.subject_name
+                    (item) => item.subject?.subject_name
                   )
                 )
               ).map((name) => ({ text: name, value: name })) ?? []
@@ -251,7 +251,7 @@ const TeacherSubjectClassTableSelect = ({
               Array.from(
                 new Set(
                   tableProps.dataSource?.map(
-                    (item) => item.subject.subject_code
+                    (item) => item.subject?.subject_code
                   )
                 )
               ).map((code) => ({ text: code, value: code })) ?? []

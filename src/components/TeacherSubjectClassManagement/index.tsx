@@ -25,11 +25,11 @@ import TeacherPicker from '@elements/TeacherPicker';
 import SubjectPicker from '@elements/SubjectPicker';
 import ClassPicker from '@elements/ClassPicker';
 import { TeacherSubjectClass } from '@interfaces/response';
-import { TeacherSubjectClassFormValues } from '@interfaces';
+import { TeacherSubjectClassTableFilter } from '@interfaces';
 import { truncateText } from '@common/helper';
 
 const TeacherSubjectClassManagement = () => {
-  const onSearch = (values: TeacherSubjectClassFormValues) => {
+  const onSearch = (values: TeacherSubjectClassTableFilter) => {
     const filters: CrudFilters = [];
 
     if (values.teacher_ids != null) {
@@ -92,7 +92,7 @@ const TeacherSubjectClassManagement = () => {
   const { tableProps, searchFormProps } = useTable<
     TeacherSubjectClass,
     HttpError,
-    TeacherSubjectClassFormValues
+    TeacherSubjectClassTableFilter
   >({
     syncWithLocation: true,
     resource: 'api/v1/teacher-subject-classes',
@@ -100,7 +100,12 @@ const TeacherSubjectClassManagement = () => {
   });
 
   return (
-    <List title="Quản lý đăng ký môn học">
+    <List
+      title="Quản lýp hân công giảng dạy"
+      createButtonProps={{
+        children: 'Đăng ký phân công',
+      }}
+    >
       <Form layout="vertical" {...searchFormProps}>
         <Row gutter={16}>
           <Col xs={24} sm={12} md={8} lg={6}>

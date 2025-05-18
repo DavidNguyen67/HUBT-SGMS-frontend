@@ -1,27 +1,26 @@
 'use client';
 
-import StudentGradeForm from '@components/StudentGradeForm';
 import TeacherSubjectClassForm from '@components/TeacherSubjectClassForm';
-import { StudentGradeFormValues } from '@interfaces';
+import { TeacherSubjectClassFormValues } from '@interfaces';
 import { Create, useForm } from '@refinedev/antd';
 import { HttpError } from '@refinedev/core';
 import { Col, Row } from 'antd';
 
-const StudentGradeCreate = () => {
+const TeacherSubjectClassCreate = () => {
   const { formProps, saveButtonProps } = useForm<
     Record<string, unknown>,
     HttpError,
-    StudentGradeFormValues
+    TeacherSubjectClassFormValues
   >({
     submitOnEnter: true,
     action: 'create',
-    resource: 'api/v1/student-grades',
+    resource: 'api/v1/teacher-subject-classes',
   });
 
   return (
     <Create
       saveButtonProps={saveButtonProps}
-      title="Thêm điểm sinh viên"
+      title="Thêm phân công giảng dạy"
       breadcrumb={null}
     >
       <Row>
@@ -33,4 +32,4 @@ const StudentGradeCreate = () => {
   );
 };
 
-export default StudentGradeCreate;
+export default TeacherSubjectClassCreate;

@@ -9,35 +9,27 @@ import {
   EditButton,
   DeleteButton,
 } from '@refinedev/antd';
-import { Typography, Descriptions, Tag, Badge } from 'antd';
+import { Typography, Descriptions, Tag } from 'antd';
 import { useParams } from 'next/navigation';
-import { StudentGrade } from '@interfaces/response';
+import { TeacherSubjectClass } from '@interfaces/response';
 import { DEFAULT_DATE_FORMAT } from '@common';
 import {
-  CheckCircleTwoTone,
-  CloseCircleTwoTone,
   BookOutlined,
   UserOutlined,
   IdcardOutlined,
   FieldTimeOutlined,
   KeyOutlined,
+  TeamOutlined,
 } from '@ant-design/icons';
 
 const { Title } = Typography;
 
-const getScoreColor = (score?: number) => {
-  if (score === undefined || score === null) return 'default';
-  if (score >= 8) return 'green';
-  if (score >= 5) return 'blue';
-  return 'red';
-};
-
-const StudentGradeShow = () => {
+const TeacherSubjectClassShow = () => {
   const { id } = useParams() as { id: string };
 
-  const { queryResult } = useShow<StudentGrade>({
+  const { queryResult } = useShow<TeacherSubjectClass>({
     id,
-    resource: 'api/v1/student-grades',
+    resource: 'api/v1/teacher-subject-classes',
   });
 
   const { data, isLoading } = queryResult;
@@ -47,7 +39,7 @@ const StudentGradeShow = () => {
     <Show
       isLoading={isLoading}
       breadcrumb={null}
-      title="Chi tiết điểm sinh viên"
+      title="Chi tiết phân công giảng dạy"
       headerButtons={({
         listButtonProps,
         refreshButtonProps,
@@ -55,21 +47,16 @@ const StudentGradeShow = () => {
         deleteButtonProps,
       }) => (
         <>
-          <ListButton {...listButtonProps}>Danh sách điểm sinh viên</ListButton>
-          <RefreshButton
-            {...refreshButtonProps}
-            resource="api/v1/student-grades"
-          >
-            Làm mới
-          </RefreshButton>
+          <ListButton {...listButtonProps}>Danh sách phân công</ListButton>
+          <RefreshButton {...refreshButtonProps}>Làm mới</RefreshButton>
           {editButtonProps && (
             <EditButton {...editButtonProps}>Chỉnh sửa</EditButton>
           )}
           {deleteButtonProps && (
             <DeleteButton
               {...deleteButtonProps}
-              resource="api/v1/student-grades"
-              confirmTitle="Bạn có chắc muốn xóa điểm sinh viên này không?"
+              resource="api/v1/teacher-subject-classes"
+              confirmTitle="Bạn có chắc muốn xóa phân công này không?"
               confirmOkText="Đồng ý"
               confirmCancelText="Hủy"
             >
@@ -81,7 +68,7 @@ const StudentGradeShow = () => {
     >
       <Title level={4} style={{ marginBottom: 24 }}>
         <BookOutlined style={{ marginRight: 8 }} />
-        Thông tin chi tiết điểm sinh viên
+        Thông tin chi tiết phân công giảng dạy
       </Title>
       <Descriptions
         bordered
@@ -111,20 +98,20 @@ const StudentGradeShow = () => {
         <Descriptions.Item
           label={
             <>
-              <UserOutlined /> Sinh viên
+              <UserOutlined /> Giáo viên
             </>
           }
         >
-          <Tag color="blue">{record?.student?.full_name}</Tag>
+          <Tag color="blue">{record?.teacher?.full_name}</Tag>
         </Descriptions.Item>
         <Descriptions.Item
           label={
             <>
-              <IdcardOutlined /> Mã sinh viên
+              <IdcardOutlined /> Mã giáo viên
             </>
           }
         >
-          <Tag>{record?.student?.student_code}</Tag>
+          <Tag>{record?.teacher?.teacher_code}</Tag>
         </Descriptions.Item>
 
         <Descriptions.Item
@@ -149,53 +136,24 @@ const StudentGradeShow = () => {
         <Descriptions.Item
           label={
             <>
-              <BookOutlined /> Loại điểm
+              <TeamOutlined /> Lớp học
             </>
           }
         >
-          <Tag color="orange">{record?.grade_type?.grade_name}</Tag>
+          <Tag color="geekblue">{record?.class?.class_name}</Tag>
         </Descriptions.Item>
         <Descriptions.Item
           label={
             <>
-              <FieldTimeOutlined /> Hệ số
+              <IdcardOutlined /> Mã lớp
             </>
           }
         >
-          <Badge
-            count={record?.grade_type?.coefficient}
-            style={{ backgroundColor: '#52c41a' }}
-          />
-        </Descriptions.Item>
-
-        <Descriptions.Item
-          label={
-            <>
-              <BookOutlined /> Điểm
-            </>
-          }
-        >
-          <Tag
-            color={getScoreColor(record?.score)}
-            style={{ fontSize: 16, fontWeight: 600 }}
-          >
-            {record?.score}
-          </Tag>
-          {record?.score !== undefined && record?.score >= 5 ? (
-            <CheckCircleTwoTone
-              twoToneColor="#52c41a"
-              style={{ marginLeft: 8 }}
-            />
-          ) : (
-            <CloseCircleTwoTone
-              twoToneColor="#ff4d4f"
-              style={{ marginLeft: 8 }}
-            />
-          )}
+          <Tag>{record?.class?.class_code}</Tag>
         </Descriptions.Item>
       </Descriptions>
     </Show>
   );
 };
 
-export default StudentGradeShow;
+export default TeacherSubjectClassShow;

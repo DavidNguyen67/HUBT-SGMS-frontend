@@ -5,9 +5,11 @@ import { Select, Tooltip } from 'antd';
 import { SelectProps } from 'antd/lib';
 import React from 'react';
 
-interface ClassPickerProps extends SelectProps {}
+interface ClassPickerProps extends SelectProps {
+  initialId?: string;
+}
 
-const ClassPicker = ({ ...props }: ClassPickerProps) => {
+const ClassPicker = ({ initialId, ...props }: ClassPickerProps) => {
   const { selectProps: classSelectProps } = useSelect<Class>({
     resource: 'api/v1/classes',
     optionLabel: 'class_name',
@@ -15,6 +17,7 @@ const ClassPicker = ({ ...props }: ClassPickerProps) => {
     meta: {
       externalFilters: {
         _end: 50,
+        initial_id: initialId,
       },
     },
   });

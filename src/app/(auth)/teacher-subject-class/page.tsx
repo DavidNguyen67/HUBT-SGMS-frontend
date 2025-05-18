@@ -2,8 +2,8 @@
 
 import TeacherSubjectClassManagement from '@components/TeacherSubjectClassManagement';
 
-const StudentGradeManagementPage = () => {
+const TeacherSubjectClassManagementPage = () => {
   return <TeacherSubjectClassManagement />;
 };
 
-export default StudentGradeManagementPage;
+export default TeacherSubjectClassManagementPage;

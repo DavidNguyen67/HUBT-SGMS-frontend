@@ -5,9 +5,11 @@ import { Select, Tooltip } from 'antd';
 import { SelectProps } from 'antd/lib';
 import React from 'react';
 
-interface TeacherPickerProps extends SelectProps {}
+interface TeacherPickerProps extends SelectProps {
+  initialId?: string;
+}
 
-const TeacherPicker = ({ ...props }: TeacherPickerProps) => {
+const TeacherPicker = ({ initialId, ...props }: TeacherPickerProps) => {
   const { selectProps: teacherSelectProps } = useSelect<Teacher>({
     resource: 'api/v1/teachers',
     optionLabel: (item) => item?.full_name,
@@ -22,6 +24,7 @@ const TeacherPicker = ({ ...props }: TeacherPickerProps) => {
     meta: {
       externalFilters: {
         _end: 50,
+        initial_id: initialId,
       },
     },
   });

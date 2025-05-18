@@ -76,7 +76,10 @@ const StudentForm = (props: StudentFormProps) => {
       </Form.Item>
 
       <Form.Item label="Lớp" name="class_id" rules={[yupSync]}>
-        <ClassPicker />
+        <ClassPicker
+          mode={undefined}
+          initialId={props.formProps?.initialValues?.class_id}
+        />
       </Form.Item>
     </Form>
   );

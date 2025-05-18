@@ -110,7 +110,7 @@ export const resources: Array<ResourceProps> = [
     icon: <BookOutlined />,
   },
   {
-    name: 'Đăng ký môn học',
+    name: 'Phân công giảng dạy',
     list: '/teacher-subject-class',
     create: '/teacher-subject-class/create',
     edit: '/teacher-subject-class/edit/:id',
@@ -118,7 +118,7 @@ export const resources: Array<ResourceProps> = [
     meta: {
       parent: 'Subjects',
       canDelete: true,
-      label: 'Đăng ký môn học',
+      label: 'Phân công giảng dạy',
       roles: ['admin', 'teacher', 'student'],
     },
     icon: <BookOutlined />,

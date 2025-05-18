@@ -274,7 +274,8 @@ const TeachersManagement = () => {
               <div>
                 {items?.map((item, idx) => (
                   <div key={idx}>
-                    <b>{item.subject.subject_name}</b> - {item.class.class_name}
+                    <b>{item.subject?.subject_name}</b> -{' '}
+                    {item.class.class_name}
                   </div>
                 )) || '-'}
               </div>
@@ -283,7 +284,7 @@ const TeachersManagement = () => {
             const displayContent = items
               ?.map(
                 (item) =>
-                  `${item.subject.subject_name} - ${item.class.class_name}`
+                  `${item.subject?.subject_name} - ${item.class.class_name}`
               )
               .join(' | ');
 
@@ -307,7 +308,7 @@ const TeachersManagement = () => {
               new Set(
                 tableProps.dataSource?.flatMap((item) =>
                   item.teacherSubjectClasses.map((subItem) => ({
-                    subject: subItem.subject.subject_name,
+                    subject: subItem.subject?.subject_name,
                     class: subItem.class.class_name,
                     id: subItem.id,
                   }))

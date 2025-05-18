@@ -2,8 +2,11 @@
 
 import StudentGradeForm from '@components/StudentGradeForm';
 import TeacherSubjectClassForm from '@components/TeacherSubjectClassForm';
-import { StudentGradeFormValues } from '@interfaces';
-import { StudentGrade } from '@interfaces/response';
+import {
+  StudentGradeFormValues,
+  TeacherSubjectClassFormValues,
+} from '@interfaces';
+import { StudentGrade, TeacherSubjectClass } from '@interfaces/response';
 import {
   DeleteButton,
   Edit,
@@ -16,18 +19,18 @@ import { HttpError } from '@refinedev/core';
 import { Col, Row } from 'antd';
 import { useParams } from 'next/navigation';
 
-const StudentGradeEdit = () => {
+const TeacherSubjectClassEdit = () => {
   const { id } = useParams() as { id: string };
 
   const { formProps, saveButtonProps, queryResult } = useForm<
-    StudentGrade,
+    TeacherSubjectClass,
     HttpError,
-    StudentGradeFormValues
+    TeacherSubjectClassFormValues
   >({
     submitOnEnter: true,
     action: 'edit',
     id,
-    resource: 'api/v1/student-grades',
+    resource: 'api/v1/teacher-subject-classes',
     updateMutationOptions: {
       meta: {
         method: 'put',
@@ -38,18 +41,20 @@ const StudentGradeEdit = () => {
   const initialValues = queryResult?.data?.data
     ? {
         ...queryResult.data.data,
-        grade_type_id: queryResult.data.data.grade_type?.id,
-        student_id: queryResult.data.data.student?.id,
+        teacher_id: queryResult.data.data.teacher?.id,
         subject_id: queryResult.data.data.subject?.id,
+        class_id: queryResult.data.data.class?.id,
       }
     : undefined;
+
+  console.log('Check initialValues:', initialValues);
 
   return (
     <Edit
       breadcrumb={null}
       saveButtonProps={saveButtonProps}
       deleteButtonProps={{
-        resource: 'api/v1/student-grades',
+        resource: 'api/v1/teacher-subject-classes',
       }}
       title="Chỉnh sửa điểm sinh viên"
       headerButtons={({ listButtonProps, refreshButtonProps }) => (
@@ -57,7 +62,7 @@ const StudentGradeEdit = () => {
           <ListButton {...listButtonProps}>Danh sách điểm sinh viên</ListButton>
           <RefreshButton
             {...refreshButtonProps}
-            resource="api/v1/student-grades"
+            resource="api/v1/teacher-subject-classes"
           >
             Làm mới
           </RefreshButton>
@@ -88,4 +93,4 @@ const StudentGradeEdit = () => {
   );
 };
 
-export default StudentGradeEdit;
+export default TeacherSubjectClassEdit;
