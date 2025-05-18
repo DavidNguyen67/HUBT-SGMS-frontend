@@ -5,9 +5,11 @@ import { Select, Tooltip } from 'antd';
 import { SelectProps } from 'antd/lib';
 import React from 'react';
 
-interface SubjectPickerProps extends SelectProps {}
+interface SubjectPickerProps extends SelectProps {
+  initialId?: string;
+}
 
-const SubjectPicker = ({ ...props }: SubjectPickerProps) => {
+const SubjectPicker = ({ initialId, ...props }: SubjectPickerProps) => {
   const { selectProps: subjectSelectProps } = useSelect<Subject>({
     resource: 'api/v1/subjects',
     optionLabel: (item) => item?.subject_name,
@@ -22,6 +24,7 @@ const SubjectPicker = ({ ...props }: SubjectPickerProps) => {
     meta: {
       externalFilters: {
         _end: 50,
+        initial_id: initialId,
       },
     },
   });

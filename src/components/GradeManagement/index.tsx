@@ -40,15 +40,11 @@ const GradeManagement = () => {
       });
     }
 
-    if (values.coefficient != null) {
-      filters.push({
-        field: 'coefficient',
-        operator: 'eq',
-        value: values.coefficient,
-      });
-    }
-
-    console.log('Check values.created_at_range:', values.created_at_range);
+    filters.push({
+      field: 'coefficient',
+      operator: 'eq',
+      value: values.coefficient,
+    });
 
     if (values.created_at_range && values.created_at_range.length > 0) {
       const [from, to] = values.created_at_range;

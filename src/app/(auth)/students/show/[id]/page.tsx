@@ -1,6 +1,10 @@
 'use client';
 
-import { DEFAULT_DATE_FORMAT } from '@common';
+import {
+  DEFAULT_DATE_FORMAT,
+  TAG_GENDER_COLOR_MAPPING,
+  TAG_GENDER_MAPPING,
+} from '@common';
 import { Student } from '@interfaces/response';
 import {
   DateField,
@@ -9,11 +13,18 @@ import {
   ListButton,
   RefreshButton,
   Show,
-  TextField,
 } from '@refinedev/antd';
 import { useShow } from '@refinedev/core';
-import { Typography, Tag } from 'antd';
+import { Typography, Tag, Descriptions, Badge } from 'antd';
 import { useParams } from 'next/navigation';
+import {
+  UserOutlined,
+  IdcardOutlined,
+  CalendarOutlined,
+  TeamOutlined,
+  FieldTimeOutlined,
+  KeyOutlined,
+} from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -26,7 +37,6 @@ const StudentShow = () => {
   });
 
   const { data, isLoading } = queryResult;
-
   const record = data?.data;
 
   return (
@@ -62,30 +72,87 @@ const StudentShow = () => {
         </>
       )}
     >
-      <Title level={5}>ID</Title>
-      <TextField value={record?.id} />
-
-      <Title level={5}>Mã sinh viên</Title>
-      <TextField value={record?.student_code} />
-
-      <Title level={5}>Họ tên</Title>
-      <TextField value={record?.full_name} />
-
-      <Title level={5}>Giới tính</Title>
-      {record?.gender === 'male' ? (
-        <Tag color="blue">Nam</Tag>
-      ) : (
-        <Tag color="pink">Nữ</Tag>
-      )}
-
-      <Title level={5}>Ngày sinh</Title>
-      <DateField value={record?.date_of_birth} format={DEFAULT_DATE_FORMAT} />
-
-      <Title level={5}>Lớp</Title>
-      <TextField value={record?.class?.class_name} />
-
-      <Title level={5}>Ngày tạo</Title>
-      <DateField value={record?.created_at} />
+      <Title level={4} style={{ marginBottom: 24 }}>
+        <UserOutlined style={{ marginRight: 8 }} />
+        Thông tin chi tiết sinh viên
+      </Title>
+      <Descriptions
+        bordered
+        column={2}
+        size="middle"
+        labelStyle={{ fontWeight: 600 }}
+      >
+        <Descriptions.Item
+          label={
+            <>
+              <KeyOutlined /> ID
+            </>
+          }
+        >
+          {record?.id}
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <IdcardOutlined /> Mã sinh viên
+            </>
+          }
+        >
+          <Tag color="geekblue">{record?.student_code}</Tag>
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <UserOutlined /> Họ tên
+            </>
+          }
+        >
+          <span style={{ fontWeight: 600, fontSize: 16 }}>
+            {record?.full_name}
+          </span>
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <FieldTimeOutlined /> Ngày tạo
+            </>
+          }
+        >
+          <DateField value={record?.created_at} format={DEFAULT_DATE_FORMAT} />
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <TeamOutlined /> Lớp
+            </>
+          }
+        >
+          <Badge color="purple" text={record?.class?.class_name || '---'} />
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <CalendarOutlined /> Ngày sinh
+            </>
+          }
+        >
+          <DateField
+            value={record?.date_of_birth}
+            format={DEFAULT_DATE_FORMAT}
+          />
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <UserOutlined /> Giới tính
+            </>
+          }
+        >
+          <Tag color={TAG_GENDER_COLOR_MAPPING[record?.gender!]}>
+            {TAG_GENDER_MAPPING[record?.gender!]}
+          </Tag>
+        </Descriptions.Item>
+      </Descriptions>
     </Show>
   );
 };

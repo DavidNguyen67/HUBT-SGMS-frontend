@@ -81,8 +81,8 @@ const SelectedTeacherSubjectClassTable = ({
         )}
         filters={
           tableProps.dataSource?.map((item) => ({
-            text: item.subject.subject_name,
-            value: item.subject.subject_name,
+            text: item.subject?.subject_name,
+            value: item.subject?.subject_name,
           })) ?? []
         }
         onFilter={(value, record) =>
@@ -99,8 +99,8 @@ const SelectedTeacherSubjectClassTable = ({
         )}
         filters={
           tableProps.dataSource?.map((item) => ({
-            text: item.class.class_name,
-            value: item.class.class_name,
+            text: item.class?.class_name,
+            value: item.class?.class_name,
           })) ?? []
         }
         onFilter={(value, record) =>

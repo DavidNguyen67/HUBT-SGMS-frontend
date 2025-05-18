@@ -1,18 +1,18 @@
 import { MAX_TAGS_DISPLAY } from '@common';
-import { Student } from '@interfaces/response';
+import { GradeType, Student } from '@interfaces/response';
 import { useSelect } from '@refinedev/antd';
 import { Select, Tooltip } from 'antd';
 import { SelectProps } from 'antd/lib';
 import React from 'react';
 
-interface StudentPickerProps extends SelectProps {
+interface GradeTypePickerProps extends SelectProps {
   initialId?: string;
 }
 
-const StudentPicker = ({ initialId, ...props }: StudentPickerProps) => {
-  const { selectProps: studentSelectProps } = useSelect<Student>({
-    resource: 'api/v1/students',
-    optionLabel: (item) => item?.full_name,
+const GradeTypePicker = ({ initialId, ...props }: GradeTypePickerProps) => {
+  const { selectProps: gradeTypeSelectProps } = useSelect<GradeType>({
+    resource: 'api/v1/grade-types',
+    optionLabel: (item) => item?.grade_name,
     optionValue: 'id',
     onSearch: (value) => [
       {
@@ -31,8 +31,8 @@ const StudentPicker = ({ initialId, ...props }: StudentPickerProps) => {
 
   return (
     <Select
-      {...studentSelectProps}
-      placeholder="Chọn sinh viên"
+      {...gradeTypeSelectProps}
+      placeholder="Chọn loại điểm"
       allowClear
       mode="multiple"
       maxTagCount={MAX_TAGS_DISPLAY}
@@ -47,4 +47,4 @@ const StudentPicker = ({ initialId, ...props }: StudentPickerProps) => {
   );
 };
 
-export default StudentPicker;
+export default GradeTypePicker;

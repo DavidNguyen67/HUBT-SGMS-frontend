@@ -14,11 +14,18 @@ import {
   ListButton,
   RefreshButton,
   Show,
-  TextField,
 } from '@refinedev/antd';
 import { useShow } from '@refinedev/core';
-import { Table, Tooltip, Typography } from 'antd';
+import { Table, Tooltip, Typography, Descriptions, Tag } from 'antd';
 import { useParams } from 'next/navigation';
+import {
+  BookOutlined,
+  IdcardOutlined,
+  FieldTimeOutlined,
+  UserOutlined,
+  TeamOutlined,
+  CalendarOutlined,
+} from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -31,7 +38,6 @@ const SubjectShow = () => {
   });
 
   const { data, isLoading } = queryResult;
-
   const record = data?.data;
 
   return (
@@ -67,19 +73,58 @@ const SubjectShow = () => {
         </>
       )}
     >
-      <Title level={5}>Mã môn học</Title>
-      <TextField value={record?.subject_code} />
+      <Title level={4} style={{ marginBottom: 24 }}>
+        <BookOutlined style={{ marginRight: 8 }} />
+        Thông tin chi tiết môn học
+      </Title>
+      <Descriptions
+        bordered
+        column={2}
+        size="middle"
+        labelStyle={{ fontWeight: 600 }}
+      >
+        <Descriptions.Item
+          label={
+            <>
+              <IdcardOutlined /> Mã môn học
+            </>
+          }
+        >
+          <Tag color="geekblue">{record?.subject_code}</Tag>
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <BookOutlined /> Tên môn học
+            </>
+          }
+        >
+          <span style={{ fontWeight: 600 }}>{record?.subject_name}</span>
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <FieldTimeOutlined /> Số tín chỉ
+            </>
+          }
+        >
+          <Tag color="purple">{record?.credits}</Tag>
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <CalendarOutlined /> Ngày tạo
+            </>
+          }
+        >
+          <DateField value={record?.created_at} format={DEFAULT_DATE_FORMAT} />
+        </Descriptions.Item>
+      </Descriptions>
 
-      <Title level={5}>Tên môn học</Title>
-      <TextField value={record?.subject_name} />
-
-      <Title level={5}>Số tín chỉ</Title>
-      <TextField value={record?.credits} />
-
-      <Title level={5}>Ngày tạo</Title>
-      <DateField value={record?.created_at} format={DEFAULT_DATE_FORMAT} />
-
-      <Title level={5}>Danh sách lớp và giáo viên giảng dạy</Title>
+      <Title level={5} style={{ marginTop: 32 }}>
+        <TeamOutlined style={{ marginRight: 6 }} />
+        Danh sách lớp và giáo viên giảng dạy
+      </Title>
       <Table
         size="small"
         rowKey="id"
@@ -102,21 +147,13 @@ const SubjectShow = () => {
             .filter(Boolean)
             .map((name) => ({ text: name, value: name }))}
           onFilter={(value, record) => record.teacher?.full_name === value}
-          sorter={(a, b) =>
-            (a.teacher?.full_name || '').localeCompare(
-              b.teacher?.full_name || ''
-            )
-          }
+          sorter={{ multiple: 1 }}
         />
         <Table.Column<TeacherSubjectClass>
           title="Mã GV"
           dataIndex={['teacher', 'teacher_code']}
           width={100}
-          sorter={(a, b) =>
-            (a.teacher?.teacher_code || '').localeCompare(
-              b.teacher?.teacher_code || ''
-            )
-          }
+          sorter={{ multiple: 2 }}
         />
         <Table.Column<TeacherSubjectClass>
           title="Lớp học"
@@ -131,9 +168,7 @@ const SubjectShow = () => {
             .filter(Boolean)
             .map((name) => ({ text: name, value: name }))}
           onFilter={(value, record) => record.class?.class_name === value}
-          sorter={(a, b) =>
-            (a.class?.class_name || '').localeCompare(b.class?.class_name || '')
-          }
+          sorter={{ multiple: 3 }}
         />
         <Table.Column<TeacherSubjectClass>
           title="Ngày phân công"
@@ -141,20 +176,19 @@ const SubjectShow = () => {
           render={(value) => (
             <DateField value={value} format={DEFAULT_DATE_FORMAT} />
           )}
-          sorter={(a, b) =>
-            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-          }
+          sorter={{ multiple: 4 }}
         />
       </Table>
 
       <Title level={5} style={{ marginTop: 32 }}>
+        <UserOutlined style={{ marginRight: 6 }} />
         Danh sách điểm sinh viên
       </Title>
       <Table
         size="small"
         rowKey="id"
         dataSource={record?.studentGrades || []}
-        pagination={{ pageSize: 5 }}
+        pagination={{ pageSize: 1 }}
       >
         <Table.Column<StudentGrade>
           title="Họ tên sinh viên"
@@ -169,20 +203,12 @@ const SubjectShow = () => {
             .filter(Boolean)
             .map((name) => ({ text: name, value: name }))}
           onFilter={(value, record) => record.student?.full_name === value}
-          sorter={(a, b) =>
-            (a.student?.full_name || '').localeCompare(
-              b.student?.full_name || ''
-            )
-          }
+          sorter={{ multiple: 2 }}
         />
         <Table.Column<StudentGrade>
           title="Mã sinh viên"
           dataIndex={['student', 'student_code']}
-          sorter={(a, b) =>
-            (a.student?.student_code || '').localeCompare(
-              b.student?.student_code || ''
-            )
-          }
+          sorter={{ multiple: 3 }}
         />
         <Table.Column<StudentGrade>
           title="Loại điểm"
@@ -197,16 +223,12 @@ const SubjectShow = () => {
             .filter(Boolean)
             .map((name) => ({ text: name, value: name }))}
           onFilter={(value, record) => record.grade_type?.grade_name === value}
-          sorter={(a, b) =>
-            (a.grade_type?.grade_name || '').localeCompare(
-              b.grade_type?.grade_name || ''
-            )
-          }
+          sorter={{ multiple: 4 }}
         />
         <Table.Column<StudentGrade>
           title="Điểm"
           dataIndex="score"
-          sorter={(a, b) => (a.score ?? 0) - (b.score ?? 0)}
+          sorter={{ multiple: 5 }}
         />
         <Table.Column<StudentGrade>
           title="Ngày chấm"
@@ -214,9 +236,7 @@ const SubjectShow = () => {
           render={(value) => (
             <DateField value={value} format={DEFAULT_DATE_FORMAT} />
           )}
-          sorter={(a, b) =>
-            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-          }
+          sorter={{ multiple: 6 }}
         />
       </Table>
     </Show>

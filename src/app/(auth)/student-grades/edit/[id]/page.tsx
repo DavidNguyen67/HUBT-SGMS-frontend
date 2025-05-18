@@ -2,26 +2,85 @@
 
 import StudentGradeForm from '@components/StudentGradeForm';
 import { StudentGradeFormValues } from '@interfaces';
-import { Edit, useForm } from '@refinedev/antd';
+import { StudentGrade } from '@interfaces/response';
+import {
+  DeleteButton,
+  Edit,
+  ListButton,
+  RefreshButton,
+  SaveButton,
+  useForm,
+} from '@refinedev/antd';
 import { HttpError } from '@refinedev/core';
 import { Col, Row } from 'antd';
+import { useParams } from 'next/navigation';
 
 const StudentGradeEdit = () => {
-  const { formProps, saveButtonProps } = useForm<
-    Record<string, unknown>,
+  const { id } = useParams() as { id: string };
+
+  const { formProps, saveButtonProps, queryResult } = useForm<
+    StudentGrade,
     HttpError,
     StudentGradeFormValues
   >({
-    action: 'edit',
     submitOnEnter: true,
-    id: 'student_grade_id',
+    action: 'edit',
+    id,
+    resource: 'api/v1/student-grades',
+    updateMutationOptions: {
+      meta: {
+        method: 'put',
+      },
+    },
   });
 
+  const initialValues = queryResult?.data?.data
+    ? {
+        ...queryResult.data.data,
+        grade_type_id: queryResult.data.data.grade_type?.id,
+        student_id: queryResult.data.data.student?.id,
+        subject_id: queryResult.data.data.subject?.id,
+      }
+    : undefined;
+
   return (
-    <Edit saveButtonProps={saveButtonProps}>
+    <Edit
+      breadcrumb={null}
+      saveButtonProps={saveButtonProps}
+      deleteButtonProps={{
+        resource: 'api/v1/student-grades',
+      }}
+      title="Chỉnh sửa điểm sinh viên"
+      headerButtons={({ listButtonProps, refreshButtonProps }) => (
+        <>
+          <ListButton {...listButtonProps}>Danh sách điểm sinh viên</ListButton>
+          <RefreshButton
+            {...refreshButtonProps}
+            resource="api/v1/student-grades"
+          >
+            Làm mới
+          </RefreshButton>
+        </>
+      )}
+      footerButtons={({ saveButtonProps, deleteButtonProps }) => (
+        <>
+          <DeleteButton
+            {...deleteButtonProps}
+            confirmTitle="Bạn có chắc muốn xóa điểm sinh viên này không?"
+            confirmOkText="Đồng ý"
+            confirmCancelText="Hủy"
+          >
+            Xóa
+          </DeleteButton>
+          <SaveButton {...saveButtonProps}>Lưu</SaveButton>
+        </>
+      )}
+    >
       <Row>
         <Col span={6} offset={8}>
-          <StudentGradeForm formProps={formProps} />
+          <StudentGradeForm
+            formProps={{ ...formProps, initialValues: initialValues }}
+          />
         </Col>
       </Row>
     </Edit>

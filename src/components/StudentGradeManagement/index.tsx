@@ -51,31 +51,42 @@ const StudentGradeManagement = () => {
       });
     }
 
-    if (values.score != null) {
+    filters.push({
+      field: 'score',
+      operator: 'eq',
+      value: values.score,
+    });
+
+    if (values.created_at_range && values.created_at_range.length > 0) {
+      const [from, to] = values.created_at_range;
+
+      if (from) {
+        filters.push({
+          field: 'created_at_from',
+          operator: 'gte',
+          value: from.add(1, 'day').toISOString(),
+        });
+      }
+      if (to) {
+        filters.push({
+          field: 'created_at_to',
+          operator: 'lte',
+          value: to.add(2, 'day').toISOString(),
+        });
+      }
+    } else {
       filters.push({
-        field: 'score',
-        operator: 'eq',
-        value: values.score,
+        field: 'created_at_from',
+        operator: 'gte',
+        value: undefined,
+      });
+      filters.push({
+        field: 'created_at_to',
+        operator: 'lte',
+        value: undefined,
       });
     }
 
-    if (
-      values.created_at_range &&
-      Array.isArray(values.created_at_range) &&
-      values.created_at_range[0] &&
-      values.created_at_range[1]
-    ) {
-      filters.push({
-        field: 'created_at',
-        operator: 'gte',
-        value: values.created_at_range[0].startOf('day').toISOString(),
-      });
-      filters.push({
-        field: 'created_at',
-        operator: 'lte',
-        value: values.created_at_range[1].endOf('day').toISOString(),
-      });
-    }
     return filters;
   };
 
@@ -175,54 +186,36 @@ const StudentGradeManagement = () => {
           title="Tên sinh viên"
           dataIndex={['student', 'full_name']}
           render={(_, record) => record.student?.full_name}
-          sorter={(a, b) =>
-            (a.student?.full_name || '').localeCompare(
-              b.student?.full_name || ''
-            )
-          }
+          sorter={{ multiple: 1 }}
         />
         <Table.Column<StudentGrade>
           title="Mã sinh viên"
           dataIndex={['student', 'student_code']}
           render={(_, record) => record.student?.student_code}
-          sorter={(a, b) =>
-            (a.student?.student_code || '').localeCompare(
-              b.student?.student_code || ''
-            )
-          }
+          sorter={{ multiple: 2 }}
         />
         <Table.Column<StudentGrade>
           title="Môn học"
           dataIndex={['subject', 'subject_name']}
           render={(_, record) => record.subject?.subject_name}
-          sorter={(a, b) =>
-            (a.subject?.subject_name || '').localeCompare(
-              b.subject?.subject_name || ''
-            )
-          }
+          sorter={{ multiple: 3 }}
         />
         <Table.Column<StudentGrade>
           title="Loại điểm"
           dataIndex={['grade_type', 'grade_name']}
           render={(_, record) => record.grade_type?.grade_name}
-          sorter={(a, b) =>
-            (a.grade_type?.grade_name || '').localeCompare(
-              b.grade_type?.grade_name || ''
-            )
-          }
+          sorter={{ multiple: 4 }}
         />
         <Table.Column<StudentGrade>
           title="Hệ số"
           dataIndex={['grade_type', 'coefficient']}
           render={(_, record) => record.grade_type?.coefficient}
-          sorter={(a, b) =>
-            (a.grade_type?.coefficient ?? 0) - (b.grade_type?.coefficient ?? 0)
-          }
+          sorter={{ multiple: 5 }}
         />
         <Table.Column<StudentGrade>
           title="Điểm"
           dataIndex="score"
-          sorter={(a, b) => (a.score ?? 0) - (b.score ?? 0)}
+          sorter={{ multiple: 6 }}
         />
         <Table.Column<StudentGrade>
           title="Ngày chấm"
@@ -230,9 +223,7 @@ const StudentGradeManagement = () => {
           render={(value) => (
             <DateField value={value} format={DEFAULT_DATE_FORMAT} />
           )}
-          sorter={(a, b) =>
-            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-          }
+          sorter={{ multiple: 7 }}
         />
         <Table.Column<StudentGrade>
           title="Thao tác"

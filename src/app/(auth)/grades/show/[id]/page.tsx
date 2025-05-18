@@ -9,11 +9,16 @@ import {
   ListButton,
   RefreshButton,
   Show,
-  TextField,
 } from '@refinedev/antd';
 import { useShow } from '@refinedev/core';
-import { Typography } from 'antd';
+import { Typography, Descriptions, Tag } from 'antd';
 import { useParams } from 'next/navigation';
+import {
+  KeyOutlined,
+  BookOutlined,
+  FieldTimeOutlined,
+  CalendarOutlined,
+} from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -61,17 +66,53 @@ const GradeShow = () => {
         </>
       )}
     >
-      <Title level={5}>ID</Title>
-      <TextField value={record?.id} />
-
-      <Title level={5}>Tên loại điểm</Title>
-      <TextField value={record?.grade_name} />
-
-      <Title level={5}>Hệ số</Title>
-      <TextField value={record?.coefficient} />
-
-      <Title level={5}>Ngày tạo</Title>
-      <DateField value={record?.created_at} format={DEFAULT_DATE_FORMAT} />
+      <Title level={4} style={{ marginBottom: 24 }}>
+        <BookOutlined style={{ marginRight: 8 }} />
+        Thông tin chi tiết loại điểm
+      </Title>
+      <Descriptions
+        bordered
+        column={2}
+        size="middle"
+        labelStyle={{ fontWeight: 600 }}
+      >
+        <Descriptions.Item
+          label={
+            <>
+              <KeyOutlined /> ID
+            </>
+          }
+        >
+          {record?.id}
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <BookOutlined /> Tên loại điểm
+            </>
+          }
+        >
+          <span style={{ fontWeight: 600 }}>{record?.grade_name}</span>
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <FieldTimeOutlined /> Hệ số
+            </>
+          }
+        >
+          <Tag color="purple">{record?.coefficient}</Tag>
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <CalendarOutlined /> Ngày tạo
+            </>
+          }
+        >
+          <DateField value={record?.created_at} format={DEFAULT_DATE_FORMAT} />
+        </Descriptions.Item>
+      </Descriptions>
     </Show>
   );
 };

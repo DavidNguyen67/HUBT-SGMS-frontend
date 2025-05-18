@@ -6,11 +6,10 @@ import {
   ListButton,
   RefreshButton,
   Show,
-  TextField,
   DateField,
 } from '@refinedev/antd';
 import { useShow } from '@refinedev/core';
-import { Typography, Tag, Table } from 'antd';
+import { Typography, Tag, Table, Descriptions } from 'antd';
 import {
   TAG_GENDER_MAPPING,
   TAG_GENDER_COLOR_MAPPING,
@@ -18,6 +17,12 @@ import {
 } from '@common';
 import { useParams } from 'next/navigation';
 import { Teacher } from '@interfaces/response';
+import {
+  UserOutlined,
+  IdcardOutlined,
+  CalendarOutlined,
+  FieldTimeOutlined,
+} from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -30,7 +35,6 @@ const TeacherShow = () => {
   });
 
   const { data, isLoading } = queryResult;
-
   const record = data?.data;
 
   return (
@@ -66,23 +70,77 @@ const TeacherShow = () => {
         </>
       )}
     >
-      <Title level={5}>Mã giáo viên</Title>
-      <TextField value={record?.teacher_code} />
+      <Title level={4} style={{ marginBottom: 24 }}>
+        <UserOutlined style={{ marginRight: 8 }} />
+        Thông tin chi tiết giáo viên
+      </Title>
+      <Descriptions
+        bordered
+        column={2}
+        size="middle"
+        labelStyle={{ fontWeight: 600 }}
+      >
+        <Descriptions.Item
+          label={
+            <>
+              <IdcardOutlined /> Mã giáo viên
+            </>
+          }
+        >
+          <Tag color="geekblue" style={{ fontSize: 15 }}>
+            {record?.teacher_code}
+          </Tag>
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <UserOutlined /> Họ và tên
+            </>
+          }
+        >
+          <span style={{ fontWeight: 600, fontSize: 16 }}>
+            {record?.full_name}
+          </span>
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <UserOutlined /> Giới tính
+            </>
+          }
+        >
+          {record?.gender && (
+            <Tag color={TAG_GENDER_COLOR_MAPPING[record.gender]}>
+              {TAG_GENDER_MAPPING[record.gender]}
+            </Tag>
+          )}
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <CalendarOutlined /> Ngày sinh
+            </>
+          }
+        >
+          <DateField
+            value={record?.date_of_birth}
+            format={DEFAULT_DATE_FORMAT}
+          />
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <FieldTimeOutlined /> Ngày tạo
+            </>
+          }
+        >
+          <DateField value={record?.created_at} format={DEFAULT_DATE_FORMAT} />
+        </Descriptions.Item>
+      </Descriptions>
 
-      <Title level={5}>Họ và tên</Title>
-      <TextField value={record?.full_name} />
-
-      <Title level={5}>Giới tính</Title>
-      {record?.gender && (
-        <Tag color={TAG_GENDER_COLOR_MAPPING[record.gender]}>
-          {TAG_GENDER_MAPPING[record.gender]}
-        </Tag>
-      )}
-
-      <Title level={5}>Ngày sinh</Title>
-      <DateField value={record?.date_of_birth} format={DEFAULT_DATE_FORMAT} />
-
-      <Title level={5}>Môn học - Lớp giảng dạy</Title>
+      <Title level={5} style={{ marginTop: 32 }}>
+        Môn học - Lớp giảng dạy
+      </Title>
       {record?.teacherSubjectClasses?.length ? (
         <div style={{ maxHeight: 240, overflowY: 'auto' }}>
           <Table
@@ -107,9 +165,6 @@ const TeacherShow = () => {
       ) : (
         <i>Chưa được phân công</i>
       )}
-
-      <Title level={5}>Ngày tạo</Title>
-      <DateField value={record?.created_at} format={DEFAULT_DATE_FORMAT} />
     </Show>
   );
 };

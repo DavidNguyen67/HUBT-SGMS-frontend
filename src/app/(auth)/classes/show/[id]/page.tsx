@@ -1,20 +1,25 @@
-"use client";
+'use client';
 
-import { useShow } from "@refinedev/core";
-import { Class } from "@interfaces/response";
+import { useShow } from '@refinedev/core';
+import { Class } from '@interfaces/response';
 import {
   Show,
-  TextField,
   DateField,
   ListButton,
   RefreshButton,
   EditButton,
   DeleteButton,
-} from "@refinedev/antd";
-import { Typography, Divider } from "antd";
-import { useParams } from "next/navigation";
-import SelectedStudentTable from "@components/SelectedStudentTable";
-import SelectedTeacherSubjectClassTable from "@components/SelectedTeacherSubjectClassTable";
+} from '@refinedev/antd';
+import { Typography, Divider, Descriptions, Tag } from 'antd';
+import { useParams } from 'next/navigation';
+import SelectedStudentTable from '@components/SelectedStudentTable';
+import SelectedTeacherSubjectClassTable from '@components/SelectedTeacherSubjectClassTable';
+import {
+  IdcardOutlined,
+  UsergroupAddOutlined,
+  FieldTimeOutlined,
+  KeyOutlined,
+} from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -23,7 +28,7 @@ const ClassShow = () => {
 
   const { queryResult } = useShow<Class>({
     id,
-    resource: "api/v1/classes",
+    resource: 'api/v1/classes',
   });
 
   const { data, isLoading } = queryResult;
@@ -67,22 +72,61 @@ const ClassShow = () => {
         </>
       )}
     >
-      <Title level={5}>ID</Title>
-      <TextField value={record?.id} />
-
-      <Title level={5}>Mã lớp</Title>
-      <TextField value={record?.class_code} />
-
-      <Title level={5}>Tên lớp</Title>
-      <TextField value={record?.class_name} />
-
-      <Title level={5}>Ngày tạo</Title>
-      <DateField value={record?.created_at} />
+      <Title level={4} style={{ marginBottom: 24 }}>
+        <UsergroupAddOutlined style={{ marginRight: 8 }} />
+        Thông tin chi tiết lớp học
+      </Title>
+      <Descriptions
+        bordered
+        column={2}
+        size="middle"
+        labelStyle={{ fontWeight: 600 }}
+      >
+        <Descriptions.Item
+          label={
+            <>
+              <KeyOutlined /> ID
+            </>
+          }
+        >
+          {record?.id}
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <IdcardOutlined /> Mã lớp
+            </>
+          }
+        >
+          <Tag color="geekblue">{record?.class_code}</Tag>
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <UsergroupAddOutlined /> Tên lớp
+            </>
+          }
+        >
+          <span style={{ fontWeight: 600 }}>{record?.class_name}</span>
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <FieldTimeOutlined /> Ngày tạo
+            </>
+          }
+        >
+          <DateField value={record?.created_at} />
+        </Descriptions.Item>
+      </Descriptions>
 
       {record?.students?.length! > 0 && (
         <>
           <Divider />
-          <Title level={5}>Danh sách sinh viên</Title>
+          <Title level={5}>
+            <UsergroupAddOutlined style={{ marginRight: 6 }} />
+            Danh sách sinh viên
+          </Title>
           <SelectedStudentTable ids={studentIds} />
         </>
       )}
@@ -90,7 +134,10 @@ const ClassShow = () => {
       {record?.teacherSubjectClasses?.length! > 0 && (
         <>
           <Divider />
-          <Title level={5}>Giáo viên - Môn học</Title>
+          <Title level={5}>
+            <UsergroupAddOutlined style={{ marginRight: 6 }} />
+            Giáo viên - Môn học
+          </Title>
           <SelectedTeacherSubjectClassTable ids={teacherSubjectClassIds} />
         </>
       )}

@@ -12,12 +12,17 @@ const StudentGradeCreate = () => {
     HttpError,
     StudentGradeFormValues
   >({
-    action: 'create',
     submitOnEnter: true,
+    action: 'create',
+    resource: 'api/v1/student-grades',
   });
 
   return (
-    <Create saveButtonProps={saveButtonProps}>
+    <Create
+      saveButtonProps={saveButtonProps}
+      title="Thêm điểm sinh viên"
+      breadcrumb={null}
+    >
       <Row>
         <Col span={6} offset={8}>
           <StudentGradeForm formProps={formProps} />
