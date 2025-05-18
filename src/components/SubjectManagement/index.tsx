@@ -33,8 +33,8 @@ import {
 } from '@interfaces/response';
 import { MAX_TAGS_DISPLAY } from '@common';
 import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
-import TeacherPicker from '@components/TeacherPicker';
-import ClassPicker from '@components/ClassPicker';
+import TeacherPicker from '@elements/TeacherPicker';
+import ClassPicker from '@elements/ClassPicker';
 
 const SubjectManagement = () => {
   const { tableProps, searchFormProps } = useTable<

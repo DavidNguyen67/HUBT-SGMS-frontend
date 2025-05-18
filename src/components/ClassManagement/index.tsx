@@ -31,8 +31,8 @@ import {
 import { ClassTableFilter } from '@interfaces';
 import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { MAX_TAGS_DISPLAY } from '@common';
-import TeacherPicker from '@components/TeacherPicker';
-import SubjectPicker from '@components/SubjectPicker';
+import TeacherPicker from '@elements/TeacherPicker';
+import SubjectPicker from '@elements/SubjectPicker';
 
 const ClassesManagement = () => {
   const onSearch = (values: ClassTableFilter) => {

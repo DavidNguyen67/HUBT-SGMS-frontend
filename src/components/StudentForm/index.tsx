@@ -9,7 +9,7 @@ import { DEFAULT_DATE_FORMAT, GENDER } from '@common';
 import dayjs from 'dayjs';
 import { Rule } from 'antd/es/form';
 import viVN from 'antd/es/date-picker/locale/vi_VN';
-import ClassPicker from '@components/ClassPicker';
+import ClassPicker from '@elements/ClassPicker';
 
 const genderOptions = [
   { label: 'Nam', value: GENDER.MALE },

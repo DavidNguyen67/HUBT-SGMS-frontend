@@ -28,8 +28,8 @@ import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { DEFAULT_DATE_FORMAT, MAX_TAGS_DISPLAY } from '@common';
 import { Student, StudentGrade, Subject } from '@interfaces/response';
 import { StudentGradeTableFilter } from '@interfaces';
-import SubjectPicker from '@components/SubjectPicker';
-import StudentPicker from '@components/StudentPicker';
+import SubjectPicker from '@elements/SubjectPicker';
+import StudentPicker from '@elements/StudentPicker';
 
 const StudentGradeManagement = () => {
   const onSearch = (values: StudentGradeTableFilter) => {

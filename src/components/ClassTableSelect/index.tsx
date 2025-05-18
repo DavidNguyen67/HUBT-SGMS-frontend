@@ -23,8 +23,8 @@ import {
 import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { MAX_TAGS_DISPLAY } from '@common';
 import { ClassTableFilter } from '@interfaces';
-import TeacherPicker from '@components/TeacherPicker';
-import SubjectPicker from '@components/SubjectPicker';
+import TeacherPicker from '@elements/TeacherPicker';
+import SubjectPicker from '@elements/SubjectPicker';
 
 interface ClassTableSelectProps {
   onChange: (selectedRowKeys: React.Key[]) => void;
