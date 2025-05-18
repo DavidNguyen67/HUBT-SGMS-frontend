@@ -104,3 +104,10 @@ export interface StudentGradeTableFilter {
   subject_ids?: string;
   student_ids?: string;
 }
+
+export interface TeacherSubjectClassFormValues {
+  teacher_ids?: string;
+  subject_ids?: string;
+  class_ids?: string;
+  create_at_range?: [Dayjs, Dayjs];
+}
