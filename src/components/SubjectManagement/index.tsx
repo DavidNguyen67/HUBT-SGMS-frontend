@@ -170,6 +170,7 @@ const SubjectManagement = () => {
           showSizeChanger: true,
           pageSizeOptions: ['10', '20', '30'],
         }}
+        size="small"
       >
         <Table.Column<Subject>
           dataIndex="id"
@@ -350,6 +351,7 @@ const SubjectManagement = () => {
         <Table.Column
           width={100}
           title="Thao tác"
+          fixed="right"
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
             <Space>

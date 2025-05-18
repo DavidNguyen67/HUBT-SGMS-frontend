@@ -156,6 +156,7 @@ const ClassesManagement = () => {
           showSizeChanger: true,
           pageSizeOptions: ['10', '20', '30'],
         }}
+        size="small"
       >
         <Table.Column<Class>
           dataIndex="id"
@@ -279,6 +280,7 @@ const ClassesManagement = () => {
         />
 
         <Table.Column<Class>
+          fixed="right"
           title="Thao tác"
           width={100}
           dataIndex="actions"

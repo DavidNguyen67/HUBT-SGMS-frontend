@@ -194,6 +194,7 @@ const StudentsManagement = () => {
           showSizeChanger: true,
           pageSizeOptions: ['10', '20', '30'],
         }}
+        size="small"
       >
         <Table.Column<Student>
           dataIndex="id"
@@ -291,6 +292,7 @@ const StudentsManagement = () => {
         <Table.Column<Student>
           title="Thao tác"
           width={100}
+          fixed="right"
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
             <Space>

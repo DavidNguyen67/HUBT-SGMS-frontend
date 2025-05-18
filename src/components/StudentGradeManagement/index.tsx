@@ -181,6 +181,7 @@ const StudentGradeManagement = () => {
           showSizeChanger: true,
           pageSizeOptions: ['5', '10', '15'],
         }}
+        size="small"
       >
         <Table.Column<StudentGrade>
           title="Tên sinh viên"
@@ -227,6 +228,7 @@ const StudentGradeManagement = () => {
         />
         <Table.Column<StudentGrade>
           title="Thao tác"
+          fixed="right"
           width={120}
           dataIndex="actions"
           render={(_, record: BaseRecord) => (

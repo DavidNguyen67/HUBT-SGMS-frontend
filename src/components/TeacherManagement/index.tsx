@@ -191,6 +191,7 @@ const TeachersManagement = () => {
           showSizeChanger: true,
           pageSizeOptions: ['10', '20', '30'],
         }}
+        size="small"
       >
         <Table.Column<Teacher>
           dataIndex="id"
@@ -326,6 +327,7 @@ const TeachersManagement = () => {
 
         <Table.Column<Teacher>
           title="Thao tác"
+          fixed="right"
           width={100}
           dataIndex="actions"
           render={(_, record: BaseRecord) => (

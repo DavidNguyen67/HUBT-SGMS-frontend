@@ -167,6 +167,7 @@ const GradeManagement = () => {
           showSizeChanger: true,
           pageSizeOptions: ['5', '10', '15'],
         }}
+        size="small"
       >
         <Table.Column<GradeType>
           dataIndex="id"
@@ -212,6 +213,7 @@ const GradeManagement = () => {
           title="Thao tác"
           width={100}
           dataIndex="actions"
+          fixed="right"
           render={(_, record: BaseRecord) => (
             <Space>
               <EditButton hideText size="small" recordItemId={record.id} />
