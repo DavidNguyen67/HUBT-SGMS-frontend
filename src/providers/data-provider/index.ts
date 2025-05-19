@@ -6,11 +6,10 @@ import {
   generateSort,
 } from '@refinedev/simple-rest';
 
-const API_URL = 'http://localhost:8080';
-
 import type { AxiosInstance } from 'axios';
 import { stringify } from 'query-string';
 import type { DataProvider } from '@refinedev/core';
+import { appConfig } from '@common';
 
 type MethodTypes = 'get' | 'delete' | 'head' | 'options';
 type MethodTypesWithBody = 'post' | 'put' | 'patch';
@@ -212,4 +211,4 @@ export const dataProviderSimpleRest = (
   },
 });
 
-export const dataProvider = dataProviderSimpleRest(API_URL);
+export const dataProvider = dataProviderSimpleRest(appConfig.BASE_URL);

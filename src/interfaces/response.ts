@@ -1,4 +1,4 @@
-import { GENDER } from '@common';
+import { GENDER, STUDENT_PERFORMANCE } from '@common';
 
 export interface ResponsePagination<T> {
   data: T[];
@@ -80,4 +80,29 @@ export interface GradeType {
   created_at: string;
   updated_at: string;
   deleted_at?: string;
+}
+
+export interface DashboardStudentByClass {
+  className: string;
+  studentCount: number;
+}
+
+export interface DashboardAvgScoreBySubject {
+  subjectName: string;
+  avgScore: number;
+}
+
+export interface DashboardTeacherCountBySubject {
+  subjectName: string;
+  teacherCount: number;
+}
+
+export interface DashboardStudentPerformance {
+  type: STUDENT_PERFORMANCE;
+  value: number;
+}
+
+export interface DashboardNewStudentsByMonth {
+  month: string; //2025-05;
+  count: number;
 }

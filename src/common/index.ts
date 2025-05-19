@@ -1,3 +1,16 @@
+import 'dotenv/config';
+import * as dotenv from 'dotenv';
+
+dotenv.config({
+  path: '.env.local',
+});
+
+export const appConfig = {
+  BASE_URL: process.env.NEXT_PUBLIC_BASE_URL!,
+};
+
+console.log('Check appConfig:', appConfig);
+
 export enum GENDER {
   MALE = 'male',
   FEMALE = 'female',
@@ -21,6 +34,13 @@ export const TAG_GENDER_COLOR_MAPPING: Record<GENDER, string> = {
   [GENDER.MALE]: 'blue',
   [GENDER.OTHER]: 'green',
 };
+
+export enum STUDENT_PERFORMANCE {
+  EXCELLENT = 'excellent',
+  GOOD = 'good',
+  AVERAGE = 'average',
+  POOR = 'poor',
+}
 
 export const PAGE_SIZE_OPTIONS = ['5', '10', '20'];
 
