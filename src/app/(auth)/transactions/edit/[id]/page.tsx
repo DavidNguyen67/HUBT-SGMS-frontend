@@ -23,7 +23,7 @@ const StudentUpdate = () => {
   const { id } = useParams() as { id: string };
 
   const { formProps, saveButtonProps, queryResult } = useForm<
-    Category,
+    any,
     HttpError,
     TransactionFormValues
   >({
