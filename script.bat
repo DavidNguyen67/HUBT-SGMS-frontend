@@ -1,7 +1,7 @@
 @echo off
-set IMAGE_NAME=HUCE-backend
+set IMAGE_NAME=huce-backend
 set IMAGE_TAG=1.0.0
-set CONTAINER_NAME=HUCE-backend
+set CONTAINER_NAME=huce-backend
 set PORT=3000:3000
 
 echo 🛠️  Đang build Docker image %IMAGE_NAME%:%IMAGE_TAG%...
