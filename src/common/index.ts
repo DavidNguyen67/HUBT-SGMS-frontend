@@ -47,3 +47,5 @@ export const PAGE_SIZE_OPTIONS = ['5', '10', '20'];
 export const MAX_TAGS_DISPLAY = 1;
 
 export const DEFAULT_DATE_FORMAT = 'DD/MM/YYYY';
+
+export const userId = '19aa8383-051a-41bf-ab0b-eeca26eb4da7';

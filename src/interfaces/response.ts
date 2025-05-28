@@ -5,104 +5,56 @@ export interface ResponsePagination<T> {
   total: number;
 }
 
-export interface Student {
+export interface User {
   id: string;
-  full_name: string;
-  student_code: string;
-  date_of_birth: string;
-  gender: GENDER;
-  created_at: string;
-  updated_at: string;
-  deleted_at?: string;
-  class: Class;
+  insertedAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  isActive: boolean;
 }
 
-export interface Teacher {
+export interface Category {
   id: string;
-  full_name: string;
-  teacher_code: string;
-  date_of_birth: string;
-  gender: GENDER;
-  teacherSubjectClasses: TeacherSubjectClass[];
-  created_at: string;
-  updated_at: string;
-  deleted_at?: string;
+  insertedAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  name: string;
+  user: User;
+  income: boolean;
 }
 
-export interface TeacherSubjectClass {
+export interface Transaction {
   id: string;
-  created_at: string;
-  updated_at: string;
-  class: Class;
-  teacher: Teacher;
-  subject: Subject;
-  deleted_at?: string;
+  insertedAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  name: string;
+  amount: number;
+  description: string;
+  transactionDate: string;
+  category: Category;
 }
 
-export interface Subject {
+export interface User {
   id: string;
-  subject_code: string;
-  subject_name: string;
-  credits: number;
-  teacherSubjectClasses: TeacherSubjectClass[];
-  studentGrades: StudentGrade[];
-  created_at: string;
-  updated_at: string;
-  deleted_at?: string;
+  insertedAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  email: string;
+  firstName: string;
+  lastName: string;
+  active: boolean | null;
 }
 
-export interface Class {
+export interface Wallet {
   id: string;
-  class_code: string;
-  class_name: string;
-  teacherSubjectClasses: TeacherSubjectClass[];
-  students: Student[];
-  created_at: string;
-  updated_at: string;
-  deleted_at?: string;
-}
-
-export interface StudentGrade {
-  id: string;
-  student: Student;
-  grade_type: GradeType;
-  subject: Subject;
-  score: number;
-  created_at: string;
-  updated_at: string;
-  deleted_at?: string;
-}
-
-export interface GradeType {
-  id: string;
-  grade_name: string;
-  coefficient: number;
-  created_at: string;
-  updated_at: string;
-  deleted_at?: string;
-}
-
-export interface DashboardStudentByClass {
-  className: string;
-  studentCount: number;
-}
-
-export interface DashboardAvgScoreBySubject {
-  subjectName: string;
-  avgScore: number;
-}
-
-export interface DashboardTeacherCountBySubject {
-  subjectName: string;
-  teacherCount: number;
-}
-
-export interface DashboardStudentPerformance {
-  type: STUDENT_PERFORMANCE;
-  value: number;
-}
-
-export interface DashboardNewStudentsByMonth {
-  month: string; //2025-05;
-  count: number;
+  insertedAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  name: string;
+  balance: number;
 }
