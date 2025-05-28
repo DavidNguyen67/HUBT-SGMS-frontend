@@ -20,6 +20,7 @@ import {
   Tooltip,
 } from 'antd';
 import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+import { useAccount } from '@hooks';
 
 interface Category {
   id: string;
@@ -28,7 +29,12 @@ interface Category {
 }
 
 const CategoryManagement = () => {
-  const { tableProps, searchFormProps } = useTable<Category, HttpError>({
+  const { sub } = useAccount();
+
+  const { tableProps, searchFormProps, tableQuery } = useTable<
+    Category,
+    HttpError
+  >({
     syncWithLocation: true,
     resource: 'api/v1/categories/all',
     meta: {},
@@ -44,6 +50,7 @@ const CategoryManagement = () => {
       <Table
         {...tableProps}
         rowKey="id"
+        bordered
         tableLayout="fixed"
         pagination={{
           ...tableProps.pagination,
@@ -99,6 +106,9 @@ const CategoryManagement = () => {
                 confirmTitle="Bạn có chắc muốn xóa Phân loại giao dịch này không?"
                 confirmOkText="Đồng ý"
                 confirmCancelText="Hủy"
+                onSuccess={() => {
+                  tableQuery.refetch();
+                }}
               />
             </Space>
           )}

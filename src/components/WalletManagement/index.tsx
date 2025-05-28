@@ -21,9 +21,15 @@ import {
 } from 'antd';
 import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { Transaction, Wallet } from '@interfaces/response';
+import { useAccount } from '@hooks';
 
 const TransactionManagement = () => {
-  const { tableProps, searchFormProps } = useTable<Transaction, HttpError>({
+  const { sub } = useAccount();
+
+  const { tableProps, searchFormProps, tableQuery } = useTable<
+    Transaction,
+    HttpError
+  >({
     syncWithLocation: true,
     resource: 'api/v1/wallets/all',
     meta: {},
@@ -39,8 +45,15 @@ const TransactionManagement = () => {
       <Table
         {...tableProps}
         rowKey="id"
-        pagination={{ position: ['bottomCenter'] }}
         bordered
+        tableLayout="fixed"
+        pagination={{
+          ...tableProps.pagination,
+          position: ['bottomCenter'],
+          showSizeChanger: true,
+          pageSizeOptions: ['10', '20', '30'],
+        }}
+        size="small"
       >
         <Table.Column<Wallet> title="Mã" dataIndex="id" width={60} ellipsis />
         <Table.Column<Wallet>
@@ -86,6 +99,8 @@ const TransactionManagement = () => {
           dataIndex="actions"
           render={(_, record) => (
             <Space>
+              <EditButton hideText size="small" recordItemId={record.id} />
+              <ShowButton hideText size="small" recordItemId={record.id} />
               <DeleteButton
                 hideText
                 size="small"
@@ -94,6 +109,9 @@ const TransactionManagement = () => {
                 confirmTitle="Bạn có chắc muốn xóa ví này không?"
                 confirmOkText="Đồng ý"
                 confirmCancelText="Hủy"
+                onSuccess={() => {
+                  tableQuery.refetch();
+                }}
               />
             </Space>
           )}

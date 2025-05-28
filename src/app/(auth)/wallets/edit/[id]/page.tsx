@@ -1,11 +1,7 @@
 'use client';
 
-import CategoryForm, { CategoryFormValues } from '@components/CategoryForm';
-import TransactionForm, {
-  TransactionFormValues,
-} from '@components/TransactionForm';
-import { StudentFormValues } from '@interfaces';
-import { Category, Transaction } from '@interfaces/response';
+import WalletForm, { WalletFormValues } from '@components/WalletForm';
+import { useAccount } from '@hooks';
 import {
   DeleteButton,
   Edit,
@@ -25,28 +21,24 @@ const StudentUpdate = () => {
   const { formProps, saveButtonProps, queryResult } = useForm<
     any,
     HttpError,
-    TransactionFormValues
+    WalletFormValues
   >({
     submitOnEnter: true,
     action: 'edit',
     id,
-    resource: 'api/v1/transactions',
+    resource: 'api/v1/wallets',
     updateMutationOptions: {
       meta: {
         method: 'put',
       },
     },
   });
+  const { sub } = useAccount();
 
   const initialValues = queryResult?.data?.data
     ? {
         ...queryResult.data.data,
-        transactionDate: queryResult.data.data?.transactionDate
-          ? dayjs(queryResult.data.data?.transactionDate)
-          : undefined,
-        categoryId: queryResult.data.data?.category?.id,
-        userId: queryResult.data.data?.user?.id,
-        walletId: queryResult.data.data?.wallet?.id,
+        userId: queryResult.data.data?.user?.id ?? sub,
       }
     : undefined;
 
@@ -55,13 +47,13 @@ const StudentUpdate = () => {
       breadcrumb={null}
       saveButtonProps={saveButtonProps}
       deleteButtonProps={{
-        resource: 'api/v1/transactions',
+        resource: 'api/v1/wallets',
       }}
-      title="Chỉnh sửa giao dịch"
+      title="Chỉnh sửa ví"
       headerButtons={({ listButtonProps, refreshButtonProps }) => (
         <>
-          <ListButton {...listButtonProps}>Danh sách giao dịch</ListButton>
-          <RefreshButton {...refreshButtonProps} resource="api/v1/transactions">
+          <ListButton {...listButtonProps}>Danh sách ví</ListButton>
+          <RefreshButton {...refreshButtonProps} resource="api/v1/wallets">
             Làm mới
           </RefreshButton>
         </>
@@ -70,7 +62,7 @@ const StudentUpdate = () => {
         <>
           <DeleteButton
             {...deleteButtonProps}
-            confirmTitle="Bạn có chắc muốn xóa giao dịch này không?"
+            confirmTitle="Bạn có chắc muốn xóa ví này không?"
             confirmOkText="Đồng ý"
             confirmCancelText="Hủy"
           >
@@ -82,7 +74,7 @@ const StudentUpdate = () => {
     >
       <Row>
         <Col span={6} offset={8}>
-          <TransactionForm
+          <WalletForm
             formProps={{ ...formProps, initialValues: initialValues }}
           />
         </Col>

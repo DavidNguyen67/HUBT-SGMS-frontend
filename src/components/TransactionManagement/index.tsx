@@ -19,15 +19,16 @@ import {
   Tooltip,
   Tag,
 } from 'antd';
-import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { Transaction } from '@interfaces/response';
-import CategoryPicker from '@elements/CategoryPicker';
 import { useAccount } from '@hooks';
 
 const WalletManagement = () => {
   const { sub } = useAccount();
 
-  const { tableProps, searchFormProps } = useTable<Transaction, HttpError>({
+  const { tableProps, searchFormProps, tableQuery } = useTable<
+    Transaction,
+    HttpError
+  >({
     syncWithLocation: true,
     resource: 'api/v1/transactions/all',
     meta: {
@@ -77,7 +78,17 @@ const WalletManagement = () => {
           dataIndex="amount"
           title="Số tiền"
           width={120}
-          render={(amount: number) => amount.toLocaleString('vi-VN')}
+          render={(_, record) =>
+            record.category.income ? (
+              <span style={{ color: 'green' }}>
+                +{record.amount.toLocaleString('vi-VN')}
+              </span>
+            ) : (
+              <span style={{ color: 'red' }}>
+                -{record.amount.toLocaleString('vi-VN')}
+              </span>
+            )
+          }
         />
         <Table.Column<Transaction>
           dataIndex="description"
@@ -118,6 +129,9 @@ const WalletManagement = () => {
                 confirmTitle="Bạn có chắc muốn xóa giao dịch này không?"
                 confirmOkText="Đồng ý"
                 confirmCancelText="Hủy"
+                onSuccess={() => {
+                  tableQuery.refetch();
+                }}
               />
             </Space>
           )}

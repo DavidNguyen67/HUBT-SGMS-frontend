@@ -1,6 +1,6 @@
 'use client';
 
-import { Form, Input, InputNumber, FormProps, Button } from 'antd';
+import { Form, Input, InputNumber, FormProps } from 'antd';
 import * as yup from 'yup';
 import { Rule } from 'antd/es/form';
 import UserPicker from '@elements/UserPicker';
@@ -8,7 +8,7 @@ import UserPicker from '@elements/UserPicker';
 export interface WalletFormValues {
   name: string;
   balance: number;
-  userId: string;
+  userId?: string;
 }
 
 interface WalletFormProps {
@@ -21,7 +21,6 @@ const walletSchema = yup.object().shape({
     .number()
     .typeError('Số dư phải là số')
     .required('Vui lòng nhập số dư'),
-  userId: yup.string().required('Vui lòng chọn người dùng'),
 });
 
 const yupSync: Rule = {
@@ -43,9 +42,8 @@ const WalletForm = ({ formProps }: WalletFormProps) => {
           placeholder="Nhập số dư"
         />
       </Form.Item>
-      <Form.Item label="Người dùng" name="userId" rules={[yupSync]}>
-        <UserPicker />
-      </Form.Item>
+
+      <Form.Item label="Người dùng" name="userId" hidden />
     </Form>
   );
 };

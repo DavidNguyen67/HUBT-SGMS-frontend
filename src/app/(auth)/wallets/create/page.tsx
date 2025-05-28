@@ -1,31 +1,33 @@
 'use client';
 
-import TransactionForm, {
-  TransactionFormValues,
-} from '@components/TransactionForm';
+import WalletForm, { WalletFormValues } from '@components/WalletForm';
+import { useAccount } from '@hooks';
 import { Create, SaveButton, useForm } from '@refinedev/antd';
 import { HttpError } from '@refinedev/core';
 import { Col, Row } from 'antd';
 import { useParams } from 'next/navigation';
 
 const StudentUpdate = () => {
-  const { id } = useParams() as { id: string };
-
   const { formProps, saveButtonProps, queryResult } = useForm<
     any,
     HttpError,
-    TransactionFormValues
+    WalletFormValues
   >({
     submitOnEnter: true,
     action: 'create',
-    id,
-    resource: 'api/v1/transactions',
+    resource: 'api/v1/wallets',
   });
+
+  const { sub } = useAccount();
+
+  const initialValues = {
+    userId: sub,
+  };
 
   return (
     <Create
       saveButtonProps={saveButtonProps}
-      title="Thêm giao dịch"
+      title="Thêm ví"
       breadcrumb={null}
       footerButtons={({ saveButtonProps }) => (
         <>
@@ -35,7 +37,9 @@ const StudentUpdate = () => {
     >
       <Row>
         <Col span={6} offset={8}>
-          <TransactionForm formProps={formProps} />
+          <WalletForm
+            formProps={{ ...formProps, initialValues: initialValues }}
+          />
         </Col>
       </Row>
     </Create>

@@ -9,24 +9,23 @@ import {
   Show,
 } from '@refinedev/antd';
 import { useShow } from '@refinedev/core';
-import { Typography, Tag, Descriptions, Badge } from 'antd';
+import { Typography, Tag, Descriptions } from 'antd';
 import { useParams } from 'next/navigation';
 import {
   KeyOutlined,
   FieldTimeOutlined,
   UserOutlined,
-  CheckCircleOutlined,
-  CloseCircleOutlined,
+  WalletOutlined,
 } from '@ant-design/icons';
 
 const { Title } = Typography;
 
-const CategoryShow = () => {
+const WalletShow = () => {
   const { id } = useParams() as { id: string };
 
   const { queryResult } = useShow({
     id,
-    resource: 'api/v1/transactions',
+    resource: 'api/v1/wallets',
   });
 
   const { data, isLoading } = queryResult;
@@ -36,7 +35,7 @@ const CategoryShow = () => {
     <Show
       isLoading={isLoading}
       breadcrumb={null}
-      title="Chi tiết Phân loại giao dịch"
+      title="Chi tiết Ví"
       headerButtons={({
         listButtonProps,
         refreshButtonProps,
@@ -44,9 +43,7 @@ const CategoryShow = () => {
         deleteButtonProps,
       }) => (
         <>
-          <ListButton {...listButtonProps}>
-            Danh sách Phân loại giao dịch
-          </ListButton>
+          <ListButton {...listButtonProps}>Danh sách Ví</ListButton>
           <RefreshButton {...refreshButtonProps}>Làm mới</RefreshButton>
           {editButtonProps && (
             <EditButton {...editButtonProps}>Chỉnh sửa</EditButton>
@@ -54,7 +51,7 @@ const CategoryShow = () => {
           {deleteButtonProps && (
             <DeleteButton
               {...deleteButtonProps}
-              confirmTitle="Bạn có chắc muốn xóa Phân loại giao dịch này không?"
+              confirmTitle="Bạn có chắc muốn xóa ví này không?"
               confirmOkText="Đồng ý"
               confirmCancelText="Hủy"
             >
@@ -65,8 +62,8 @@ const CategoryShow = () => {
       )}
     >
       <Title level={4} style={{ marginBottom: 24 }}>
-        <KeyOutlined style={{ marginRight: 8 }} />
-        Thông tin chi tiết Phân loại giao dịch
+        <WalletOutlined style={{ marginRight: 8 }} />
+        Thông tin chi tiết Ví
       </Title>
       <Descriptions
         bordered
@@ -111,16 +108,31 @@ const CategoryShow = () => {
         <Descriptions.Item
           label={
             <>
-              <UserOutlined /> Tên Phân loại giao dịch
+              <WalletOutlined /> Tên ví
             </>
           }
         >
           <span style={{ fontWeight: 600, fontSize: 16 }}>{record?.name}</span>
         </Descriptions.Item>
-        <Descriptions.Item label="User">
+        <Descriptions.Item label="Số dư">
+          <span style={{ fontWeight: 600, fontSize: 16 }}>
+            {record?.balance?.toLocaleString('vi-VN')} đ
+          </span>
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <UserOutlined /> Người dùng
+            </>
+          }
+        >
           {record?.user ? (
             typeof record.user === 'object' ? (
-              record.user.email || record.user.id || JSON.stringify(record.user)
+              <>
+                {record.user.email}
+                <br />
+                {record.user.firstName} {record.user.lastName}
+              </>
             ) : (
               record.user
             )
@@ -128,18 +140,9 @@ const CategoryShow = () => {
             <Tag color="default">Không có</Tag>
           )}
         </Descriptions.Item>
-
-        <Descriptions.Item label="Thu nhập">
-          {record?.income ? (
-            <Tag icon={<CheckCircleOutlined />} color="success"></Tag>
-          ) : (
-            <Tag icon={<CloseCircleOutlined />} color="error"></Tag>
-          )}
-        </Descriptions.Item>
       </Descriptions>
     </Show>
   );
 };
 
-export default CategoryShow;
-// ...existing code...
+export default WalletShow;

@@ -16,7 +16,7 @@ type MethodTypesWithBody = 'post' | 'put' | 'patch';
 
 export const dataProviderSimpleRest = (
   apiUrl: string,
-  httpClient: AxiosInstance = axiosInstance
+  httpClient: AxiosInstance = axiosInstance,
 ): Omit<
   Required<DataProvider>,
   'createMany' | 'updateMany' | 'deleteMany'
@@ -80,7 +80,7 @@ export const dataProviderSimpleRest = (
 
     const { data } = await httpClient[requestMethod](
       `${apiUrl}/${resource}?${stringify({ id: ids })}`,
-      { headers }
+      { headers },
     );
 
     return {
