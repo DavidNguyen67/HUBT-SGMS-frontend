@@ -19,4 +19,11 @@ export const resources: Array<ResourceProps> = [
     edit: '/categories/edit/:id',
     show: '/categories/show/:id',
   },
+  {
+    name: 'Wallets',
+    list: '/wallets',
+    create: '/wallets/create',
+    edit: '/wallets/edit/:id',
+    show: '/wallets/show/:id',
+  },
 ];

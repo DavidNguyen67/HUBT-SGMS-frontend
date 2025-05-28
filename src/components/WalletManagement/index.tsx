@@ -21,12 +21,12 @@ import {
 } from 'antd';
 import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { userId } from '@common';
-import { Transaction } from '@interfaces/response';
+import { Transaction, Wallet } from '@interfaces/response';
 
-const WalletManagement = () => {
+const TransactionManagement = () => {
   const { tableProps, searchFormProps } = useTable<Transaction, HttpError>({
     syncWithLocation: true,
-    resource: 'api/v1/transactions/all',
+    resource: 'api/v1/wallets/all',
     meta: {
       externalFilters: {
         userId,
@@ -36,16 +36,16 @@ const WalletManagement = () => {
 
   return (
     <List
-      title="Quản lý giao dịch"
+      title="Quản lý ví"
       createButtonProps={{
-        children: 'Thêm giao dịch',
+        children: 'Thêm ví',
       }}
     >
       <Form layout="vertical" {...searchFormProps}>
         <Row gutter={16}>
           <Col xs={24} sm={12} md={8} lg={6} xl={6}>
-            <Form.Item name="name" label="Tên giao dịch">
-              <Input placeholder="Tìm theo tên giao dịch..." allowClear />
+            <Form.Item name="name" label="Tên ví">
+              <Input placeholder="Tìm theo tên ví..." allowClear />
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8} lg={6} xl={6}>
@@ -54,8 +54,8 @@ const WalletManagement = () => {
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8} lg={6} xl={6}>
-            <Form.Item name="category" label="Phân loại giao dịch">
-              <Input placeholder="Tìm theo Phân loại giao dịch..." allowClear />
+            <Form.Item name="category" label="Phân loại ví">
+              <Input placeholder="Tìm theo Phân loại ví..." allowClear />
             </Form.Item>
           </Col>
           <Col
@@ -95,75 +95,59 @@ const WalletManagement = () => {
       <Table
         {...tableProps}
         rowKey="id"
-        tableLayout="fixed"
-        pagination={{
-          ...tableProps.pagination,
-          position: ['bottomCenter'],
-          showSizeChanger: true,
-          pageSizeOptions: ['10', '20', '30'],
-        }}
-        size="small"
+        pagination={{ position: ['bottomCenter'] }}
+        bordered
       >
-        <Table.Column<Transaction>
-          dataIndex="id"
-          title="Mã"
-          width={60}
-          ellipsis
-          render={(value: string) => (
-            <Tooltip title={value}>
-              <div style={{ width: 60, wordWrap: 'break-word' }}>{value}</div>
-            </Tooltip>
-          )}
-        />
-        <Table.Column<Transaction>
+        <Table.Column<Wallet> title="Mã" dataIndex="id" width={60} ellipsis />
+        <Table.Column<Wallet>
+          title="Tên ví"
           dataIndex="name"
-          title="Tên giao dịch"
           width={180}
           ellipsis
         />
-        <Table.Column<Transaction>
-          dataIndex="amount"
-          title="Số tiền"
+        <Table.Column<Wallet>
+          title="Số dư"
+          dataIndex="balance"
           width={120}
-          render={(amount: number) => amount.toLocaleString('vi-VN')}
+          render={(balance: number) => balance.toLocaleString('vi-VN')}
         />
-        <Table.Column<Transaction>
-          dataIndex="description"
-          title="Mô tả"
-          width={200}
-          ellipsis
-        />
-        <Table.Column<Transaction>
-          dataIndex="transactionDate"
-          title="Ngày giao dịch"
+        <Table.Column<Wallet>
+          title="Ngày tạo"
+          dataIndex="insertedAt"
           width={150}
           render={(date: string) => new Date(date).toLocaleDateString('vi-VN')}
         />
-        <Table.Column<Transaction>
-          dataIndex={['category', 'name']}
-          title="Phân loại giao dịch"
-          width={120}
-          render={(_, record) => (
-            <Tag color={record.category.income ? 'green' : 'red'}>
-              {record.category.name}
-            </Tag>
-          )}
+        <Table.Column<Wallet>
+          title="Ngày cập nhật"
+          dataIndex="updatedAt"
+          width={150}
+          render={(date: string) => new Date(date).toLocaleDateString('vi-VN')}
         />
-        <Table.Column<Transaction>
+        <Table.Column<Wallet>
+          title="Trạng thái"
+          dataIndex="deletedAt"
+          width={100}
+          render={(deletedAt: string | null) =>
+            deletedAt ? (
+              <Tag color="red">Đã xóa</Tag>
+            ) : (
+              <Tag color="green">Hoạt động</Tag>
+            )
+          }
+        />
+        <Table.Column<Wallet>
           fixed="right"
           title="Thao tác"
           width={100}
           dataIndex="actions"
           render={(_, record) => (
             <Space>
-              <EditButton hideText size="small" recordItemId={record.id} />
-              <ShowButton hideText size="small" recordItemId={record.id} />
               <DeleteButton
                 hideText
                 size="small"
                 recordItemId={record.id}
-                resource="api/v1/transactions"
-                confirmTitle="Bạn có chắc muốn xóa giao dịch này không?"
+                resource="api/v1/wallets"
+                confirmTitle="Bạn có chắc muốn xóa ví này không?"
                 confirmOkText="Đồng ý"
                 confirmCancelText="Hủy"
               />
@@ -175,4 +159,4 @@ const WalletManagement = () => {
   );
 };
 
-export default WalletManagement;
+export default TransactionManagement;
