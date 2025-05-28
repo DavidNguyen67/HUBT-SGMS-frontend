@@ -27,26 +27,53 @@ const mockUsers = [
 
 export const authProviderClient: AuthProvider = {
   login: async ({ email, username, password, remember }) => {
-    const user = mockUsers.find((item) => item.email === email);
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/v1/auth/login`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        },
+      );
 
-    if (user) {
-      Cookies.set('auth', JSON.stringify(user), {
-        expires: 30, // 30 days
+      if (!res.ok) {
+        return {
+          success: false,
+          error: {
+            name: 'LoginError',
+            message: 'Invalid username or password',
+          },
+        };
+      }
+
+      const data = await res.json();
+      // Lưu accessToken và refreshToken vào cookie
+      Cookies.set('accessToken', data.accessToken, {
+        expires: 30,
         path: '/',
       });
+      Cookies.set('refreshToken', data.refreshToken, {
+        expires: 30,
+        path: '/',
+      });
+
+      // Nếu muốn lưu thêm user info, cần gọi API lấy user info và lưu vào cookie 'auth'
+      // Hoặc chỉ lưu token, sau này lấy user info từ token
+
       return {
         success: true,
-        redirectTo: '/',
+        redirectTo: '/dashboard',
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: {
+          name: 'LoginError',
+          message: 'Có lỗi xảy ra khi đăng nhập',
+        },
       };
     }
-
-    return {
-      success: false,
-      error: {
-        name: 'LoginError',
-        message: 'Invalid username or password',
-      },
-    };
   },
   logout: async () => {
     Cookies.remove('auth', { path: '/' });

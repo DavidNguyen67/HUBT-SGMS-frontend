@@ -14,13 +14,6 @@ const CategoryPicker = ({ initialId, ...props }: CategoryPickerProps) => {
     resource: 'api/v1/categories/all',
     optionLabel: (item) => item?.name,
     optionValue: 'id',
-    onSearch: (value) => [
-      {
-        field: 'value',
-        operator: 'contains',
-        value,
-      },
-    ],
     meta: {
       externalFilters: {
         _end: 50,

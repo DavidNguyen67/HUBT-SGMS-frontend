@@ -20,18 +20,13 @@ import {
   Tag,
 } from 'antd';
 import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
-import { userId } from '@common';
 import { Transaction, Wallet } from '@interfaces/response';
 
 const TransactionManagement = () => {
   const { tableProps, searchFormProps } = useTable<Transaction, HttpError>({
     syncWithLocation: true,
     resource: 'api/v1/wallets/all',
-    meta: {
-      externalFilters: {
-        userId,
-      },
-    },
+    meta: {},
   });
 
   return (
@@ -41,57 +36,6 @@ const TransactionManagement = () => {
         children: 'Thêm ví',
       }}
     >
-      <Form layout="vertical" {...searchFormProps}>
-        <Row gutter={16}>
-          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
-            <Form.Item name="name" label="Tên ví">
-              <Input placeholder="Tìm theo tên ví..." allowClear />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
-            <Form.Item name="description" label="Mô tả">
-              <Input placeholder="Tìm theo mô tả..." allowClear />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
-            <Form.Item name="category" label="Phân loại ví">
-              <Input placeholder="Tìm theo Phân loại ví..." allowClear />
-            </Form.Item>
-          </Col>
-          <Col
-            xs={24}
-            sm={24}
-            md={24}
-            lg={24}
-            xl={24}
-            style={{ textAlign: 'right' }}
-          >
-            <Form.Item>
-              <Space>
-                <Button
-                  htmlType="submit"
-                  type="primary"
-                  icon={<SearchOutlined />}
-                  style={{ minWidth: 90 }}
-                >
-                  Lọc
-                </Button>
-                <Button
-                  icon={<ReloadOutlined />}
-                  onClick={() => {
-                    searchFormProps.form?.resetFields();
-                    searchFormProps.form?.submit();
-                  }}
-                  style={{ minWidth: 90 }}
-                >
-                  Đặt lại
-                </Button>
-              </Space>
-            </Form.Item>
-          </Col>
-        </Row>
-      </Form>
-
       <Table
         {...tableProps}
         rowKey="id"

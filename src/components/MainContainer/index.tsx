@@ -12,7 +12,6 @@ import { resources } from '@common/resources';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { ColorModeContextProvider } from '@contexts/color-mode';
 import { DevtoolsProvider } from '@refinedev/devtools';
-import AuthenticationListener from '@components/AuthenticationListener';
 import { ConfigProvider } from 'antd';
 import viVN from 'antd/locale/vi_VN';
 import dayjs from 'dayjs';
@@ -26,8 +25,6 @@ interface MainContainerProps {
 }
 
 const MainContainer = ({ children, defaultMode }: MainContainerProps) => {
-  const [visibleResources, setVisibleResources] = useState<ResourceProps[]>([]);
-
   return (
     <Suspense>
       <RefineKbarProvider>
@@ -39,7 +36,7 @@ const MainContainer = ({ children, defaultMode }: MainContainerProps) => {
                 dataProvider={dataProvider}
                 notificationProvider={useNotificationProvider}
                 authProvider={authProviderClient}
-                resources={visibleResources}
+                resources={resources}
                 options={{
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
@@ -47,12 +44,7 @@ const MainContainer = ({ children, defaultMode }: MainContainerProps) => {
                   projectId: 'BqkOw9-rTT8QE-6I7UhU',
                 }}
               >
-                <ConfigProvider locale={viVN}>
-                  <AuthenticationListener
-                    setVisibleResources={setVisibleResources}
-                  />
-                  {children}
-                </ConfigProvider>
+                <ConfigProvider locale={viVN}>{children}</ConfigProvider>
                 <RefineKbar />
               </Refine>
             </DevtoolsProvider>

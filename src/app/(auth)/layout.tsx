@@ -17,6 +17,11 @@ export default async function Layout({ children }: React.PropsWithChildren) {
 async function getData() {
   const { authenticated, redirectTo } = await authProviderServer.check();
 
+  console.log('Check authentication status:', {
+    authenticated,
+    redirectTo,
+  });
+
   return {
     authenticated,
     redirectTo,

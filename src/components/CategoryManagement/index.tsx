@@ -41,50 +41,6 @@ const CategoryManagement = () => {
         children: 'Thêm Phân loại giao dịch',
       }}
     >
-      <Form layout="vertical" {...searchFormProps}>
-        <Row gutter={16}>
-          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
-            <Form.Item name="name" label="Tên Phân loại giao dịch">
-              <Input
-                placeholder="Tìm theo tên Phân loại giao dịch..."
-                allowClear
-              />
-            </Form.Item>
-          </Col>
-          <Col
-            xs={24}
-            sm={24}
-            md={24}
-            lg={24}
-            xl={24}
-            style={{ textAlign: 'right' }}
-          >
-            <Form.Item>
-              <Space>
-                <Button
-                  htmlType="submit"
-                  type="primary"
-                  icon={<SearchOutlined />}
-                  style={{ minWidth: 90 }}
-                >
-                  Lọc
-                </Button>
-                <Button
-                  icon={<ReloadOutlined />}
-                  onClick={() => {
-                    searchFormProps.form?.resetFields();
-                    searchFormProps.form?.submit();
-                  }}
-                  style={{ minWidth: 90 }}
-                >
-                  Đặt lại
-                </Button>
-              </Space>
-            </Form.Item>
-          </Col>
-        </Row>
-      </Form>
-
       <Table
         {...tableProps}
         rowKey="id"

@@ -20,16 +20,19 @@ import {
   Tag,
 } from 'antd';
 import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
-import { userId } from '@common';
 import { Transaction } from '@interfaces/response';
+import CategoryPicker from '@elements/CategoryPicker';
+import { useAccount } from '@hooks';
 
 const WalletManagement = () => {
+  const { sub } = useAccount();
+
   const { tableProps, searchFormProps } = useTable<Transaction, HttpError>({
     syncWithLocation: true,
     resource: 'api/v1/transactions/all',
     meta: {
       externalFilters: {
-        userId,
+        userId: sub,
       },
     },
   });
@@ -41,57 +44,6 @@ const WalletManagement = () => {
         children: 'Thêm giao dịch',
       }}
     >
-      <Form layout="vertical" {...searchFormProps}>
-        <Row gutter={16}>
-          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
-            <Form.Item name="name" label="Tên giao dịch">
-              <Input placeholder="Tìm theo tên giao dịch..." allowClear />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
-            <Form.Item name="description" label="Mô tả">
-              <Input placeholder="Tìm theo mô tả..." allowClear />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8} lg={6} xl={6}>
-            <Form.Item name="category" label="Phân loại giao dịch">
-              <Input placeholder="Tìm theo Phân loại giao dịch..." allowClear />
-            </Form.Item>
-          </Col>
-          <Col
-            xs={24}
-            sm={24}
-            md={24}
-            lg={24}
-            xl={24}
-            style={{ textAlign: 'right' }}
-          >
-            <Form.Item>
-              <Space>
-                <Button
-                  htmlType="submit"
-                  type="primary"
-                  icon={<SearchOutlined />}
-                  style={{ minWidth: 90 }}
-                >
-                  Lọc
-                </Button>
-                <Button
-                  icon={<ReloadOutlined />}
-                  onClick={() => {
-                    searchFormProps.form?.resetFields();
-                    searchFormProps.form?.submit();
-                  }}
-                  style={{ minWidth: 90 }}
-                >
-                  Đặt lại
-                </Button>
-              </Space>
-            </Form.Item>
-          </Col>
-        </Row>
-      </Form>
-
       <Table
         {...tableProps}
         rowKey="id"
