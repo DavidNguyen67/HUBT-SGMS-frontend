@@ -22,8 +22,6 @@ export default function RootLayout({
   const theme = cookieStore.get('theme');
   const defaultMode = theme?.value === 'dark' ? 'dark' : 'light';
 
-  console.log('Current theme from cookies:', defaultMode);
-
   return (
     <html lang="en">
       <body>
