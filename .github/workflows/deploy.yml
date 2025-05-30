@@ -26,7 +26,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/hubt-frontend:latest
 
   deploy:
     runs-on: ubuntu-22.04
