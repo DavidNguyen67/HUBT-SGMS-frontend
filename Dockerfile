@@ -19,7 +19,9 @@ COPY --from=deps /app/refine/node_modules ./node_modules
 
 COPY . .
 
-RUN npm run build
+ENV NEXT_PUBLIC_BASE_URL=http://14.225.29.107:8080
+
+RUN yarn run build
 
 FROM base AS runner
 
@@ -36,7 +38,5 @@ COPY --from=builder --chown=refine:nodejs /app/refine/.next/static ./.next/stati
 USER refine
 
 EXPOSE 3000
-
-ENV NEXT_PUBLIC_BASE_URL=http://14.225.29.107:8080
 
 CMD ["node", "server.js"]
