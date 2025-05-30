@@ -42,7 +42,7 @@ jobs:
       - name: Build and push frontend image
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend
+          context: ./.
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/huce-frontend:latest
 
