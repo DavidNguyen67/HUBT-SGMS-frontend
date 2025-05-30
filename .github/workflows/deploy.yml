@@ -54,6 +54,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker pull ${{ secrets.DOCKER_USERNAME }}/huce-frontend:latest
             docker stop huce-frontend || true && docker rm huce-frontend || true
             docker run -d --name huce-frontend -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/huce-frontend:latest
