@@ -14,14 +14,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Bước 2: Setup Node.js cho frontend build
+      # Bước 2: Setup Node.js cho backend build
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20.18.3'
 
-      # Bước 3: Build frontend
-      - name: Build frontend
+      # Bước 3: Build backend
+      - name: Build backend
         working-directory: ./.
         run: |
           yarn install
@@ -38,13 +38,13 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Bước 6: Build & push Docker image frontend
-      - name: Build and push frontend image
+      # Bước 6: Build & push Docker image backend
+      - name: Build and push backend image
         uses: docker/build-push-action@v5
         with:
           context: ./.
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/hubt-frontend:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/huce-backend:latest
 
       # Bước 7: Deploy bằng SSH (nếu có VPS)
       - name: Deploy to VPS via SSH
@@ -55,6 +55,6 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker pull ${{ secrets.DOCKER_USERNAME }}/hubt-frontend:latest
-            docker stop hubt-frontend || true && docker rm hubt-frontend || true
-            docker run -d --name hubt-frontend -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/hubt-frontend:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/ ${{ secrets.DOCKER_IMAGE_NAME}}:latest
+            docker stop  ${{ secrets.DOCKER_IMAGE_NAME}} || true && docker rm  ${{ secrets.DOCKER_IMAGE_NAME}} || true
+            docker run -d --name  ${{ secrets.DOCKER_IMAGE_NAME}} -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/ ${{ secrets.DOCKER_IMAGE_NAME}}:latest
