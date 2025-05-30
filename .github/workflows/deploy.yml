@@ -41,4 +41,5 @@ jobs:
           script: |
             docker stop ${{ secrets.DOCKER_IMAGE_NAME }} || true
             docker rm ${{ secrets.DOCKER_IMAGE_NAME }} || true
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest || true
             docker run -d --name ${{ secrets.DOCKER_IMAGE_NAME }} --restart unless-stopped -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
