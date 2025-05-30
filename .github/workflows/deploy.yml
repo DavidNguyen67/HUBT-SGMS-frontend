@@ -6,25 +6,25 @@ on:
       - hubt
 
 jobs:
-  # build:
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-  #     - name: Setup Node.js
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: '20.18.3'
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.18.3'
 
-  #     - name: Build frontend
-  #       run: |
-  #         yarn install
-  #         yarn build
+      - name: Build frontend
+        run: |
+          yarn install
+          yarn build
 
   docker:
     runs-on: ubuntu-22.04
-    # needs: build
+    needs: build
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
