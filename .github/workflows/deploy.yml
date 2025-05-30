@@ -22,7 +22,7 @@ jobs:
 
       # Bước 3: Build frontend
       - name: Build frontend
-        working-directory: ./frontend
+        working-directory: ./.
         run: |
           yarn install
           yarn build
