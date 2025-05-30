@@ -25,7 +25,7 @@ FROM base AS runner
 
 ENV NODE_ENV production
 
-COPY --from=builder /app/refine/public ./public
+# COPY --from=builder /app/refine/public ./public
 
 RUN mkdir .next
 RUN chown refine:nodejs .next
