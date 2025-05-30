@@ -12,23 +12,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20.18.3'
-
-      - name: Build frontend
-        run: |
-          yarn install
-          yarn build
-
-  docker:
-    runs-on: ubuntu-22.04
-    needs: build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -47,7 +30,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-22.04
-    needs: docker
+    needs: build
     steps:
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1.0.0
