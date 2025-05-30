@@ -19,7 +19,7 @@ COPY --from=deps /app/refine/node_modules ./node_modules
 
 COPY . .
 
-ARG NEXT_PUBLIC_BASE_URLhttp://14.225.29.107:8080
+ARG NEXT_PUBLIC_BASE_URL=http://14.225.29.107:8080
 ENV NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
 
 RUN yarn run build
